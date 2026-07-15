@@ -107,8 +107,14 @@ h3 { font-size: 0.95rem; margin: 1.2rem 0 0.2rem; }
   background: var(--no-fond);
   color: var(--no);
 }
-.bloc.go { background: var(--go-fond); color: var(--go); font-weight: 700; }
-.bloc .valeur { display: block; font-size: 0.95rem; }
+.bloc.go { background: var(--go-fond); color: var(--go); }
+.bloc .nom-bloc { display: block; }
+.bloc .nom-bloc em { font-style: normal; opacity: 0.7; font-size: 0.7rem; }
+.bloc .valeur { display: block; font-size: 1rem; font-weight: 700; }
+.bloc .valeur small { font-size: 0.72rem; font-weight: 400; }
+.carte .rangee-blocs { margin-top: 0.45rem; }
+.carte .bloc { padding: 0.3rem 0.15rem; font-size: 0.72rem; }
+.carte .bloc .valeur { font-size: 0.9rem; }
 
 .avis {
   background: var(--avis-fond);

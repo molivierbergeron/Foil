@@ -17,23 +17,21 @@
 <main>
   <p id="etat" class="etat">Chargement des prévisions…</p>
 
-  <section id="semaine" hidden>
-    <h2>Cette semaine</h2>
-    <p class="aide">Verdict par jour selon l'ensemble corrigé des modèles. La cote de
-    confiance vient du backtest 2024–2026 : c'est la part des GO annoncés à cet
-    horizon qui se sont réellement confirmés.</p>
-    <div id="cartes-semaine" class="cartes"></div>
-  </section>
-
   <section id="execution" hidden>
     <h2>Aujourd'hui / demain</h2>
     <div id="blocs-jours"></div>
     <div id="divergence" class="avis" hidden></div>
     <h3>Vent prévu, heure par heure (48 h)</h3>
     <p class="aide">Ligne épaisse : ensemble corrigé. Lignes fines : chaque modèle
-    après correction de son biais mesuré. Zone teintée : bande foilable.</p>
+    après correction de son biais mesuré. Zone teintée : bande de foil (7–16 nds).
+    Glisse le doigt sur le graphique pour lire vent et rafales.</p>
     <div id="graphique" class="graphique-cadre"></div>
     <div id="legende" class="legende"></div>
+  </section>
+
+  <section id="semaine" hidden>
+    <h2>Cette semaine</h2>
+    <div id="cartes-semaine" class="cartes"></div>
   </section>
 </main>
 

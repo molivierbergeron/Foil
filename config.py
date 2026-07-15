@@ -87,7 +87,9 @@ SECTEURS = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"]  # 8 secteurs de 45°
 N_MIN_SEGMENT = 30  # taille minimale d'échantillon pour conclure sur une cellule
 
 # --- Blocs horaires (heures locales) pour le verdict d'exécution ---
-BLOCS = {"matin": (8, 12), "apres_midi": (12, 17), "soiree": (17, 20)}
+# Découpage demandé par l'utilisateur (AM 8-11, midi 11-13, PM 14-18) ;
+# midi étendu à 14 h pour ne pas laisser 13 h-14 h orphelin.
+BLOCS = {"matin": (8, 11), "midi": (11, 14), "apres_midi": (14, 18)}
 
 # --- Stockage ---
 DOSSIER_RAW = "data/raw"
