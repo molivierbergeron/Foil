@@ -1,0 +1,6 @@
+# Cache d'appels API — reproductible, jamais commité (anti-bloat)
+data/raw/
+
+__pycache__/
+*.pyc
+.venv/
