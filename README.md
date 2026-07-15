@@ -17,8 +17,8 @@ corrigeant les prévisions en conséquence.
 
 | Phase | État |
 |---|---|
-| 1. Backtest 2024–2026, rapport, poids calibrés | ✅ Livrée — voir `reports/rapport_backtest.md` |
-| 2. Boucle d'apprentissage continue (GitHub Actions) | À venir (après validation de la phase 1) |
+| 1. Backtest 2024–2026, rapport, poids calibrés | ✅ Livrée et validée — voir `reports/rapport_backtest.md` |
+| 2. Boucle d'apprentissage continue (GitHub Actions) | ✅ Livrée — jobs quotidien et hebdomadaire, testés en local |
 | 3. Dashboard public (GitHub Pages) | À venir |
 | 4. Station Ecowitt au lac (`TRUTH_SOURCE="station"`) | À venir |
 | 5. Correction apprise avancée (MOS) | À venir |
@@ -119,11 +119,43 @@ horizon parmi les modèles disponibles.
 - **DST** : tout est stocké en UTC ; conversion America/Toronto au moment de
   l'analyse (pandas gère les changements d'heure).
 - **Segmentation** : aucune conclusion sur une cellule de moins de 30 points.
-- **Fenêtre foilable** : ≥ 2 h dans la bande 9–25 nds entre 8 h et 20 h,
-  creux passagers 7–9 nds tolérés (pas deux consécutifs, jamais sous 7 nds),
-  un pas > 25 nds coupe la fenêtre. Logique testée dans `tests/test_fenetre.py`.
+- **Fenêtre foilable** (bande validée par l'utilisateur le 2026-07-15 :
+  « à partir de 7 kts c'est bon, 16+ c'est too much ») : ≥ 2 h dans la bande
+  7–16 nds entre 8 h et 20 h, creux passagers 5–7 nds tolérés (pas deux
+  consécutifs, jamais sous 5 nds), un pas > 16 nds coupe la fenêtre.
+  Logique testée dans `tests/test_fenetre.py`.
 - Petits échantillons : toutes les proportions sont accompagnées d'un
   intervalle de confiance de Wilson à 95 %.
+
+## Phase 2 — la boucle d'apprentissage continue
+
+Deux workflows GitHub Actions (minutes creuses volontairement, jamais :00) :
+
+- **Quotidien** (`quotidien.yml`, 09:17 UTC) : exécute `job_quotidien.py` —
+  récupère pour J-9 à J-3 (archives complètes à J-3) ce que chaque modèle
+  prévoyait à 24/48/96 h et la vérité, apparie, et ajoute les lignes
+  manquantes à la partition mensuelle `data/verification/AAAA-MM.parquet`.
+  **Append-only** : le job ne complète que la partition du mois courant (et
+  du mois précédent en début de mois, fenêtre de rattrapage) ; l'historique
+  n'est jamais réécrit, jamais d'amend ni de force-push — l'historique Git
+  est la piste d'audit de la dérive des modèles. Seul `data/forecast.json`
+  (petit : verdicts 7 jours de l'ensemble corrigé) est écrasé à chaque run.
+- **Hebdomadaire** (`recalibrage.yml`, lundi 10:43 UTC) : exécute
+  `recalibrage.py` — recalcule les poids sur fenêtre glissante (saison
+  courante pesant double). **Garde-fou** : les poids candidats, calculés sans
+  voir les 60 derniers jours, ne sont appliqués que s'ils battent les poids
+  courants sur ces 60 jours (RMSE de l'ensemble corrigé-pondéré). Sinon ils
+  sont conservés. Chaque décision est journalisée dans `reports/derive.md`.
+
+**Piège GitHub connu** : GitHub désactive les workflows planifiés après ~60
+jours sans activité sur le repo. Réactivation : onglet Actions → le workflow
+→ bouton « Enable workflow » (un commit quelconque réactive aussi). Les
+commits quotidiens du job maintiennent normalement l'activité — le problème
+ne survient que si le job est cassé longtemps.
+
+**Anti-bloat** : partitions mensuelles ≈ 70 Ko/mois. Si le repo dépassait un
+jour ~500 Mo, migrer les partitions froides vers GitHub Releases (documenté,
+pas implémenté).
 
 ## Attribution
 

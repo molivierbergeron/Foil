@@ -11,9 +11,11 @@ LONGITUDE = -73.3638
 FUSEAU_LOCAL = "America/Toronto"
 
 # --- Paramètres du sport (catamaran UFO, foil) ---
-VENT_MIN_FOILABLE = 9.0   # nds, bas de la bande foilable
-VENT_MAX_FOILABLE = 25.0  # nds, haut de la bande foilable
-VENT_MARGINAL = 7.0       # nds, plancher de la zone marginale (7–9 nds)
+# Validés par l'utilisateur (2026-07-15) : « à partir de 7 kts c'est bon,
+# 16+ c'est too much ». La zone marginale garde 2 nds sous la bande.
+VENT_MIN_FOILABLE = 7.0   # nds, bas de la bande foilable
+VENT_MAX_FOILABLE = 16.0  # nds, haut de la bande foilable
+VENT_MARGINAL = 5.0       # nds, plancher de la zone marginale (5–7 nds)
 DUREE_MIN_FENETRE = 2     # heures consécutives (pas horaires) dans la bande
 HEURE_DEBUT = 8           # heure locale, début de la journée navigable
 HEURE_FIN = 20            # heure locale, fin de la journée navigable (exclusif)

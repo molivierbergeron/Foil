@@ -212,6 +212,10 @@ def generer():
     diverg_med = float((p24["max"] - p24["min"]).median())
     diverg_p90 = float((p24["max"] - p24["min"]).quantile(0.9))
 
+    total_f = sum(n for n, _ in par_annee.values())
+    total_j = sum(t for _, t in par_annee.values())
+    part_foilable = f"{round(10 * total_f / total_j)} jours sur 10" if total_j else "?"
+
     s24_idx = stats[stats["horizon"] == "24h"].set_index("modele")
     biais_gem = float(s24_idx.loc[["gem_global", "gem_regional"], "biais"].mean())
     biais_hrdps = float(s24_idx.loc["gem_hrdps_continental", "biais"])
@@ -241,8 +245,8 @@ séries « hour-0 » (voir la section Limites).
 
 - **Ton spot est un spot de vent léger.** Vent médian en journée :
   {vent_median:.0f} nds ; il faut monter au 90e percentile pour toucher
-  {vent_p90:.0f} nds. La barre foilable (9 nds) est donc un événement rare :
-  **{faits_annee} jours foilables** — grosso modo un jour sur sept. Le système
+  {vent_p90:.0f} nds. Avec la barre foilable à {config.VENT_MIN_FOILABLE:.0f} nds :
+  **{faits_annee} jours foilables** — environ {part_foilable}. Le système
   ne cherche pas à prévoir le vent « en général », il cherche à attraper ces
   jours-là sans te faire monter au chalet pour rien.
 
@@ -251,7 +255,7 @@ séries « hour-0 » (voir la section Limites).
   mais les six s'entendent seulement {n_tous} fois. À la même heure, l'écart
   typique entre le modèle le plus optimiste et le plus pessimiste est de
   {diverg_med:.0f} nds (et dépasse {diverg_p90:.0f} nds un jour sur dix) —
-  énorme quand le seuil GO/NO-GO est à 9 nds. C'est exactement pourquoi lire
+  énorme quand le seuil GO/NO-GO est à {config.VENT_MIN_FOILABLE:.0f} nds. C'est exactement pourquoi lire
   une seule app météo marche mal ici, et pourquoi la pondération multi-modèles
   de ce projet a une chance de faire mieux.
 
@@ -295,8 +299,8 @@ séries « hour-0 » (voir la section Limites).
    une cote, pas une promesse — et le dashboard l'affichera toujours ainsi.
 
 4. **Les busts ont-ils une signature ?** Sur {n_busts + n_hits} journées GO à
-   24 h, {n_busts} ont été des busts complets (vent resté sous 9 nds toute la
-   journée). {texte_busts}
+   24 h, {n_busts} ont été des busts complets (vent resté sous
+   {config.VENT_MIN_FOILABLE:.0f} nds toute la journée). {texte_busts}
 
 ## Erreur sur le vent moyen (biais et RMSE)
 
@@ -311,8 +315,9 @@ GEM régional s'arrête à 84 h (pas de 96 h non plus).
 
 ## Événement « fenêtre foilable » : détection et fausses alertes
 
-Fenêtre foilable = au moins 2 h entre 9 et 25 nds, entre 8 h et 20 h locales,
-créux passagers 7–9 nds tolérés (voir config.py). Probabilité de détection
+Fenêtre foilable = au moins 2 h entre {config.VENT_MIN_FOILABLE:.0f} et
+{config.VENT_MAX_FOILABLE:.0f} nds, entre 8 h et 20 h locales, creux passagers
+{config.VENT_MARGINAL:.0f}–{config.VENT_MIN_FOILABLE:.0f} nds tolérés (voir config.py). Probabilité de détection
 (POD) = part des vraies fenêtres que le modèle avait annoncées. Taux de
 fausses alertes (FAR) = part des GO annoncés qui ne se sont pas matérialisés.
 

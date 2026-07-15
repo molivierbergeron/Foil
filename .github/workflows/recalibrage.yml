@@ -1,0 +1,35 @@
+# Recalibrage hebdomadaire des poids, avec garde-fou en validation temporelle.
+# Minute creuse volontairement (pas :00).
+name: Recalibrage hebdomadaire
+
+on:
+  schedule:
+    - cron: "43 10 * * 1"   # lundi 10:43 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: donnees
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  recalibrer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python recalibrage.py
+      - name: Commit et push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/poids_modeles.json reports/derive.md
+          git diff --cached --quiet && exit 0
+          git commit -m "Recalibrage hebdomadaire $(date -u +%F)"
+          git pull --rebase origin ${GITHUB_REF_NAME} && git push

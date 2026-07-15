@@ -8,17 +8,17 @@ séries « hour-0 » (voir la section Limites).
 
 - **Ton spot est un spot de vent léger.** Vent médian en journée :
   5 nds ; il faut monter au 90e percentile pour toucher
-  8 nds. La barre foilable (9 nds) est donc un événement rare :
-  **2024 : 25 sur 184 ; 2025 : 27 sur 184 ; 2026 : 12 sur 73 jours foilables** — grosso modo un jour sur sept. Le système
+  8 nds. Avec la barre foilable à 7 nds :
+  **2024 : 70 sur 184 ; 2025 : 84 sur 184 ; 2026 : 31 sur 73 jours foilables** — environ 4 jours sur 10. Le système
   ne cherche pas à prévoir le vent « en général », il cherche à attraper ces
   jours-là sans te faire monter au chalet pour rien.
 
 - **Pris un par un, les modèles ne s'entendent pas du tout.** À 24 h
-  d'échéance, au moins un modèle annonce une journée GO 179 fois —
-  mais les six s'entendent seulement 12 fois. À la même heure, l'écart
+  d'échéance, au moins un modèle annonce une journée GO 318 fois —
+  mais les six s'entendent seulement 70 fois. À la même heure, l'écart
   typique entre le modèle le plus optimiste et le plus pessimiste est de
   3 nds (et dépasse 5 nds un jour sur dix) —
-  énorme quand le seuil GO/NO-GO est à 9 nds. C'est exactement pourquoi lire
+  énorme quand le seuil GO/NO-GO est à 7 nds. C'est exactement pourquoi lire
   une seule app météo marche mal ici, et pourquoi la pondération multi-modèles
   de ce projet a une chance de faire mieux.
 
@@ -26,12 +26,12 @@ séries « hour-0 » (voir la section Limites).
   lisent systématiquement bas (-0.9 nds au consensus à 24 h) :
   quand ils disent GO, c'est fiable, mais ils ratent la majorité des vraies
   fenêtres. HRDPS lit haut (+1.0 nds) : il ne rate presque rien
-  mais crie au loup 61% du temps. Ce sont ces biais-là, mesurés à
+  mais crie au loup 34% du temps. Ce sont ces biais-là, mesurés à
   ce spot précis, que `poids_modeles.json` corrige.
 
 - **La distance d'échéance coûte cher.** Un GO annoncé 4 jours d'avance ne
-  tient que 69% du temps ; à 24 h,
-  85%. La décision « chalet » se prend donc sur une
+  tient que 76% du temps ; à 24 h,
+  93%. La décision « chalet » se prend donc sur une
   cote, jamais sur une certitude — et le dashboard l'affichera toujours
   comme telle.
 
@@ -51,22 +51,22 @@ séries « hour-0 » (voir la section Limites).
 
 3. **Quelle confiance accorder à un GO selon l'horizon ?** Sur la prévision
    d'ensemble (médiane des modèles) :
-   - GO annoncé à **96 h** : confirmé 69% du temps
-     (fourchette 55%–80%, 48 cas).
-   - GO annoncé à **48 h** : confirmé 76% du temps
-     (63%–86%, 51 cas).
-   - GO annoncé à **24 h** : confirmé 85% du temps
-     (74%–92%, 60 cas).
+   - GO annoncé à **96 h** : confirmé 76% du temps
+     (fourchette 69%–82%, 161 cas).
+   - GO annoncé à **48 h** : confirmé 91% du temps
+     (85%–94%, 153 cas).
+   - GO annoncé à **24 h** : confirmé 93% du temps
+     (88%–96%, 176 cas).
 
    Autrement dit, un « GO chalet » lancé 4 jours d'avance doit se lire comme
    une cote, pas une promesse — et le dashboard l'affichera toujours ainsi.
 
-4. **Les busts ont-ils une signature ?** Sur 57 journées GO à
-   24 h, 6 ont été des busts complets (vent resté sous 9 nds toute la
-   journée). **Non — pas encore de signature détectable.** Les médianes des
+4. **Les busts ont-ils une signature ?** Sur 172 journées GO à
+   24 h, 9 ont été des busts complets (vent resté sous
+   7 nds toute la journée). **Non — pas encore de signature détectable.** Les médianes des
    proxys de découplage sont quasi identiques entre busts et bons jours
-   (cisaillement 1.66 contre 1.65 ; rayonnement 418 contre
-   387 W/m²), et 6 cas ne permettent aucune conclusion (le seuil
+   (cisaillement 1.69 contre 1.62 ; rayonnement 376 contre
+   421 W/m²), et 9 cas ne permettent aucune conclusion (le seuil
    de ce rapport est n ≥ 30 par cellule ; on est loin en dessous). Deux
    lectures : (a) la vérité actuelle étant une médiane de modèles, elle est
    corrélée aux prévisions — les vrais busts « grille dit vent, lac dit rien »
@@ -103,8 +103,9 @@ GEM régional s'arrête à 84 h (pas de 96 h non plus).
 
 ## Événement « fenêtre foilable » : détection et fausses alertes
 
-Fenêtre foilable = au moins 2 h entre 9 et 25 nds, entre 8 h et 20 h locales,
-créux passagers 7–9 nds tolérés (voir config.py). Probabilité de détection
+Fenêtre foilable = au moins 2 h entre 7 et
+16 nds, entre 8 h et 20 h locales, creux passagers
+5–7 nds tolérés (voir config.py). Probabilité de détection
 (POD) = part des vraies fenêtres que le modèle avait annoncées. Taux de
 fausses alertes (FAR) = part des GO annoncés qui ne se sont pas matérialisés.
 
@@ -112,37 +113,37 @@ fausses alertes (FAR) = part des GO annoncés qui ne se sont pas matérialisés.
 
 | Modèle                 | Horizon   |   Jours |   Fenêtres réelles |   Hits |   Fausses alertes |   Manqués | POD (IC 95 %)   | FAR (IC 95 %)   |
 |:-----------------------|:----------|--------:|-------------------:|-------:|------------------:|----------:|:----------------|:----------------|
-| GEM régional (Canada)  | 24h       |     428 |                 61 |     17 |                 0 |        44 | 28% (18%–40%)   | 0% (0%–18%)     |
-| GEM global (Canada)    | 24h       |     441 |                 64 |     19 |                 3 |        45 | 30% (20%–42%)   | 14% (5%–33%)    |
-| ICON (Allemagne)       | 24h       |     441 |                 64 |     48 |                24 |        16 | 75% (63%–84%)   | 33% (24%–45%)   |
-| ECMWF IFS 0.25°        | 24h       |     441 |                 64 |     58 |                49 |         6 | 91% (81%–96%)   | 46% (37%–55%)   |
-| GFS (États-Unis)       | 24h       |     441 |                 64 |     60 |                55 |         4 | 94% (85%–98%)   | 48% (39%–57%)   |
-| HRDPS (Canada, 2.5 km) | 24h       |     441 |                 64 |     62 |                95 |         2 | 97% (89%–99%)   | 61% (53%–68%)   |
-| GEM régional (Canada)  | 48h       |     440 |                 63 |     18 |                 4 |        45 | 29% (19%–41%)   | 18% (7%–39%)    |
-| GEM global (Canada)    | 48h       |     430 |                 62 |     17 |                 5 |        45 | 27% (18%–40%)   | 23% (10%–43%)   |
-| ICON (Allemagne)       | 48h       |     441 |                 64 |     48 |                29 |        16 | 75% (63%–84%)   | 38% (28%–49%)   |
-| ECMWF IFS 0.25°        | 48h       |     441 |                 64 |     57 |                51 |         7 | 89% (79%–95%)   | 47% (38%–57%)   |
-| GFS (États-Unis)       | 48h       |     441 |                 64 |     57 |                65 |         7 | 89% (79%–95%)   | 53% (44%–62%)   |
-| GEM global (Canada)    | 96h       |     436 |                 63 |     13 |                 1 |        50 | 21% (12%–32%)   | 7% (1%–31%)     |
-| ICON (Allemagne)       | 96h       |     441 |                 64 |     33 |                32 |        31 | 52% (40%–63%)   | 49% (37%–61%)   |
-| ECMWF IFS 0.25°        | 96h       |     441 |                 64 |     49 |                69 |        15 | 77% (65%–85%)   | 58% (49%–67%)   |
-| GFS (États-Unis)       | 96h       |     441 |                 64 |     44 |                76 |        20 | 69% (57%–79%)   | 63% (54%–71%)   |
+| GEM global (Canada)    | 24h       |     441 |                185 |     89 |                 2 |        96 | 48% (41%–55%)   | 2% (1%–8%)      |
+| GEM régional (Canada)  | 24h       |     428 |                177 |     84 |                 4 |        93 | 47% (40%–55%)   | 5% (2%–11%)     |
+| ICON (Allemagne)       | 24h       |     441 |                185 |    166 |                31 |        19 | 90% (85%–93%)   | 16% (11%–21%)   |
+| ECMWF IFS 0.25°        | 24h       |     441 |                185 |    171 |                60 |        14 | 92% (88%–95%)   | 26% (21%–32%)   |
+| GFS (États-Unis)       | 24h       |     441 |                185 |    170 |                73 |        15 | 92% (87%–95%)   | 30% (25%–36%)   |
+| HRDPS (Canada, 2.5 km) | 24h       |     441 |                185 |    183 |                96 |         2 | 99% (96%–100%)  | 34% (29%–40%)   |
+| GEM régional (Canada)  | 48h       |     440 |                184 |     87 |                10 |        97 | 47% (40%–54%)   | 10% (6%–18%)    |
+| GEM global (Canada)    | 48h       |     430 |                179 |     74 |                12 |       105 | 41% (34%–49%)   | 14% (8%–23%)    |
+| ICON (Allemagne)       | 48h       |     441 |                185 |    157 |                43 |        28 | 85% (79%–89%)   | 22% (16%–28%)   |
+| ECMWF IFS 0.25°        | 48h       |     441 |                185 |    167 |                62 |        18 | 90% (85%–94%)   | 27% (22%–33%)   |
+| GFS (États-Unis)       | 48h       |     441 |                185 |    162 |                76 |        23 | 88% (82%–92%)   | 32% (26%–38%)   |
+| GEM global (Canada)    | 96h       |     436 |                183 |     68 |                21 |       115 | 37% (30%–44%)   | 24% (16%–33%)   |
+| ICON (Allemagne)       | 96h       |     441 |                185 |    136 |                65 |        49 | 74% (67%–79%)   | 32% (26%–39%)   |
+| ECMWF IFS 0.25°        | 96h       |     441 |                185 |    149 |                77 |        36 | 81% (74%–86%)   | 34% (28%–40%)   |
+| GFS (États-Unis)       | 96h       |     441 |                185 |    141 |                99 |        44 | 76% (70%–82%)   | 41% (35%–48%)   |
 
 ## Survie des fenêtres : le chiffre de la décision « chalet »
 
-Parmi les GO annoncés à 96 h par l'ensemble : 33 sur
-48 se sont réalisés (69%,
-fourchette 55%–80%).
+Parmi les GO annoncés à 96 h par l'ensemble : 122 sur
+161 se sont réalisés (76%,
+fourchette 69%–82%).
 
 ![Survie des GO](survie.png)
 
 | GO annoncé à   | Vérifié à   |   Cas |   Tiennent | Taux (IC 95 %)   |
 |:---------------|:------------|------:|-----------:|:-----------------|
-| 96h            | 48h         |    48 |         27 | 56% (42%–69%)    |
-| 96h            | 24h         |    48 |         30 | 62% (48%–75%)    |
-| 96h            | réalisé     |    48 |         33 | 69% (55%–80%)    |
-| 48h            | réalisé     |    51 |         39 | 76% (63%–86%)    |
-| 24h            | réalisé     |    60 |         51 | 85% (74%–92%)    |
+| 96h            | 48h         |   161 |        117 | 73% (65%–79%)    |
+| 96h            | 24h         |   161 |        124 | 77% (70%–83%)    |
+| 96h            | réalisé     |   161 |        122 | 76% (69%–82%)    |
+| 48h            | réalisé     |   153 |        139 | 91% (85%–94%)    |
+| 24h            | réalisé     |   176 |        163 | 93% (88%–96%)    |
 
 ## Diagnostic des busts
 
@@ -150,10 +151,10 @@ fourchette 55%–80%).
 
 | Variable           |   Médiane hits |   Médiane busts |   n hits |   n busts |
 |:-------------------|---------------:|----------------:|---------:|----------:|
-| cisaillement       |           1.65 |            1.66 |       51 |         6 |
-| rayonnement_moyen  |         387.17 |          417.73 |       51 |         6 |
-| nebulosite_moyenne |          42.75 |           59.65 |       51 |         6 |
-| inversion          |          -1.13 |           -1    |       51 |         6 |
+| cisaillement       |           1.62 |            1.69 |      163 |         9 |
+| rayonnement_moyen  |         421.21 |          376.29 |      163 |         9 |
+| nebulosite_moyenne |          38.88 |           69.83 |      163 |         9 |
+| inversion          |          -1.1  |           -0.85 |      163 |         9 |
 
 Variables : cisaillement = ratio vent 80 m / vent 10 m (médiane 8 h–20 h) ;
 inversion = temp. 80 m − temp. 2 m en °C (positif = air stable, découplage
