@@ -4,6 +4,37 @@ Période analysée : 2024-05-01 à 2026-07-12 (mai-octobre). Spot : 46.3123° N,
 -73.3638° O. Unités : nœuds (nds). Vérité terrain : médiane multi-modèles des
 séries « hour-0 » (voir la section Limites).
 
+## L'essentiel en langage clair
+
+- **Ton spot est un spot de vent léger.** Vent médian en journée :
+  5 nds ; il faut monter au 90e percentile pour toucher
+  8 nds. La barre foilable (9 nds) est donc un événement rare :
+  **2024 : 25 sur 184 ; 2025 : 27 sur 184 ; 2026 : 12 sur 73 jours foilables** — grosso modo un jour sur sept. Le système
+  ne cherche pas à prévoir le vent « en général », il cherche à attraper ces
+  jours-là sans te faire monter au chalet pour rien.
+
+- **Pris un par un, les modèles ne s'entendent pas du tout.** À 24 h
+  d'échéance, au moins un modèle annonce une journée GO 179 fois —
+  mais les six s'entendent seulement 12 fois. À la même heure, l'écart
+  typique entre le modèle le plus optimiste et le plus pessimiste est de
+  3 nds (et dépasse 5 nds un jour sur dix) —
+  énorme quand le seuil GO/NO-GO est à 9 nds. C'est exactement pourquoi lire
+  une seule app météo marche mal ici, et pourquoi la pondération multi-modèles
+  de ce projet a une chance de faire mieux.
+
+- **Chaque modèle a un caractère mesurable et stable.** Les GEM canadiens
+  lisent systématiquement bas (-0.9 nds au consensus à 24 h) :
+  quand ils disent GO, c'est fiable, mais ils ratent la majorité des vraies
+  fenêtres. HRDPS lit haut (+1.0 nds) : il ne rate presque rien
+  mais crie au loup 61% du temps. Ce sont ces biais-là, mesurés à
+  ce spot précis, que `poids_modeles.json` corrige.
+
+- **La distance d'échéance coûte cher.** Un GO annoncé 4 jours d'avance ne
+  tient que 69% du temps ; à 24 h,
+  85%. La décision « chalet » se prend donc sur une
+  cote, jamais sur une certitude — et le dashboard l'affichera toujours
+  comme telle.
+
 ## Conclusions d'abord
 
 1. **Quel modèle croire à ce spot ?** À 24 h, le plus précis est

@@ -190,6 +190,34 @@ def generer():
    « découplage » — un drapeau non validé serait de la fausse précision. Le
    diagnostic sera relancé automatiquement quand la vérité station existera."""
 
+    # --- Faits en langage clair (calculés, pas racontés) ---
+    verite_df = verite.reset_index()[["time", "vent"]]
+    reels = backtest.jours_foilables(backtest.series_jour(verite_df))
+    reels_dt = pd.Series(reels.values, index=pd.to_datetime(reels.index.astype(str)))
+    par_annee = {int(a): (int(g.sum()), len(g))
+                 for a, g in reels_dt.groupby(reels_dt.index.year)}
+    faits_annee = " ; ".join(f"{a} : {n} sur {t}" for a, (n, t) in par_annee.items())
+
+    loc = verite_df["time"].dt.tz_convert(config.FUSEAU_LOCAL)
+    jour_v = verite_df[(loc.dt.hour >= config.HEURE_DEBUT) & (loc.dt.hour < config.HEURE_FIN)]
+    vent_median = float(jour_v["vent"].median())
+    vent_p90 = float(jour_v["vent"].quantile(0.9))
+
+    go24 = {m: backtest.jours_foilables(backtest.series_jour(g))
+            for m, g in apparie[apparie["horizon"] == "24h"].groupby("modele")}
+    godf = pd.DataFrame(go24).dropna()
+    n_aumoins1, n_tous = int(godf.any(axis=1).sum()), int(godf.all(axis=1).sum())
+
+    p24 = apparie[apparie["horizon"] == "24h"].groupby("time")["vent"].agg(["min", "max"])
+    diverg_med = float((p24["max"] - p24["min"]).median())
+    diverg_p90 = float((p24["max"] - p24["min"]).quantile(0.9))
+
+    s24_idx = stats[stats["horizon"] == "24h"].set_index("modele")
+    biais_gem = float(s24_idx.loc[["gem_global", "gem_regional"], "biais"].mean())
+    biais_hrdps = float(s24_idx.loc["gem_hrdps_continental", "biais"])
+    far_hrdps = float(conf[(conf["modele"] == "gem_hrdps_continental")
+                           & (conf["horizon"] == "24h")]["far"].iloc[0])
+
     conf_aff = conf.copy()
     conf_aff["pod_aff"] = conf_aff.apply(
         lambda r: f"{r['pod']:.0%} ({_fmt_ic(r['pod_ic'])})" if pd.notna(r["pod"]) else "—", axis=1)
@@ -208,6 +236,37 @@ def generer():
 Période analysée : {res['poids']['periode_backtest']}. Spot : 46.3123° N,
 -73.3638° O. Unités : nœuds (nds). Vérité terrain : médiane multi-modèles des
 séries « hour-0 » (voir la section Limites).
+
+## L'essentiel en langage clair
+
+- **Ton spot est un spot de vent léger.** Vent médian en journée :
+  {vent_median:.0f} nds ; il faut monter au 90e percentile pour toucher
+  {vent_p90:.0f} nds. La barre foilable (9 nds) est donc un événement rare :
+  **{faits_annee} jours foilables** — grosso modo un jour sur sept. Le système
+  ne cherche pas à prévoir le vent « en général », il cherche à attraper ces
+  jours-là sans te faire monter au chalet pour rien.
+
+- **Pris un par un, les modèles ne s'entendent pas du tout.** À 24 h
+  d'échéance, au moins un modèle annonce une journée GO {n_aumoins1} fois —
+  mais les six s'entendent seulement {n_tous} fois. À la même heure, l'écart
+  typique entre le modèle le plus optimiste et le plus pessimiste est de
+  {diverg_med:.0f} nds (et dépasse {diverg_p90:.0f} nds un jour sur dix) —
+  énorme quand le seuil GO/NO-GO est à 9 nds. C'est exactement pourquoi lire
+  une seule app météo marche mal ici, et pourquoi la pondération multi-modèles
+  de ce projet a une chance de faire mieux.
+
+- **Chaque modèle a un caractère mesurable et stable.** Les GEM canadiens
+  lisent systématiquement bas ({biais_gem:+.1f} nds au consensus à 24 h) :
+  quand ils disent GO, c'est fiable, mais ils ratent la majorité des vraies
+  fenêtres. HRDPS lit haut ({biais_hrdps:+.1f} nds) : il ne rate presque rien
+  mais crie au loup {far_hrdps:.0%} du temps. Ce sont ces biais-là, mesurés à
+  ce spot précis, que `poids_modeles.json` corrige.
+
+- **La distance d'échéance coûte cher.** Un GO annoncé 4 jours d'avance ne
+  tient que {fiab['96h']['taux']:.0%} du temps ; à 24 h,
+  {fiab['24h']['taux']:.0%}. La décision « chalet » se prend donc sur une
+  cote, jamais sur une certitude — et le dashboard l'affichera toujours
+  comme telle.
 
 ## Conclusions d'abord
 
