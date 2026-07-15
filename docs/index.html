@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Prévisions de vent calibrées pour le foil au Lac Maskinongé — verdicts GO/NO avec fiabilité mesurée.">
+<title>Vent — Lac Maskinongé</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌬️</text></svg>">
+</head>
+<body>
+<header>
+  <h1>Vent au Lac Maskinongé</h1>
+  <p class="sous-titre">Foil UFO — prévisions calibrées sur l'erreur mesurée des modèles à ce spot</p>
+</header>
+
+<main>
+  <p id="etat" class="etat">Chargement des prévisions…</p>
+
+  <section id="semaine" hidden>
+    <h2>Cette semaine</h2>
+    <p class="aide">Verdict par jour selon l'ensemble corrigé des modèles. La cote de
+    confiance vient du backtest 2024–2026 : c'est la part des GO annoncés à cet
+    horizon qui se sont réellement confirmés.</p>
+    <div id="cartes-semaine" class="cartes"></div>
+  </section>
+
+  <section id="execution" hidden>
+    <h2>Aujourd'hui / demain</h2>
+    <div id="blocs-jours"></div>
+    <div id="divergence" class="avis" hidden></div>
+    <h3>Vent prévu, heure par heure (48 h)</h3>
+    <p class="aide">Ligne épaisse : ensemble corrigé. Lignes fines : chaque modèle
+    après correction de son biais mesuré. Zone teintée : bande foilable.</p>
+    <div id="graphique" class="graphique-cadre"></div>
+    <div id="legende" class="legende"></div>
+  </section>
+</main>
+
+<footer id="pied" hidden>
+  <p id="fraicheur"></p>
+  <p id="recalibrage"></p>
+  <p>Données météo : <a href="https://open-meteo.com/" rel="noopener">Open-Meteo.com</a> (CC BY 4.0).
+  La vérité de calibration est pour l'instant un consensus de modèles — les cotes
+  seront requalifiées quand l'anémomètre au lac sera en service.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -19,7 +19,7 @@ corrigeant les prévisions en conséquence.
 |---|---|
 | 1. Backtest 2024–2026, rapport, poids calibrés | ✅ Livrée et validée — voir `reports/rapport_backtest.md` |
 | 2. Boucle d'apprentissage continue (GitHub Actions) | ✅ Livrée — jobs quotidien et hebdomadaire, testés en local |
-| 3. Dashboard public (GitHub Pages) | À venir |
+| 3. Dashboard public (GitHub Pages) | ✅ Livrée — `docs/`, publiée par `pages.yml` |
 | 4. Station Ecowitt au lac (`TRUTH_SOURCE="station"`) | À venir |
 | 5. Correction apprise avancée (MOS) | À venir |
 | 6. Alertes (`alertes.py`, placeholder) | Non implémentée — consommera les verdicts existants ; seuils de confiance, horaires et canaux (ntfy) à décider ensemble. |
@@ -156,6 +156,32 @@ ne survient que si le job est cassé longtemps.
 **Anti-bloat** : partitions mensuelles ≈ 70 Ko/mois. Si le repo dépassait un
 jour ~500 Mo, migrer les partitions froides vers GitHub Releases (documenté,
 pas implémenté).
+
+## Phase 3 — le dashboard public
+
+`docs/` est un site statique autonome (HTML/CSS/JS sans dépendance, chemins
+relatifs) publié par GitHub Pages (`pages.yml`) — copiable tel quel par FTP
+ailleurs plus tard. **Architecture de fraîcheur** : la page récupère les
+prévisions brutes en direct chez Open-Meteo (CORS, sans clé) à chaque
+ouverture, puis leur applique en JavaScript les corrections de
+`docs/poids_modeles.json` (copie tenue à jour par le recalibrage
+hebdomadaire). Les données affichées sont donc toujours au dernier run de
+modèle, même si les crons ont du retard — le cron ne sert jamais à
+l'affichage.
+
+Détails d'implémentation :
+- Les seuils du sport (bande 7–16, marginale, blocs, ratio rafaleux) sont lus
+  dans la section `sport` de `poids_modeles.json` — jamais codés en dur en JS.
+- La logique de fenêtres JS est testée contre les mêmes cas que la version
+  Python : `node tests/test_dashboard.js`.
+- Chaque verdict GO affiche sa cote mesurée (fourchette IC 95 % du backtest,
+  par horizon). Aucun drapeau « découplage » tant que la phase 1 n'a pas
+  trouvé de signature validée (voir rapport).
+- Mention « modèles divisés » quand l'écart entre modèles dépasse 5 nds ;
+  badge « rafaleux » si la majorité des heures en bande de la fenêtre dépasse
+  le ratio 1,6.
+- Mobile-first (iPhone Safari/Chrome), clair/sombre automatique, lecture
+  seule, aucune authentification, aucune donnée personnelle.
 
 ## Attribution
 

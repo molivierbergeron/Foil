@@ -129,6 +129,11 @@ def principal():
         with open(config.FICHIER_POIDS, "w") as f:
             json.dump(poids_final, f, indent=2, ensure_ascii=False)
 
+    # Le dashboard (docs/) lit sa propre copie — tenue en phase avec data/
+    docs_poids = Path("docs/poids_modeles.json")
+    if docs_poids.parent.exists():
+        docs_poids.write_text(Path(config.FICHIER_POIDS).read_text())
+
     chemin = Path("reports/derive.md")
     if not chemin.exists():
         chemin.write_text(
