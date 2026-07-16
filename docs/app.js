@@ -1,10 +1,12 @@
 /* Dashboard vent Lac Maskinongé.
  *
  * Architecture de fraîcheur : les prévisions brutes sont récupérées EN DIRECT
- * chez Open-Meteo à chaque ouverture (CORS, sans clé). Les corrections
- * (biais/poids par modèle et horizon) viennent de poids_modeles.json,
- * recalibré chaque semaine par le cron — le cron ne sert jamais à l'affichage.
- * Tous les seuils du sport sont lus dans poids_modeles.json (section sport).
+ * chez Open-Meteo à chaque ouverture (CORS, sans clé), puis re-rafraîchies
+ * automatiquement toutes les heures entre 7 h et 17 h (heure de Montréal)
+ * tant que la page est ouverte. Les corrections (biais/poids par modèle et
+ * horizon) viennent de poids_modeles.json, recalibré chaque semaine par le
+ * cron — le cron ne sert jamais à l'affichage. Tous les seuils du sport sont
+ * lus dans poids_modeles.json (section sport).
  */
 "use strict";
 
@@ -20,6 +22,9 @@ const SECTEURS = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"];
 const JOURS = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
 const LIBELLES_BLOCS = { matin: "matin", midi: "midi", apres_midi: "après-midi" };
 const SEUIL_DIVERGENCE = 5; // nds d'écart entre modèles = mention de divergence
+
+// Auto-rafraîchissement : chaque heure entre 7 h et 17 h (heure de Montréal)
+const RAFRAICHIR_DE = 7, RAFRAICHIR_A = 17, RAFRAICHIR_MS = 60 * 60 * 1000;
 
 // ---------------------------------------------------------------- fenêtres
 
@@ -76,14 +81,63 @@ function corrige(modele, brut, direction, decalageJour, poids) {
   return { vent: brut - biais, poids: infos.poids, horizon: h };
 }
 
+// ------------------------------------------------------------------- météo
+
+const CODES_ORAGE = [95, 96, 99];
+
+function iconeMeteo(code) {
+  if (code == null) return "";
+  if (CODES_ORAGE.includes(code)) return "⛈️";
+  if (code === 0) return "☀️";
+  if (code <= 2) return "🌤️";
+  if (code === 3) return "☁️";
+  if (code <= 48) return "🌫️";
+  if (code <= 57) return "🌦️";
+  if (code <= 67) return "🌧️";
+  if (code <= 77) return "❄️";
+  if (code <= 82) return "🌧️";
+  if (code <= 86) return "❄️";
+  return "⛈️";
+}
+
+function resumeMeteoJour(jour) {
+  /* Résumé discret de la météo du jour (heures navigables) :
+   * icône dominante, cumul de pluie, drapeau orage. */
+  const codes = jour.map((h) => h.meteoCode).filter((c) => c != null);
+  if (!codes.length) return null;
+  const orage = codes.some((c) => CODES_ORAGE.includes(c));
+  const pluie = jour.reduce((s, h) => s + (h.pluie ?? 0), 0);
+  const probMax = Math.max(...jour.map((h) => h.probPluie ?? 0));
+  // Icône du "pire" moment hors orage (le plus couvert/mouillé), pour ne pas
+  // afficher soleil quand l'après-midi est sous la pluie.
+  const dominant = Math.max(...codes.filter((c) => !CODES_ORAGE.includes(c)), 0);
+  let texte;
+  if (pluie < 0.5) texte = probMax >= 40 ? `risque d'averses (${probMax} %)` : "sec";
+  else if (pluie < 5) texte = `un peu de pluie (${pluie.toFixed(0)} mm)`;
+  else if (pluie < 15) texte = `pluie (${pluie.toFixed(0)} mm)`;
+  else texte = `grosse pluie (${pluie.toFixed(0)} mm)`;
+  return { icone: iconeMeteo(orage ? 95 : dominant), texte, orage, pluie };
+}
+
 // --------------------------------------------------------------- ensemble
 
-function construireHeures(donnees, poids) {
+function construireHeures(donnees, meteo, poids) {
   /* Retourne une liste d'objets {t, jourISO, heure, decalage, parModele,
-   * ensemble, rafales, direction, divergence} en heure locale du spot. */
+   * ensemble, rafales, direction, divergence, meteoCode, pluie, probPluie}
+   * en heure locale du spot. */
   const temps = donnees.hourly.time;
   const aujourdhui = temps[0].slice(0, 10);
   const ratioDefaut = poids.ratio_rafales_defaut ?? 1.6;
+  const meteoParTemps = {};
+  if (meteo?.hourly?.time) {
+    meteo.hourly.time.forEach((t, i) => {
+      meteoParTemps[t] = {
+        meteoCode: meteo.hourly.weather_code?.[i],
+        pluie: meteo.hourly.precipitation?.[i],
+        probPluie: meteo.hourly.precipitation_probability?.[i],
+      };
+    });
+  }
   const heures = [];
   for (let i = 0; i < temps.length; i++) {
     const jourISO = temps[i].slice(0, 10);
@@ -119,9 +173,32 @@ function construireHeures(donnees, poids) {
       rafales: nraf > 0 ? sraf / nraf : null,
       direction: sw > 0 ? ((Math.atan2(-su, -sv) * 180) / Math.PI + 360) % 360 : null,
       divergence: valeurs.length >= 2 ? Math.max(...valeurs) - Math.min(...valeurs) : 0,
+      ...(meteoParTemps[temps[i]] ?? {}),
     });
   }
   return heures;
+}
+
+function regulariteFenetres(jour, fenetres, sport) {
+  /* Indice de régularité des puffs, à partir du facteur de rafales
+   * (rafales / vent moyen) médian sur les heures en bande des fenêtres :
+   * < 1.35 -> "régulier", 1.35..ratio_rafaleux -> "puffs modérés",
+   * > ratio_rafaleux (1.6) -> "puffy". Proxy standard : plus les rafales
+   * dépassent le vent moyen, plus le vent est irrégulier. */
+  const dansBande = (v) => v != null && v >= sport.vent_min && v <= sport.vent_max;
+  const ratios = [];
+  for (const [d, f] of fenetres) {
+    for (let i = d; i < f; i++) {
+      const h = jour[i];
+      if (dansBande(h.ensemble) && h.rafales != null) ratios.push(h.rafales / h.ensemble);
+    }
+  }
+  if (!ratios.length) return null;
+  ratios.sort((a, b) => a - b);
+  const mediane = ratios[Math.floor(ratios.length / 2)];
+  if (mediane > sport.ratio_rafaleux) return { niveau: "puffy", classe: "mauvais" };
+  if (mediane > 1.35) return { niveau: "puffs modérés", classe: "moyen" };
+  return { niveau: "vent régulier", classe: "bon" };
 }
 
 function analyseJour(heures, jourISO, sport) {
@@ -130,20 +207,10 @@ function analyseJour(heures, jourISO, sport) {
   const vents = jour.map((h) => h.ensemble);
   const fenetres = fenetresDuJour(vents, sport);
   const dansBande = (v) => v != null && v >= sport.vent_min && v <= sport.vent_max;
-  // Puffy si la MAJORITÉ des heures en bande de la fenêtre dépasse le ratio —
-  // une seule heure limite ne doit pas étiqueter toute la journée.
-  let nBande = 0, nPuffy = 0;
-  for (const [d, f] of fenetres) {
-    for (let i = d; i < f; i++) {
-      const h = jour[i];
-      if (!dansBande(h.ensemble)) continue;
-      nBande++;
-      if (h.rafales != null && h.rafales / h.ensemble > sport.ratio_rafaleux) nPuffy++;
-    }
-  }
-  const puffy = nBande > 0 && nPuffy / nBande > 0.5;
+  const regularite = regulariteFenetres(jour, fenetres, sport);
   const heuresDivergentes = jour.filter((h) => h.divergence > SEUIL_DIVERGENCE).length;
   const max = Math.max(...vents.filter((v) => v != null), 0);
+  const meteo = resumeMeteoJour(jour);
 
   // Blocs (matin/midi/après-midi) : GO si une fenêtre recouvre le bloc d'au
   // moins 1 h dans la bande + pics de vent et de rafales du bloc.
@@ -163,7 +230,7 @@ function analyseJour(heures, jourISO, sport) {
       rafales: Math.max(...dansBloc.map((h) => h.rafales ?? 0), 0),
     };
   }
-  return { jour, fenetres, puffy, heuresDivergentes, max, blocs };
+  return { jour, fenetres, regularite, heuresDivergentes, max, blocs, meteo };
 }
 
 // ---------------------------------------------------------------- verdicts
@@ -198,22 +265,49 @@ function fleche(direction) {
   return fleches[Math.floor(((direction + 22.5) % 360) / 45)];
 }
 
-function rangeeBlocs(analyse, sport, compact) {
-  return `<div class="rangee-blocs">` + Object.entries(analyse.blocs).map(([nom, b]) => {
-    const [debutB, finB] = sport.blocs[nom];
-    const valeur = b.vent > 0
-      ? `${b.vent.toFixed(0)}<small> / raf ${b.rafales.toFixed(0)}</small>`
-      : "—";
-    return `<div class="bloc ${b.go ? "go" : ""}">
-      <span class="nom-bloc">${LIBELLES_BLOCS[nom] ?? nom}${compact ? "" : ` <em>${debutB}–${finB} h</em>`}</span>
-      <span class="valeur">${valeur}</span></div>`;
-  }).join("") + `</div>`;
+function heureMontreal() {
+  return Number(new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Toronto", hour: "2-digit", hour12: false,
+  }).format(new Date()));
 }
 
 // ----------------------------------------------------------------- rendu
 
+function classeHeure(h, sport) {
+  if (h.ensemble == null) return "vide";
+  if (h.ensemble > sport.vent_max) return "trop";
+  if (h.ensemble >= sport.vent_min) return "go";
+  if (h.ensemble >= sport.vent_marginal) return "marginal";
+  return "calme";
+}
+
+function bandeHoraire(analyse, sport, heureCourante) {
+  /* Bande heure par heure (8 h–20 h) : vent, rafales, météo, orage. */
+  const cellules = analyse.jour
+    .filter((h) => h.decalage > 0 || h.heure >= Math.max(sport.heure_debut, heureCourante))
+    .map((h) => {
+      const orage = CODES_ORAGE.includes(h.meteoCode);
+      return `<div class="cellule ${classeHeure(h, sport)}${orage ? " orage" : ""}">
+        <span class="ch">${h.heure} h</span>
+        <span class="cv">${h.ensemble != null ? h.ensemble.toFixed(0) : "—"}</span>
+        <span class="cr">${h.rafales != null ? `raf ${h.rafales.toFixed(0)}` : ""}</span>
+        <span class="cm">${orage ? "⚡" : iconeMeteo(h.meteoCode)}</span>
+      </div>`;
+    });
+  if (!cellules.length) return `<p class="aide">journée navigable terminée</p>`;
+  return `<div class="bande-heures">${cellules.join("")}</div>`;
+}
+
+function ligneMeteo(meteo) {
+  if (!meteo) return "";
+  const orage = meteo.orage
+    ? ` <span class="orage-badge">⚡ risque d'orages — pas d'eau à ce moment-là</span>` : "";
+  return `<p class="meteo">${meteo.icone} ${meteo.texte}${orage}</p>`;
+}
+
 function rendreSemaine(heures, poids, sport) {
   const conteneur = document.getElementById("cartes-semaine");
+  conteneur.innerHTML = "";
   const jours = [...new Set(heures.map((h) => h.jourISO))].slice(0, 7);
   for (const jourISO of jours) {
     const a = analyseJour(heures, jourISO, sport);
@@ -227,8 +321,9 @@ function rendreSemaine(heures, poids, sport) {
     const carte = document.createElement("article");
     carte.className = "carte";
     const etiquettes = [];
-    if (go && a.puffy) etiquettes.push("puffy");
-    if (a.heuresDivergentes >= 2) etiquettes.push("modèles divisés");
+    if (go && a.regularite) etiquettes.push(
+      `<span class="etiquette ${a.regularite.classe}">${a.regularite.niveau}</span>`);
+    if (a.heuresDivergentes >= 2) etiquettes.push(`<span class="etiquette">modèles divisés</span>`);
     carte.innerHTML = `
       <div class="entete">
         <span class="jour">${decalage === 0 ? "aujourd'hui" : decalage === 1 ? "demain" : JOURS[d.getDay()]}</span>
@@ -236,32 +331,47 @@ function rendreSemaine(heures, poids, sport) {
         <span class="badge ${go ? "go" : "no"}">${go && conf != null ? `GO · ${conf} %` : go ? "GO" : "NO"}</span>
       </div>
       <p class="resume">${fleche(milieu.direction)} ${etiquetteFenetre(a, sport)}</p>
-      ${rangeeBlocs(a, sport, true)}
-      ${etiquettes.length ? `<div class="etiquettes">${etiquettes.map((e) => `<span class="etiquette">${e}</span>`).join("")}</div>` : ""}`;
+      <div class="rangee-blocs">${Object.entries(a.blocs).map(([nom, b]) => {
+        const valeur = b.vent > 0
+          ? `${b.vent.toFixed(0)}<small> / raf ${b.rafales.toFixed(0)}</small>` : "—";
+        return `<div class="bloc ${b.go ? "go" : ""}">
+          <span class="nom-bloc">${LIBELLES_BLOCS[nom] ?? nom}</span>
+          <span class="valeur">${valeur}</span></div>`;
+      }).join("")}</div>
+      ${ligneMeteo(a.meteo)}
+      ${etiquettes.length ? `<div class="etiquettes">${etiquettes.join("")}</div>` : ""}`;
     conteneur.appendChild(carte);
   }
 }
 
 function rendreExecution(heures, sport) {
   const conteneur = document.getElementById("blocs-jours");
+  conteneur.innerHTML = "";
+  const heureCourante = heureMontreal();
   const jours = [...new Set(heures.map((h) => h.jourISO))].slice(0, 2);
   jours.forEach((jourISO, idx) => {
     const a = analyseJour(heures, jourISO, sport);
     if (!a.jour.length) return;
     const div = document.createElement("div");
     div.className = "jour-blocs";
-    div.innerHTML = `<div class="titre-jour">${idx === 0 ? "aujourd'hui" : "demain"}</div>`
-      + rangeeBlocs(a, sport, false);
+    const chips = [];
+    if (a.regularite) chips.push(
+      `<span class="etiquette ${a.regularite.classe}">${a.regularite.niveau}</span>`);
+    div.innerHTML = `<div class="titre-jour">${idx === 0 ? "aujourd'hui" : "demain"}
+        ${chips.join("")}</div>`
+      + bandeHoraire(a, sport, heureCourante)
+      + ligneMeteo(a.meteo);
     conteneur.appendChild(div);
   });
 
   // Mention de divergence sur les 48 h affichées
+  const avis = document.getElementById("divergence");
+  avis.hidden = true;
   const h48 = heures.filter((h) => h.decalage <= 1);
   const divergentes = h48.filter(
     (h) => h.heure >= sport.heure_debut && h.heure < sport.heure_fin
       && h.divergence > SEUIL_DIVERGENCE);
   if (divergentes.length >= 2) {
-    const avis = document.getElementById("divergence");
     avis.hidden = false;
     avis.textContent = `⚠️ Les modèles s'écartent de plus de ${SEUIL_DIVERGENCE} nds pendant `
       + `${divergentes.length} h sur les 48 prochaines heures — verdict moins fiable que d'habitude.`;
@@ -283,6 +393,16 @@ function rendreGraphique(heures, sport) {
 
   let svg = `<svg viewBox="0 0 ${L} ${H}" width="100%" style="min-width:640px" role="img" aria-label="Vent prévu sur 48 heures, par modèle et ensemble corrigé">`;
   svg += `<rect x="${mg.g}" y="${y(sport.vent_max)}" width="${larg}" height="${y(sport.vent_min) - y(sport.vent_max)}" fill="var(--bande)"/>`;
+
+  // Heures déjà passées : grisées, avec un repère « maintenant »
+  const heureCourante = heureMontreal();
+  const iMaintenant = h48.findIndex((h) => h.decalage === 0 && h.heure === heureCourante);
+  if (iMaintenant > 0) {
+    svg += `<rect x="${mg.g}" y="${mg.h}" width="${x(iMaintenant) - mg.g}" height="${haut}" fill="var(--passe)"/>`
+      + `<line x1="${x(iMaintenant)}" x2="${x(iMaintenant)}" y1="${mg.h}" y2="${H - mg.b}" stroke="var(--maintenant)" stroke-width="1.6"/>`
+      + `<text x="${x(iMaintenant) + 4}" y="${mg.h + 10}" font-size="10" fill="var(--maintenant)">maintenant</text>`;
+  }
+
   for (const v of [0, 5, 10, 15, 20].filter((v) => v <= maxY)) {
     svg += `<line x1="${mg.g}" x2="${L - mg.d}" y1="${y(v)}" y2="${y(v)}" stroke="var(--bordure)" stroke-width="0.7"/>`
       + `<text x="${mg.g - 5}" y="${y(v) + 3}" text-anchor="end" font-size="10" fill="var(--texte-3)">${v}</text>`;
@@ -349,30 +469,39 @@ function rendreGraphique(heures, sport) {
 
 // ---------------------------------------------------------------- démarrage
 
+let derniereMaj = 0;
+
 async function demarrer() {
   const etat = document.getElementById("etat");
   try {
     const poids = await (await fetch("poids_modeles.json")).json();
     const sport = poids.sport;
-    const url = "https://api.open-meteo.com/v1/forecast"
-      + `?latitude=${poids.spot.latitude}&longitude=${poids.spot.longitude}`
+    const base = "https://api.open-meteo.com/v1/forecast"
+      + `?latitude=${poids.spot.latitude}&longitude=${poids.spot.longitude}`;
+    const urlVent = base
       + "&hourly=wind_speed_10m,wind_gusts_10m,wind_direction_10m"
       + `&models=${Object.keys(MODELES).join(",")}`
       + "&wind_speed_unit=kn&timezone=America%2FToronto&forecast_days=7";
-    const rep = await fetch(url);
-    if (!rep.ok) throw new Error(`Open-Meteo HTTP ${rep.status}`);
-    const donnees = await rep.json();
+    const urlMeteo = base
+      + "&hourly=weather_code,precipitation,precipitation_probability"
+      + "&timezone=America%2FToronto&forecast_days=7";
+    const [repVent, repMeteo] = await Promise.all([fetch(urlVent), fetch(urlMeteo)]);
+    if (!repVent.ok) throw new Error(`Open-Meteo HTTP ${repVent.status}`);
+    const donnees = await repVent.json();
+    const meteo = repMeteo.ok ? await repMeteo.json() : null;
 
-    const heures = construireHeures(donnees, poids);
+    const heures = construireHeures(donnees, meteo, poids);
     rendreExecution(heures, sport);
     rendreGraphique(heures, sport);
     rendreSemaine(heures, poids, sport);
+    derniereMaj = Date.now();
 
     const maintenant = new Date();
     document.getElementById("fraicheur").textContent =
       `Prévisions chargées en direct le ${maintenant.toLocaleDateString("fr-CA")} à `
       + `${maintenant.toLocaleTimeString("fr-CA", { hour: "2-digit", minute: "2-digit" })} `
-      + "(dernier run disponible de chaque modèle).";
+      + "(dernier run disponible de chaque modèle) — la page se rafraîchit "
+      + `toute seule chaque heure entre ${RAFRAICHIR_DE} h et ${RAFRAICHIR_A} h.`;
     document.getElementById("recalibrage").textContent =
       `Le % d'un GO = la part des GO annoncés à cette échéance qui se sont `
       + `réellement confirmés (mesuré sur ${poids.periode_backtest}). `
@@ -387,9 +516,24 @@ async function demarrer() {
   }
 }
 
-if (typeof document !== "undefined") demarrer();
+function rafraichirSiPertinent() {
+  const h = heureMontreal();
+  const primee = Date.now() - derniereMaj >= RAFRAICHIR_MS - 30000;
+  if (primee && h >= RAFRAICHIR_DE && h <= RAFRAICHIR_A) demarrer();
+}
+
+if (typeof document !== "undefined") {
+  demarrer();
+  // Rafraîchissement horaire (7 h–17 h, heure de Montréal) tant que la page
+  // est ouverte + mise à jour immédiate quand on revient sur l'onglet.
+  setInterval(rafraichirSiPertinent, 5 * 60 * 1000);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && Date.now() - derniereMaj > 30 * 60 * 1000) demarrer();
+  });
+}
 
 // Export pour tests hors navigateur (node tests/test_dashboard.js)
 if (typeof module !== "undefined") {
-  module.exports = { fenetresDuJour, secteurDe, horizonPour, corrige, analyseJour };
+  module.exports = { fenetresDuJour, secteurDe, horizonPour, corrige,
+                     regulariteFenetres, iconeMeteo, resumeMeteoJour };
 }

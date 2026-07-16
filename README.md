@@ -182,6 +182,18 @@ Détails d'implémentation :
   le ratio 1,6.
 - Mobile-first (iPhone Safari/Chrome), clair/sombre automatique, lecture
   seule, aucune authentification, aucune donnée personnelle.
+- **Auto-rafraîchissement** : la page recharge les prévisions chaque heure
+  entre 7 h et 17 h (heure de Montréal) tant qu'elle est ouverte, et dès
+  qu'on revient sur l'onglet si les données ont plus de 30 min. Le graphique
+  48 h grise les heures passées et marque « maintenant ».
+- **Aujourd'hui / demain en heure par heure** : bande de cellules 8 h–20 h
+  (aujourd'hui à partir de l'heure courante) avec vent, rafales et icône
+  météo ; vert = bande de foil, ⚡ = risque d'orage (codes WMO 95/96/99).
+- **Météo discrète** sous chaque verdict : icône, cumul de pluie du jour,
+  drapeau orage bien visible (sécurité sur l'eau).
+- **Indice de régularité des puffs** : facteur de rafales médian
+  (rafales/vent) des heures en bande — < 1,35 « vent régulier »,
+  1,35–1,6 « puffs modérés », > 1,6 « puffy ».
 
 ## Attribution
 

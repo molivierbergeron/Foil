@@ -25,3 +25,19 @@ egal(horizonPour("gem_hrdps_continental", 3, poids), "24h", "horizon_repli_hrdps
 egal(horizonPour("gem_global", 3, poids), "96h", "horizon_96h");
 egal(horizonPour("gem_regional", 4, poids), "48h", "horizon_repli_regional");
 console.log("Tous les tests dashboard passent.");
+
+// Tests régularité des puffs et météo
+const { regulariteFenetres, iconeMeteo, resumeMeteoJour } = require("../docs/app.js");
+const jourTest = (ratios) => ratios.map((r) => ({ ensemble: 10, rafales: 10 * r, meteoCode: 0, pluie: 0, probPluie: 0 }));
+egal(regulariteFenetres(jourTest([1.2, 1.25, 1.3]), [[0, 3]], sport).niveau, "vent régulier", "regularite_bonne");
+egal(regulariteFenetres(jourTest([1.5, 1.5, 1.4]), [[0, 3]], sport).niveau, "puffs modérés", "regularite_moyenne");
+egal(regulariteFenetres(jourTest([1.9, 2.0, 1.8]), [[0, 3]], sport).niveau, "puffy", "regularite_puffy");
+egal(regulariteFenetres(jourTest([1.2]), [], sport), null, "regularite_sans_fenetre");
+egal(iconeMeteo(0), "☀️", "meteo_soleil");
+egal(iconeMeteo(95), "⛈️", "meteo_orage");
+egal(iconeMeteo(63), "🌧️", "meteo_pluie");
+const jourOrage = [{ meteoCode: 95, pluie: 8, probPluie: 90 }, { meteoCode: 61, pluie: 3, probPluie: 80 }];
+const rm = resumeMeteoJour(jourOrage);
+egal(rm.orage, true, "resume_orage");
+egal(rm.texte.includes("11 mm"), true, "resume_cumul_pluie");
+console.log("Tests météo/régularité passent.");
