@@ -1,65 +1,65 @@
 {
- "genere_le": "2026-07-15T20:09+00:00",
+ "genere_le": "2026-07-17T11:04+00:00",
  "spot": {
   "latitude": 46.3123,
   "longitude": -73.3638
  },
  "unites": "noeuds",
  "verdicts_ensemble": {
-  "2026-07-15": {
-   "go": true,
-   "blocs": {
-    "matin": true,
-    "apres_midi": true,
-    "soiree": true
-   }
-  },
-  "2026-07-16": {
-   "go": true,
-   "blocs": {
-    "matin": true,
-    "apres_midi": true,
-    "soiree": true
-   }
-  },
   "2026-07-17": {
    "go": true,
    "blocs": {
     "matin": true,
-    "apres_midi": false,
-    "soiree": false
+    "midi": true,
+    "apres_midi": false
    }
   },
   "2026-07-18": {
    "go": false,
    "blocs": {
     "matin": false,
-    "apres_midi": false,
-    "soiree": false
+    "midi": false,
+    "apres_midi": false
    }
   },
   "2026-07-19": {
    "go": true,
    "blocs": {
     "matin": true,
-    "apres_midi": true,
-    "soiree": true
+    "midi": true,
+    "apres_midi": true
    }
   },
   "2026-07-20": {
    "go": true,
    "blocs": {
     "matin": false,
-    "apres_midi": true,
-    "soiree": true
+    "midi": false,
+    "apres_midi": true
    }
   },
   "2026-07-21": {
-   "go": false,
+   "go": true,
    "blocs": {
     "matin": false,
-    "apres_midi": false,
-    "soiree": false
+    "midi": true,
+    "apres_midi": true
+   }
+  },
+  "2026-07-22": {
+   "go": true,
+   "blocs": {
+    "matin": true,
+    "midi": true,
+    "apres_midi": true
+   }
+  },
+  "2026-07-23": {
+   "go": true,
+   "blocs": {
+    "matin": false,
+    "midi": true,
+    "apres_midi": true
    }
   }
  },
