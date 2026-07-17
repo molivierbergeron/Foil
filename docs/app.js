@@ -2,7 +2,7 @@
  *
  * Architecture de fraîcheur : les prévisions brutes sont récupérées EN DIRECT
  * chez Open-Meteo à chaque ouverture (CORS, sans clé), puis re-rafraîchies
- * automatiquement toutes les heures entre 7 h et 17 h (heure de Montréal)
+ * automatiquement toutes les heures entre 6 h et 22 h (heure de Montréal)
  * tant que la page est ouverte. Les corrections (biais/poids par modèle et
  * horizon) viennent de poids_modeles.json, recalibré chaque semaine par le
  * cron — le cron ne sert jamais à l'affichage. Tous les seuils du sport sont
@@ -23,8 +23,8 @@ const JOURS = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "s
 const LIBELLES_BLOCS = { matin: "matin", midi: "midi", apres_midi: "après-midi" };
 const SEUIL_DIVERGENCE = 5; // nds d'écart entre modèles = mention de divergence
 
-// Auto-rafraîchissement : chaque heure entre 7 h et 17 h (heure de Montréal)
-const RAFRAICHIR_DE = 7, RAFRAICHIR_A = 17, RAFRAICHIR_MS = 60 * 60 * 1000;
+// Auto-rafraîchissement : chaque heure entre 6 h et 22 h (heure de Montréal)
+const RAFRAICHIR_DE = 6, RAFRAICHIR_A = 22, RAFRAICHIR_MS = 60 * 60 * 1000;
 
 // ---------------------------------------------------------------- fenêtres
 
@@ -290,9 +290,17 @@ function fleche(direction) {
 }
 
 function heureMontreal() {
-  return Number(new Intl.DateTimeFormat("en-CA", {
-    timeZone: "America/Toronto", hour: "2-digit", hour12: false,
-  }).format(new Date()));
+  const parts = new Intl.DateTimeFormat("fr-CA", {
+    timeZone: "America/Toronto", hour: "numeric", hour12: false,
+  }).formatToParts(new Date());
+  const h = Number(parts.find((p) => p.type === "hour")?.value);
+  return Number.isFinite(h) ? h % 24 : new Date().getHours();
+}
+
+function dateMontreal() {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Toronto", year: "numeric", month: "2-digit", day: "2-digit",
+  }).format(new Date());
 }
 
 // ----------------------------------------------------------------- rendu
@@ -306,19 +314,19 @@ function classeHeure(h, sport) {
 }
 
 function bandeHoraire(analyse, sport, heureCourante) {
-  /* Bande heure par heure (8 h–20 h) : vent, rafales, météo, orage. */
-  const cellules = analyse.jour
-    .filter((h) => h.decalage > 0 || h.heure >= Math.max(sport.heure_debut, heureCourante))
-    .map((h) => {
-      const orage = CODES_ORAGE.includes(h.meteoCode);
-      return `<div class="cellule ${classeHeure(h, sport)}${orage ? " orage" : ""}">
-        <span class="ch">${h.heure} h</span>
-        <span class="cv">${h.ensemble != null ? h.ensemble.toFixed(0) : "—"}</span>
-        <span class="cr">${h.rafales != null ? `raf ${h.rafales.toFixed(0)}` : ""}</span>
-        <span class="cm">${orage ? "⚡" : iconeMeteo(h.meteoCode)}</span>
-      </div>`;
-    });
-  if (!cellules.length) return `<p class="aide">journée navigable terminée</p>`;
+  /* Bande heure par heure (8 h–20 h) : vent, rafales, météo, orage.
+   * La journée complète est TOUJOURS affichée ; les heures déjà passées
+   * (aujourd'hui seulement) sont grisées, jamais retirées. */
+  const cellules = analyse.jour.map((h) => {
+    const orage = CODES_ORAGE.includes(h.meteoCode);
+    const passee = h.decalage === 0 && h.heure < heureCourante;
+    return `<div class="cellule ${classeHeure(h, sport)}${orage ? " orage" : ""}${passee ? " passee" : ""}">
+      <span class="ch">${h.heure} h</span>
+      <span class="cv">${h.ensemble != null ? h.ensemble.toFixed(0) : "—"}</span>
+      <span class="cr">${h.rafales != null ? `raf ${h.rafales.toFixed(0)}` : ""}</span>
+      <span class="cm">${orage ? "⚡" : iconeMeteo(h.meteoCode)}</span>
+    </div>`;
+  });
   return `<div class="bande-heures">${cellules.join("")}</div>`;
 }
 
@@ -403,10 +411,15 @@ function rendreExecution(heures, sport) {
 }
 
 function rendreGraphique(heures, sport) {
-  const h48 = heures.filter((h) => h.decalage <= 1);
+  /* Fenêtre du graphique : de (maintenant - 2 h) à la fin de demain — on
+   * regarde devant, pas la nuit passée. */
+  const heureCourante = heureMontreal();
+  const h48 = heures.filter((h) => h.decalage === 1
+    || (h.decalage === 0 && h.heure >= Math.max(0, heureCourante - 2)));
   const L = 720, H = 260, mg = { g: 30, d: 8, h: 12, b: 34 };
   const larg = L - mg.g - mg.d, haut = H - mg.h - mg.b;
   const maxY = Math.max(20, ...h48.map((h) => h.ensemble ?? 0),
+                        ...h48.map((h) => h.rafales ?? 0),
                         ...h48.flatMap((h) => Object.values(h.parModele))) + 1;
   const x = (i) => mg.g + (i / (h48.length - 1)) * larg;
   const y = (v) => mg.h + haut - (v / maxY) * haut;
@@ -418,13 +431,14 @@ function rendreGraphique(heures, sport) {
   let svg = `<svg viewBox="0 0 ${L} ${H}" width="100%" style="min-width:640px" role="img" aria-label="Vent prévu sur 48 heures, par modèle et ensemble corrigé">`;
   svg += `<rect x="${mg.g}" y="${y(sport.vent_max)}" width="${larg}" height="${y(sport.vent_min) - y(sport.vent_max)}" fill="var(--bande)"/>`;
 
-  // Heures déjà passées : grisées, avec un repère « maintenant »
-  const heureCourante = heureMontreal();
+  // Repère « maintenant » + les 2 h passées grisées
   const iMaintenant = h48.findIndex((h) => h.decalage === 0 && h.heure === heureCourante);
-  if (iMaintenant > 0) {
-    svg += `<rect x="${mg.g}" y="${mg.h}" width="${x(iMaintenant) - mg.g}" height="${haut}" fill="var(--passe)"/>`
-      + `<line x1="${x(iMaintenant)}" x2="${x(iMaintenant)}" y1="${mg.h}" y2="${H - mg.b}" stroke="var(--maintenant)" stroke-width="1.6"/>`
-      + `<text x="${x(iMaintenant) + 4}" y="${mg.h + 10}" font-size="10" fill="var(--maintenant)">maintenant</text>`;
+  if (iMaintenant >= 0) {
+    if (iMaintenant > 0) {
+      svg += `<rect x="${mg.g}" y="${mg.h}" width="${x(iMaintenant) - mg.g}" height="${haut}" fill="var(--passe)"/>`;
+    }
+    svg += `<line x1="${x(iMaintenant)}" x2="${x(iMaintenant)}" y1="${mg.h}" y2="${H - mg.b}" stroke="var(--maintenant)" stroke-width="1.6"/>`
+      + `<text x="${Math.min(x(iMaintenant) + 4, L - 70)}" y="${mg.h + 10}" font-size="10" fill="var(--maintenant)">maintenant</text>`;
   }
 
   for (const v of [0, 5, 10, 15, 20].filter((v) => v <= maxY)) {
@@ -432,7 +446,7 @@ function rendreGraphique(heures, sport) {
       + `<text x="${mg.g - 5}" y="${y(v) + 3}" text-anchor="end" font-size="10" fill="var(--texte-3)">${v}</text>`;
   }
   for (let i = 0; i < h48.length; i++) {
-    if (h48[i].heure % 6 === 0) {
+    if (h48[i].heure % 3 === 0) {
       svg += `<text x="${x(i)}" y="${H - mg.b + 14}" text-anchor="middle" font-size="10" fill="var(--texte-3)">${h48[i].heure} h</text>`;
     }
     if (h48[i].heure === 0 && i > 0) {
@@ -446,6 +460,7 @@ function rendreGraphique(heures, sport) {
     if (points.every((p) => p == null)) continue;
     svg += `<path d="${chemin(points)}" fill="none" stroke="var(--m-${m})" stroke-width="1.3" opacity="0.55"/>`;
   }
+  svg += `<path d="${chemin(h48.map((h) => h.rafales))}" fill="none" stroke="var(--maintenant)" stroke-width="1.8" stroke-dasharray="6 4" opacity="0.9"/>`;
   svg += `<path d="${chemin(h48.map((h) => h.ensemble))}" fill="none" stroke="var(--ensemble)" stroke-width="2.6"/>`;
   svg += `<g id="curseur" style="display:none"><line y1="${mg.h}" y2="${H - mg.b}" stroke="var(--texte-3)" stroke-width="1"/>`
     + `<circle r="4" fill="var(--ensemble)"/>`
@@ -487,6 +502,7 @@ function rendreGraphique(heures, sport) {
 
   const legende = document.getElementById("legende");
   legende.innerHTML = `<span><i style="background:var(--ensemble);height:4px"></i>Ensemble corrigé</span>`
+    + `<span><i style="background:repeating-linear-gradient(90deg,var(--maintenant) 0 5px,transparent 5px 8px);height:3px"></i>Puffs (rafales)</span>`
     + Object.entries(MODELES).map(
       ([m, nom]) => `<span><i style="background:var(--m-${m})"></i>${nom}</span>`).join("");
 }
@@ -494,6 +510,7 @@ function rendreGraphique(heures, sport) {
 // ---------------------------------------------------------------- démarrage
 
 let derniereMaj = 0;
+let dateAffichee = null;
 
 async function demarrer() {
   const etat = document.getElementById("etat");
@@ -519,6 +536,7 @@ async function demarrer() {
     rendreGraphique(heures, sport);
     rendreSemaine(heures, poids, sport);
     derniereMaj = Date.now();
+    dateAffichee = dateMontreal();
 
     const maintenant = new Date();
     document.getElementById("fraicheur").textContent =
@@ -548,12 +566,19 @@ function rafraichirSiPertinent() {
 
 if (typeof document !== "undefined") {
   demarrer();
-  // Rafraîchissement horaire (7 h–17 h, heure de Montréal) tant que la page
+  // Rafraîchissement horaire (6 h–22 h, heure de Montréal) tant que la page
   // est ouverte + mise à jour immédiate quand on revient sur l'onglet.
+  // pageshow couvre la restauration d'onglet par Safari (bfcache), où
+  // visibilitychange ne se déclenche pas toujours : sans lui, une page
+  // laissée ouverte la veille réafficherait le rendu d'hier au matin.
   setInterval(rafraichirSiPertinent, 5 * 60 * 1000);
-  document.addEventListener("visibilitychange", () => {
-    if (!document.hidden && Date.now() - derniereMaj > 30 * 60 * 1000) demarrer();
-  });
+  const reveil = () => {
+    const perime = Date.now() - derniereMaj > 30 * 60 * 1000
+      || (dateAffichee && dateAffichee !== dateMontreal());
+    if (perime) demarrer();
+  };
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) reveil(); });
+  window.addEventListener("pageshow", reveil);
 }
 
 // Export pour tests hors navigateur (node tests/test_dashboard.js)
