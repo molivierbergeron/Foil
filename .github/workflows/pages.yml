@@ -6,6 +6,8 @@ name: Publier le dashboard
 
 on:
   push:
+    branches:
+      - claude/maskinonge-wind-forecast-oioft2
     paths:
       - "docs/**"
       - ".github/workflows/pages.yml"
