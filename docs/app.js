@@ -85,6 +85,19 @@ function corrige(modele, brut, direction, decalageJour, poids) {
 
 const CODES_ORAGE = [95, 96, 99];
 
+// Tendance du ciel (code WMO -> catégorie) : 0-3 restent tels quels, le
+// brouillard est à part, toute précipitation/orage compte comme « couvert »
+// pour la tendance du ciel (le cumul de pluie donne le détail à côté).
+const CIEL_TEXTES = { 0: "ensoleillé", 1: "généralement ensoleillé",
+                      2: "partiellement nuageux", 3: "couvert" };
+
+function categorieCiel(code) {
+  if (code == null) return null;
+  if (code <= 3) return code;
+  if (code === 45 || code === 48) return "brouillard";
+  return 3;
+}
+
 function iconeMeteo(code) {
   if (code == null) return "";
   if (CODES_ORAGE.includes(code)) return "⛈️";
@@ -102,7 +115,8 @@ function iconeMeteo(code) {
 
 function resumeMeteoJour(jour) {
   /* Résumé discret de la météo du jour (heures navigables) :
-   * icône dominante, cumul de pluie, drapeau orage. */
+   * icône dominante, tendance du ciel (ensoleillé/nuageux/couvert/brumeux),
+   * cumul de pluie, drapeau orage. */
   const codes = jour.map((h) => h.meteoCode).filter((c) => c != null);
   if (!codes.length) return null;
   const orage = codes.some((c) => CODES_ORAGE.includes(c));
@@ -111,11 +125,21 @@ function resumeMeteoJour(jour) {
   // Icône du "pire" moment hors orage (le plus couvert/mouillé), pour ne pas
   // afficher soleil quand l'après-midi est sous la pluie.
   const dominant = Math.max(...codes.filter((c) => !CODES_ORAGE.includes(c)), 0);
-  let texte;
-  if (pluie < 0.5) texte = probMax >= 40 ? `risque d'averses (${probMax} %)` : "sec";
-  else if (pluie < 5) texte = `un peu de pluie (${pluie.toFixed(0)} mm)`;
-  else if (pluie < 15) texte = `pluie (${pluie.toFixed(0)} mm)`;
-  else texte = `grosse pluie (${pluie.toFixed(0)} mm)`;
+
+  // Catégorie de ciel la plus fréquente sur les heures navigables
+  const compte = {};
+  for (const c of codes.map(categorieCiel)) compte[c] = (compte[c] ?? 0) + 1;
+  const categorieDominante = Object.entries(compte).sort((a, b) => b[1] - a[1])[0][0];
+  const cielTexte = categorieDominante === "brouillard"
+    ? "brumeux" : CIEL_TEXTES[categorieDominante];
+
+  let pluieTexte = null;
+  if (pluie < 0.5) pluieTexte = probMax >= 40 ? `risque d'averses (${probMax} %)` : null;
+  else if (pluie < 5) pluieTexte = `un peu de pluie (${pluie.toFixed(0)} mm)`;
+  else if (pluie < 15) pluieTexte = `pluie (${pluie.toFixed(0)} mm)`;
+  else pluieTexte = `grosse pluie (${pluie.toFixed(0)} mm)`;
+
+  const texte = pluieTexte ? `${cielTexte}, ${pluieTexte}` : cielTexte;
   return { icone: iconeMeteo(orage ? 95 : dominant), texte, orage, pluie };
 }
 

@@ -38,8 +38,19 @@ def appel(url: str, params: dict, essais_max: int = 5) -> dict:
 
     cache.parent.mkdir(parents=True, exist_ok=True)
     delai = 2.0
+    derniere_erreur: Exception | None = None
     for essai in range(essais_max):
-        rep = requests.get(url, params=params, headers=ENTETES, timeout=120)
+        try:
+            rep = requests.get(url, params=params, headers=ENTETES, timeout=120)
+        except requests.exceptions.RequestException as exc:
+            # Timeout / connexion coupée avant même une réponse HTTP : même
+            # traitement que 429/5xx, sinon un simple aléa réseau tue le job.
+            derniere_erreur = exc
+            if essai == essais_max - 1:
+                break
+            time.sleep(delai)
+            delai *= 2
+            continue
         if rep.status_code == 200:
             donnees = rep.json()
             if "error" in donnees and donnees.get("error"):
@@ -55,4 +66,8 @@ def appel(url: str, params: dict, essais_max: int = 5) -> dict:
             delai *= 2
             continue
         raise RuntimeError(f"HTTP {rep.status_code}: {rep.text[:300]}")
+    if derniere_erreur is not None:
+        raise RuntimeError(
+            f"Échec après {essais_max} essais (réseau): {derniere_erreur}"
+        ) from derniere_erreur
     raise RuntimeError(f"Échec après {essais_max} essais: HTTP {rep.status_code}")
