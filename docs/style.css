@@ -165,8 +165,8 @@ h3 { font-size: 0.95rem; margin: 1.2rem 0 0.2rem; }
   margin: 0.6rem 0;
 }
 
-.graphique-cadre { overflow-x: auto; }
-.graphique-cadre svg { display: block; touch-action: pan-y; }
+.graphique-cadre { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.graphique-cadre svg { display: block; touch-action: pan-x pan-y; }
 .legende { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-top: 0.4rem; }
 .legende span { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.75rem; color: var(--texte-2); }
 .legende i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }

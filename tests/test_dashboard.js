@@ -40,4 +40,12 @@ const jourOrage = [{ meteoCode: 95, pluie: 8, probPluie: 90 }, { meteoCode: 61, 
 const rm = resumeMeteoJour(jourOrage);
 egal(rm.orage, true, "resume_orage");
 egal(rm.texte.includes("11 mm"), true, "resume_cumul_pluie");
+
+// Tendance du ciel : détail au-delà du seul cumul de pluie
+const heureSeche = (code, prob) => ({ meteoCode: code, pluie: 0, probPluie: prob ?? 0 });
+egal(resumeMeteoJour([heureSeche(0), heureSeche(0), heureSeche(1)]).texte, "ensoleillé", "ciel_ensoleille");
+egal(resumeMeteoJour([heureSeche(3), heureSeche(3), heureSeche(2)]).texte, "couvert", "ciel_couvert");
+egal(resumeMeteoJour([heureSeche(2), heureSeche(2), heureSeche(1)]).texte,
+     "partiellement nuageux", "ciel_partiellement_nuageux");
+egal(resumeMeteoJour([heureSeche(45)]).texte, "brumeux", "ciel_brumeux");
 console.log("Tests météo/régularité passent.");
