@@ -1,0 +1,34 @@
+# Filet de sécurité : toute modification du code passe les tests Python et
+# JavaScript. Protège les évolutions futures (les crons quotidiens ne
+# déclenchent pas ce workflow : ils ne touchent que data/ et reports/).
+name: Tests
+
+on:
+  push:
+    paths:
+      - "**.py"
+      - "docs/**.js"
+      - "tests/**"
+      - "requirements.txt"
+      - ".github/workflows/tests.yml"
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tester:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python tests/test_fenetre.py
+      - run: python tests/test_verite.py
+      - run: python tests/test_station_ecowitt.py
+      - run: python tests/test_openmeteo_client.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: node tests/test_dashboard.js

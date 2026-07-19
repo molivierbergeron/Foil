@@ -20,9 +20,9 @@ corrigeant les prévisions en conséquence.
 | 1. Backtest 2024–2026, rapport, poids calibrés | ✅ Livrée et validée — voir `reports/rapport_backtest.md` |
 | 2. Boucle d'apprentissage continue (GitHub Actions) | ✅ Livrée — jobs quotidien et hebdomadaire, testés en local |
 | 3. Dashboard public (GitHub Pages) | ✅ Livrée — `docs/`, publiée par `pages.yml` |
-| 4. Station Ecowitt au lac (`TRUTH_SOURCE="station"`) | À venir |
-| 5. Correction apprise avancée (MOS) | À venir |
-| 6. Alertes (`alertes.py`, placeholder) | Non implémentée — consommera les verdicts existants ; seuils de confiance, horaires et canaux (ntfy) à décider ensemble. |
+| 4. Station Ecowitt au lac (`TRUTH_SOURCE="station"`) | ✅ Prête à brancher — `station_ecowitt.py`, procédure dans `MAINTENANCE.md` (il ne manque que les clés API et l'anémomètre) |
+| 5. Correction apprise avancée (MOS) | Squelette exécutable (`mos.py`) — dernier essai : pas de gain net, non intégré (voir `reports/mos_baseline.md`) |
+| 6. Alertes (`alertes.py`, placeholder) | Non implémentée — consommera `data/forecast.json` ; seuils, horaires et canal (ntfy) à décider ensemble (docstring d'`alertes.py`). |
 
 ## Exécuter la phase 1
 
@@ -194,6 +194,18 @@ Détails d'implémentation :
 - **Indice de régularité des puffs** : facteur de rafales médian
   (rafales/vent) des heures en bande — < 1,35 « vent régulier »,
   1,35–1,6 « puffs modérés », > 1,6 « puffy ».
+
+## Maintenance et suite
+
+Tout ce qu'il faut pour opérer, diagnostiquer et continuer le projet sans
+assistance est dans **`MAINTENANCE.md`** : quoi surveiller, comment brancher
+la station (phase 4), relancer l'essai MOS (phase 5), activer les alertes
+(phase 6), ou déménager le dashboard par FTP. Un workflow `tests.yml`
+exécute les 4 suites de tests à chaque modification de code.
+
+Le dashboard s'installe sur l'écran d'accueil iPhone (Partager → « Sur
+l'écran d'accueil ») : icône et plein écran fournis par
+`docs/manifest.webmanifest`.
 
 ## Attribution
 

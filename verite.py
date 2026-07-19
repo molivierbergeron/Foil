@@ -26,8 +26,27 @@ def construire_verite(hour0: pd.DataFrame) -> pd.DataFrame:
     vent, rafales, direction, u, v, n_modeles + variables de découplage
     (vent80, rayonnement, nebulosite, temp2m, temp80 : médianes multi-modèles).
     """
+    if config.TRUTH_SOURCE == "station":
+        # Phase 4 : vérité mesurée au lac (Ecowitt). On couvre la même plage
+        # temporelle que les données hour-0 reçues, puis on garde les colonnes
+        # de découplage du consensus de modèles (la station ne les mesure pas).
+        import station_ecowitt
+        debut = hour0["time"].min().to_pydatetime()
+        fin = hour0["time"].max().to_pydatetime()
+        station = station_ecowitt.verite_station(debut, fin)
+        grp = hour0.groupby("time")
+        complements = pd.DataFrame({
+            "vent80": grp["vent80"].median(),
+            "rayonnement": grp["rayonnement"].median(),
+            "nebulosite": grp["nebulosite"].median(),
+            "temp2m": grp["temp2m"].median(),
+            "temp80": grp["temp80"].median(),
+        })
+        verite = station.join(complements, how="left")
+        verite["n_modeles"] = 1
+        return verite.sort_index()
     if config.TRUTH_SOURCE != "median_hour0":
-        raise NotImplementedError(f"TRUTH_SOURCE={config.TRUTH_SOURCE} non branché (phase 4)")
+        raise ValueError(f"TRUTH_SOURCE inconnu: {config.TRUTH_SOURCE}")
 
     grp = hour0.groupby("time")
     verite = pd.DataFrame({

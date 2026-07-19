@@ -1,0 +1,14 @@
+{
+  "name": "Vent — Lac Maskinongé",
+  "short_name": "Vent Maski",
+  "description": "Prévisions de vent calibrées pour le foil au Lac Maskinongé",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fcfcfb",
+  "theme_color": "#2a78d6",
+  "lang": "fr-CA",
+  "icons": [
+    { "src": "icone-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icone-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
