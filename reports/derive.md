@@ -10,3 +10,4 @@ s'ils font au moins aussi bien. Une dérive soudaine d'un modèle
 | Date | RMSE courant (24/48/96 h) | RMSE candidat | Décision |
 |---|---|---|---|
 | 2026-07-15 | 0.76/0.93/1.40 | 0.76/0.93/1.40 | **conservé** (candidat moins bon) |
+| 2026-07-20 | 0.82/1.01/1.48 | 0.82/1.01/1.48 | **conservé** (candidat moins bon) |
