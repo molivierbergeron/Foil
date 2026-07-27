@@ -11,3 +11,4 @@ s'ils font au moins aussi bien. Une dérive soudaine d'un modèle
 |---|---|---|---|
 | 2026-07-15 | 0.76/0.93/1.40 | 0.76/0.93/1.40 | **conservé** (candidat moins bon) |
 | 2026-07-20 | 0.82/1.01/1.48 | 0.82/1.01/1.48 | **conservé** (candidat moins bon) |
+| 2026-07-27 | 0.83/1.04/1.57 | 0.83/1.05/1.58 | **conservé** (candidat moins bon) |
