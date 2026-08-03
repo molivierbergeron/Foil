@@ -1,25 +1,17 @@
 {
- "genere_le": "2026-08-02T10:59+00:00",
+ "genere_le": "2026-08-03T12:44+00:00",
  "spot": {
   "latitude": 46.3123,
   "longitude": -73.3638
  },
  "unites": "noeuds",
  "verdicts_ensemble": {
-  "2026-08-02": {
-   "go": false,
-   "blocs": {
-    "matin": false,
-    "midi": false,
-    "apres_midi": false
-   }
-  },
   "2026-08-03": {
-   "go": false,
+   "go": true,
    "blocs": {
     "matin": false,
     "midi": false,
-    "apres_midi": false
+    "apres_midi": true
    }
   },
   "2026-08-04": {
@@ -60,6 +52,14 @@
     "matin": false,
     "midi": false,
     "apres_midi": false
+   }
+  },
+  "2026-08-09": {
+   "go": true,
+   "blocs": {
+    "matin": false,
+    "midi": true,
+    "apres_midi": true
    }
   }
  },
