@@ -10,6 +10,15 @@
  */
 "use strict";
 
+/* Version de l'INTERFACE (ce fichier + index.html + style.css). À incrémenter
+ * à la main quand l'affichage change — mineur pour un ajustement, majeur pour
+ * une refonte. Elle est volontairement indépendante de la version du MODÈLE
+ * (les poids calibrés, affichés à côté en pied de page) : les deux évoluent
+ * séparément, et quand quelque chose cloche il faut pouvoir dire lequel des
+ * deux a bougé. Pas de numéro injecté au déploiement : docs/ doit rester
+ * copiable tel quel par FTP, sans étape de build. */
+const VERSION_UI = "1.1.0";
+
 const MODELES = {
   gem_global: "GEM global",
   gem_regional: "GEM régional",
@@ -544,13 +553,17 @@ async function demarrer() {
       + `${maintenant.toLocaleTimeString("fr-CA", { hour: "2-digit", minute: "2-digit" })} `
       + "(dernier run disponible de chaque modèle) — la page se rafraîchit "
       + `toute seule chaque heure entre ${RAFRAICHIR_DE} h et ${RAFRAICHIR_A} h.`;
-    // La version du modèle est affichée pour que ce qu'on voit à l'écran soit
-    // rattachable à un jeu de poids archivé (data/modeles/<version>/).
-    const version = poids.version_modele ? ` — modèle ${poids.version_modele}` : "";
     document.getElementById("recalibrage").textContent =
       `Le % d'un GO = la part des GO annoncés à cette échéance qui se sont `
       + `réellement confirmés (mesuré sur ${poids.periode_backtest}). `
-      + `Dernier recalibrage des corrections : ${poids.genere_le}${version}.`;
+      + `Dernier recalibrage des corrections : ${poids.genere_le}.`;
+
+    // Les deux versions côte à côte : ce qui est affiché (interface) et ce qui
+    // a calculé les chiffres (modèle). Le modèle renvoie à un jeu de poids
+    // archivé dans data/modeles/<version>/, restaurable tel quel.
+    const versionModele = poids.version_modele ?? "non versionné";
+    document.getElementById("versions").textContent =
+      `Interface v${VERSION_UI} · modèle ${versionModele}`;
 
     etat.hidden = true;
     for (const id of ["semaine", "execution", "pied"]) {

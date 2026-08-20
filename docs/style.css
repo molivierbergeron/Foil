@@ -175,3 +175,10 @@ h3 { font-size: 0.95rem; margin: 1.2rem 0 0.2rem; }
 footer { margin-top: 2rem; border-top: 1px solid var(--bordure); padding-top: 0.7rem; }
 footer p { font-size: 0.75rem; color: var(--texte-3); margin: 0.25rem 0; }
 footer a { color: inherit; }
+/* Versions : discrètes mais lisibles et sélectionnables — c'est le premier
+   renseignement à donner quand quelque chose semble faux à l'écran. */
+footer p.versions {
+  margin-top: 0.5rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.75;
+}
