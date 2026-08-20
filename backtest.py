@@ -27,6 +27,31 @@ def charger():
     return previsions, hour0, verite
 
 
+def charger_apparie_complet() -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Backtest figé + partitions de vérification accumulées, dédupliqué.
+
+    Utilisé par le recalibrage hebdomadaire et par la comparaison de versions
+    de modèle (versions.py) : les deux ont besoin de tout l'historique apparié.
+    """
+    previsions, hour0, verite = charger()
+    apparie = apparier(previsions, verite)
+
+    from pathlib import Path
+    partitions = sorted(Path("data/verification").glob("*.parquet"))
+    if partitions:
+        verif = pd.concat([pd.read_parquet(p) for p in partitions], ignore_index=True)
+        temps_local = verif["time"].dt.tz_convert(config.FUSEAU_LOCAL)
+        verif["heure_locale"] = temps_local.dt.hour
+        verif["date_locale"] = temps_local.dt.date
+        verif["mois"] = temps_local.dt.month
+        verif["secteur_verite"] = secteur(verif["verite_direction"])
+        verif = verif[verif["mois"].isin(config.MOIS_SAISON)]
+        colonnes = [c for c in apparie.columns if c in verif.columns]
+        apparie = (pd.concat([apparie[colonnes], verif[colonnes]], ignore_index=True)
+                   .drop_duplicates(subset=["time", "modele", "horizon"]))
+    return apparie, hour0
+
+
 def apparier(previsions: pd.DataFrame, verite: pd.DataFrame) -> pd.DataFrame:
     """Joint prévision et vérité sur l'heure UTC (pas d'ambiguïté DST en UTC)."""
     df = previsions.merge(
@@ -190,6 +215,80 @@ def survie_fenetres(apparie: pd.DataFrame, verite: pd.DataFrame) -> pd.DataFrame
     return pd.DataFrame(lignes)
 
 
+# ------------------------------- métriques d'un JEU DE POIDS (comparaison)
+# Ces trois fonctions évaluent un fichier poids_modeles.json complet sur des
+# données appariées. Elles servent au garde-fou du recalibrage hebdomadaire et
+# à la comparaison de deux versions de modèle (versions.py --comparer).
+
+def ensemble_corrige(apparie: pd.DataFrame, poids: dict,
+                     horizon: str) -> pd.DataFrame | None:
+    """Série de l'ensemble corrigé-pondéré pour un horizon : time, ens, verite.
+
+    C'est la prévision que le système rend réellement : chaque modèle est
+    débiaisé (biais_nds du jeu de poids) puis pondéré (poids ∝ 1/RMSE²).
+    Retourne None si aucun modèle du jeu de poids n'est présent.
+    """
+    rows = apparie[apparie["horizon"] == horizon]
+    if rows.empty:
+        return None
+    morceaux = []
+    for modele, g in rows.groupby("modele"):
+        info = poids["modeles"].get(modele, {}).get("horizons", {}).get(horizon)
+        if info is None:
+            continue  # modèle absent de ce jeu de poids : il ne vote pas
+        g = g.copy()
+        g["corrige"] = g["vent"].astype(float) - info["biais_nds"]
+        g["w"] = info["poids"]
+        morceaux.append(g[["time", "corrige", "w", "verite_vent"]])
+    if not morceaux:
+        return None
+    df = pd.concat(morceaux, ignore_index=True)
+    return df.groupby("time").apply(
+        lambda x: pd.Series({
+            "ens": float((x["corrige"] * x["w"]).sum() / x["w"].sum()),
+            "verite": float(x["verite_vent"].iloc[0])}),
+        include_groups=False).reset_index()
+
+
+def rmse_ensemble(apparie: pd.DataFrame, poids: dict) -> dict:
+    """RMSE (nds) de l'ensemble corrigé-pondéré, par horizon."""
+    resultats = {}
+    for horizon in config.HORIZONS:
+        agg = ensemble_corrige(apparie, poids, horizon)
+        if agg is None:
+            continue
+        resultats[horizon] = float(np.sqrt(((agg["ens"] - agg["verite"]) ** 2).mean()))
+    return resultats
+
+
+def taux_go_ensemble(apparie: pd.DataFrame, poids: dict) -> dict:
+    """Fiabilité d'un GO de l'ensemble, par horizon : taux, IC 95 %, n.
+
+    C'est le chiffre que voit l'utilisateur sur le dashboard (« un GO annoncé
+    à 96 h se confirme X % du temps »), donc le vrai critère de qualité —
+    le RMSE peut s'améliorer sans que les verdicts GO/NO changent.
+    """
+    resultats = {}
+    for horizon in config.HORIZONS:
+        agg = ensemble_corrige(apparie, poids, horizon)
+        if agg is None:
+            continue
+        prevus = jours_foilables(series_jour(
+            agg.rename(columns={"ens": "vent"})[["time", "vent"]]))
+        reels = jours_foilables(series_jour(
+            agg.rename(columns={"verite": "vent"})[["time", "vent"]]))
+        communs = prevus.index.intersection(reels.index)
+        gos = [d for d in communs if bool(prevus.loc[d])]
+        tiennent = int(sum(bool(reels.loc[d]) for d in gos))
+        resultats[horizon] = {
+            "taux": tiennent / len(gos) if gos else float("nan"),
+            "ic95": intervalle_wilson(tiennent, len(gos)),
+            "n_go": len(gos),
+            "n_jours": len(communs),
+        }
+    return resultats
+
+
 # ------------------------------------------------------------------- rafales
 
 def ratios_rafales(hour0: pd.DataFrame) -> dict:
@@ -265,10 +364,18 @@ def calculer_poids(stats_globales: pd.DataFrame, stats_secteur: pd.DataFrame,
         }
 
     return {
-        "schema_version": 1,
+        # v2 : ajout du bloc "verite" (composition gelée de la vérité terrain).
+        # Un fichier v1 reste lisible — le champ truth_source n'a pas bougé.
+        "schema_version": 2,
         "genere_le": date.today().isoformat(),
         "periode_backtest": periode,
         "truth_source": config.TRUTH_SOURCE,
+        # Contre quoi ces biais/RMSE ont été mesurés. Deux jeux de poids dont
+        # les blocs "verite" diffèrent ne sont PAS comparables entre eux.
+        "verite": {
+            "version": config.VERITE_VERSION,
+            "modeles": list(config.MODELES_VERITE),
+        },
         "spot": {"latitude": config.LATITUDE, "longitude": config.LONGITUDE},
         "unites": "noeuds",
         # Seuils du sport : le dashboard les lit ici, jamais codés en dur en JS
@@ -304,10 +411,17 @@ def principal():
     ratios = ratios_rafales(hour0)
 
     poids = calculer_poids(stats_globales, stats_secteur, conf, surv, ratios, periode)
-    with open(config.FICHIER_POIDS, "w") as f:
-        json.dump(poids, f, indent=2, ensure_ascii=False)
+    # Un backtest complet produit un nouveau modèle : il est archivé et activé
+    # comme n'importe quel autre, donc restaurable (versions.py --activer).
+    # L'import est différé pour garder backtest.py importable seul.
+    import versions
+    version = versions.enregistrer(
+        poids, origine="backtest",
+        donnees_jusqu_au=apparie["date_locale"].max(),
+        n_apparie=int(len(apparie)),
+        notes=f"Backtest complet sur {periode}.")
 
-    return {"apparie": apparie, "verite": verite, "hour0": hour0,
+    return {"apparie": apparie, "verite": verite, "hour0": hour0, "version": version,
             "stats_globales": stats_globales, "stats_secteur": stats_secteur,
             "stats_mois": stats_mois, "stats_tranche": stats_tranche,
             "confusion": conf, "survie": surv, "ratios": ratios, "poids": poids}

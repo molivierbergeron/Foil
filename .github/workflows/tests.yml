@@ -28,6 +28,7 @@ jobs:
       - run: python tests/test_verite.py
       - run: python tests/test_station_ecowitt.py
       - run: python tests/test_openmeteo_client.py
+      - run: python tests/test_versions.py
       - uses: actions/setup-node@v4
         with:
           node-version: "20"

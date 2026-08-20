@@ -6,6 +6,10 @@ l'écart résiduel entre la grille des modèles et le vent réel au lac. La
 médiane sur 6 modèles évite qu'un modèle soit vérifié contre sa propre
 analyse (poids 1/6 dans la médiane, pas de corrélation dominante).
 
+La médiane porte sur config.MODELES_VERITE (composition gelée), JAMAIS sur
+config.MODELES : ajouter un modèle de prévision ne doit pas déplacer la
+cible. Voir le commentaire de MODELES_VERITE dans config.py.
+
 La direction est médianée en composantes vectorielles u/v (jamais en degrés
 bruts) puis reconvertie en degrés pour l'affichage.
 
@@ -19,13 +23,50 @@ import pandas as pd
 import config
 
 
-def construire_verite(hour0: pd.DataFrame) -> pd.DataFrame:
+def composition_verite(hour0: pd.DataFrame) -> list[str]:
+    """Modèles de vérité réellement présents dans ces données, dans l'ordre.
+
+    C'est cette liste — pas la liste théorique — qui est estampillée sur les
+    lignes de data/verification/ : une vérité calculée sur 5 modèles au lieu
+    de 6 (trou d'archive chez un fournisseur) doit rester identifiable.
+    """
+    presents = set(hour0["modele"].unique())
+    return [m for m in config.MODELES_VERITE if m in presents]
+
+
+def filtrer_modeles_verite(hour0: pd.DataFrame, strict: bool = True) -> pd.DataFrame:
+    """Ne garde que les modèles qui composent la vérité (composition gelée).
+
+    strict=True (backtest, recalibrage) : un modèle de vérité manquant est une
+    erreur de configuration — toute la calibration serait fausse, on échoue.
+    strict=False (job quotidien) : un trou d'archive ponctuel chez un
+    fournisseur ne doit pas tuer le job ; on avertit, on continue, et l'appelant
+    estampille la composition réelle via composition_verite().
+    """
+    manquants = [m for m in config.MODELES_VERITE
+                 if m not in set(hour0["modele"].unique())]
+    if manquants:
+        message = (f"modèles de vérité absents des séries hour-0 : {manquants} "
+                   f"(vérité {config.VERITE_VERSION}, "
+                   f"{len(config.MODELES_VERITE)} modèles attendus)")
+        if strict:
+            raise ValueError(message.capitalize())
+        print(f"ATTENTION : {message} — vérité calculée sur "
+              f"{len(config.MODELES_VERITE) - len(manquants)} modèles")
+    return hour0[hour0["modele"].isin(config.MODELES_VERITE)]
+
+
+def construire_verite(hour0: pd.DataFrame, strict: bool = True) -> pd.DataFrame:
     """Agrège hour0 (format long, une ligne par modèle × heure) en vérité.
 
     Retourne un DataFrame indexé par time (UTC) avec :
     vent, rafales, direction, u, v, n_modeles + variables de découplage
     (vent80, rayonnement, nebulosite, temp2m, temp80 : médianes multi-modèles).
+
+    Seules les lignes des modèles de config.MODELES_VERITE sont agrégées ;
+    les modèles de prévision supplémentaires présents dans hour0 sont ignorés.
     """
+    hour0 = filtrer_modeles_verite(hour0, strict=strict)
     if config.TRUTH_SOURCE == "station":
         # Phase 4 : vérité mesurée au lac (Ecowitt). On couvre la même plage
         # temporelle que les données hour-0 reçues, puis on garde les colonnes

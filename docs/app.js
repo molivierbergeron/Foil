@@ -544,10 +544,13 @@ async function demarrer() {
       + `${maintenant.toLocaleTimeString("fr-CA", { hour: "2-digit", minute: "2-digit" })} `
       + "(dernier run disponible de chaque modèle) — la page se rafraîchit "
       + `toute seule chaque heure entre ${RAFRAICHIR_DE} h et ${RAFRAICHIR_A} h.`;
+    // La version du modèle est affichée pour que ce qu'on voit à l'écran soit
+    // rattachable à un jeu de poids archivé (data/modeles/<version>/).
+    const version = poids.version_modele ? ` — modèle ${poids.version_modele}` : "";
     document.getElementById("recalibrage").textContent =
       `Le % d'un GO = la part des GO annoncés à cette échéance qui se sont `
       + `réellement confirmés (mesuré sur ${poids.periode_backtest}). `
-      + `Dernier recalibrage des corrections : ${poids.genere_le}.`;
+      + `Dernier recalibrage des corrections : ${poids.genere_le}${version}.`;
 
     etat.hidden = true;
     for (const id of ["semaine", "execution", "pied"]) {

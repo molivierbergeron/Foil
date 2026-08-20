@@ -71,7 +71,30 @@ gradient thermique 80 m − 2 m.
 
 `TRUTH_SOURCE = "median_hour0"` (config.py) : médiane multi-modèles des
 séries hour-0, direction médiane en composantes vectorielles. Un modèle n'est
-jamais vérifié contre sa propre analyse seule (erreurs corrélées). Limite :
+jamais vérifié contre sa propre analyse seule (erreurs corrélées).
+
+**La composition de la vérité est gelée** dans `config.MODELES_VERITE`, une
+liste distincte de `config.MODELES` (les membres de prévision). Cette
+séparation est structurante : ajouter un modèle de prévision ne doit jamais
+déplacer la cible. Sans elle, une simple clé de plus dans `MODELES` changerait
+silencieusement la vérité, casserait la comparabilité de l'archive
+append-only `data/verification/` et rendrait faux les biais/RMSE publiés sans
+qu'aucun test n'échoue.
+
+- Chaque ligne ajoutée à `data/verification/` porte `verite_version` et
+  `verite_modeles` (composition réellement utilisée). Les lignes antérieures
+  au versionnage n'ont pas ces colonnes — valeur nulle = vérité v1 non
+  estampillée.
+- Un modèle de vérité manquant fait **échouer** le backtest et le recalibrage
+  (`strict=True` : la calibration serait fausse), mais seulement **avertir**
+  le job quotidien (`strict=False` : un trou d'archive ponctuel chez un
+  fournisseur ne doit pas tuer le job). Dans ce cas la ligne est estampillée
+  avec les 5 modèles réellement utilisés, donc reste identifiable.
+- Changer `MODELES_VERITE` impose d'incrémenter `config.VERITE_VERSION` et de
+  relancer un backtest complet. Deux jeux de poids dont les blocs `verite`
+  diffèrent ne sont pas comparables entre eux.
+
+Limite :
 c'est une vérité de modèles — elle capture le synoptique, pas l'écart
 grille-vs-lac. La phase 4 la remplacera par l'anémomètre au bord du lac
 (`TRUTH_SOURCE = "station"`), sans autre changement de code.
@@ -80,15 +103,97 @@ Inventaire des stations réelles (~40 km) : une seule station horaire active,
 **Lac Saint-Pierre** (701LP0N, 37 km SE, sur l'eau, 1994→aujourd'hui) —
 vérité secondaire possible pour le régime synoptique. Détails dans le rapport.
 
-## Format de `data/poids_modeles.json` (schéma v1)
+## Versionnage des modèles — historique, retour arrière, comparaison
+
+Un « modèle », ici, c'est un **jeu de poids complet** : c'est lui qui
+transforme six prévisions brutes en un verdict. Il est donc archivé,
+restaurable et comparable.
+
+```
+data/modeles/registre.json          index + version active + journal des bascules
+data/modeles/<version>/poids.json   le jeu de poids figé (contenu calibré nu)
+data/poids_modeles.json             copie de travail = version active
+docs/poids_modeles.json             copie lue par le dashboard
+```
+
+Les deux copies en service portent en plus un champ `version_modele` (affiché
+en pied de dashboard) ; l'archive ne l'a pas, pour que son empreinte ne
+dépende pas de son propre identifiant.
+
+```bash
+python3 versions.py --lister                       # historique + version active
+python3 versions.py --comparer v2-… v3-…           # laquelle prévoit le mieux ?
+python3 versions.py --activer v2-… --raison "…"    # retour arrière
+```
+
+- **Création automatique** : chaque backtest complet (`origine: backtest`) et
+  chaque recalibrage hebdomadaire *appliqué* (`origine: recalibrage`) crée une
+  version. Un recalibrage qui aboutit aux mêmes chiffres n'en crée pas
+  (empreinte identique) — pas d'empilement de doublons.
+- **Amorçage** : un dépôt sans registre importe `data/poids_modeles.json`
+  comme `v1` (`origine: import-initial`), en déduisant sa borne de calibration
+  de `periode_backtest`.
+- **Retour arrière** : `--activer` réinstalle les deux copies et journalise la
+  bascule avec sa raison. Rien n'est jamais supprimé ni réécrit — l'historique
+  des activations reste lisible (« on est revenus à v2 le 20 août parce
+  que… »). Il faut committer après.
+
+### « Est-ce que le modèle d'aujourd'hui est meilleur qu'avant ? »
+
+`--comparer A B` répond avec deux métriques, sur la même fenêtre :
+
+| Métrique | Ce qu'elle dit |
+|---|---|
+| **RMSE de l'ensemble corrigé-pondéré**, par horizon | l'erreur typique en nœuds |
+| **Taux de GO confirmé** + IC 95 % de Wilson, par horizon | ce que voit l'utilisateur : la part des GO annoncés qui se réalisent |
+
+Les deux peuvent diverger — un RMSE qui s'améliore de 0,05 nds peut ne changer
+aucun verdict GO/NO. C'est pour ça que les deux sont affichées.
+
+**Le choix de la fenêtre est le point délicat, et il est automatique.** Chaque
+version mémorise `donnees_jusqu_au`, le dernier jour ayant servi à la
+calibrer. La comparaison démarre après la **plus tardive** des deux bornes :
+sinon la version la plus récemment calibrée serait jugée sur ses propres
+données d'entraînement et gagnerait d'office. `--jours N` et `--depuis DATE`
+forcent une autre fenêtre, mais la sortie affiche alors explicitement que le
+résultat **n'est pas** hors échantillon. Si la fenêtre est vide, l'outil le
+dit au lieu d'inventer un verdict : il faut laisser passer des jours avant de
+pouvoir départager deux versions.
+
+Exemple de sortie réelle :
+
+```
+A = v1-2026-07-15
+B = v2-2026-06-20
+Fenêtre : 2026-07-12 → 2026-08-06 (8940 lignes, hors échantillon pour les deux versions)
+
+horizon     RMSE A    RMSE B     écart           GO conf. A         GO conf. B
+24h          1.066     1.067    +0.000   92% [67%-99%] n=13  92% [67%-99%] n=13
+48h          1.238     1.237    -0.001   92% [65%-99%] n=12  92% [65%-99%] n=12
+96h          1.777     1.779    +0.002   92% [67%-99%] n=13  92% [67%-99%] n=13
+
+Match nul (écart moyen +0.001 nds, sous le bruit).
+```
+
+Le verdict reste prudent par construction : sous 200 lignes il refuse de
+conclure, et sous 0,05 nds d'écart moyen il annonce un match nul plutôt qu'un
+gagnant — à ce spot, l'écart entre modèles est de l'ordre de 3 nds, un
+centième de nœud n'est pas un progrès.
+
+## Format de `data/poids_modeles.json` (schéma v2)
 
 Consommable en JavaScript par le dashboard (phase 3) :
 
 ```jsonc
 {
-  "schema_version": 1,
+  "schema_version": 2,                  // v2 : ajout du bloc "verite"
   "genere_le": "2026-07-15",
+  "version_modele": "v3-2026-08-17",    // copies en service seulement, pas l'archive
   "truth_source": "median_hour0",
+  "verite": {                           // contre quoi ces chiffres ont été mesurés
+    "version": "median_hour0/v1",
+    "modeles": ["gem_global", "gem_regional", "…"]
+  },
   "unites": "noeuds",
   "ratio_rafales_defaut": 1.5,          // repli rafales (ECMWF)
   "modeles": {

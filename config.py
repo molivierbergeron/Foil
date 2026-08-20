@@ -27,6 +27,12 @@ MOIS_SAISON = [5, 6, 7, 8, 9, 10]  # mai à octobre
 # "station"      : station Ecowitt au lac (phase 4, non branchée).
 TRUTH_SOURCE = "median_hour0"
 
+# Identifiant de la DÉFINITION de la vérité. À incrémenter dès que la
+# composition de MODELES_VERITE change : les métriques calculées avant et
+# après ne sont plus comparables, et l'archive append-only doit pouvoir dire
+# laquelle des deux a servi pour chaque ligne.
+VERITE_VERSION = "median_hour0/v1"
+
 # --- Sources Open-Meteo (validées par appels réels, voir README) ---
 URL_PREVIOUS_RUNS = "https://previous-runs-api.open-meteo.com/v1/forecast"
 URL_HISTORICAL = "https://historical-forecast-api.open-meteo.com/v1/forecast"
@@ -73,6 +79,47 @@ MODELES = {
         "rafales_previous": True, "rafales_hour0": True, "vent80_hour0": True,
     },
 }
+
+# --- Composition de la vérité terrain (GELÉE) ---
+# Les six modèles dont la médiane hour-0 fait la vérité. Cette liste est
+# volontairement SÉPARÉE de MODELES : ajouter un modèle de prévision ne doit
+# jamais changer la vérité, sinon les lignes d'avant et d'après l'ajout ne
+# sont plus comparables et les biais/RMSE publiés deviennent faux sans que
+# rien ne le signale (l'archive data/verification/ est append-only).
+#
+# Pour ajouter un modèle À LA VÉRITÉ (décision lourde, rarement justifiée) :
+# 1. l'ajouter ici, 2. incrémenter VERITE_VERSION, 3. relancer un backtest
+# complet — les partitions existantes gardent l'estampille de l'ancienne
+# vérité et restent lisibles telles quelles.
+MODELES_VERITE = (
+    "gem_global",
+    "gem_regional",
+    "gem_hrdps_continental",
+    "ecmwf_ifs025",
+    "gfs_global",
+    "icon_global",
+)
+
+# Garde-fou : une faute de frappe dans MODELES_VERITE amputerait la vérité en
+# silence (médiane sur 5 modèles au lieu de 6). On échoue à l'import.
+_inconnus = [m for m in MODELES_VERITE if m not in MODELES]
+if _inconnus:
+    raise ValueError(
+        f"MODELES_VERITE contient des modèles absents de MODELES : {_inconnus}. "
+        "Un modèle de vérité doit être téléchargé, donc déclaré dans MODELES."
+    )
+del _inconnus
+
+
+def modeles_telechargement() -> list[str]:
+    """Modèles à télécharger : membres de prévision + membres de vérité.
+
+    Aujourd'hui MODELES_VERITE ⊆ MODELES, mais l'union garde le pipeline
+    correct si un modèle sortait un jour des membres de prévision tout en
+    restant dans la vérité (sa série hour-0 resterait nécessaire).
+    """
+    return list(MODELES) + [m for m in MODELES_VERITE if m not in MODELES]
+
 
 # Saisons couvertes par le backtest (début, fin incluse) — la saison courante
 # s'arrête à J-3 pour laisser les archives se compléter.

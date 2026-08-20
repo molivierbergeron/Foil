@@ -32,6 +32,42 @@ prévisions en direct — seuls le recalibrage et l'historique dépendent des cr
   durablement (ex. 0,8 → 1,5) signalerait un changement de version chez un
   fournisseur de modèle : relancer alors `python3 rapport.py` pour requalifier.
 
+## « Le modèle s'est-il amélioré ? » — et comment revenir en arrière
+
+Chaque backtest complet et chaque recalibrage appliqué archivent une version
+du modèle dans `data/modeles/`. Trois commandes suffisent :
+
+```bash
+python3 versions.py --lister                 # qu'est-ce qui a tourné, et quand
+python3 versions.py --comparer v2-… v3-…     # laquelle prévoit le mieux
+python3 versions.py --activer v2-… --raison "v3 rate les journées de SO"
+git add -A data/modeles data/poids_modeles.json docs/poids_modeles.json && git commit
+```
+
+**Le contrôle périodique.** Après un mois ou deux de données accumulées,
+comparer la version active à celle d'avant : la fenêtre d'évaluation démarre
+automatiquement après la dernière donnée ayant servi à calibrer l'une OU
+l'autre, donc le résultat est honnête sans réglage manuel. Lire les deux
+métriques, pas une seule — le RMSE (erreur en nœuds) peut bouger sans que le
+taux de GO confirmé (ce que voit l'utilisateur) change d'un pouce.
+
+Trois sorties possibles, toutes normales :
+- « Match nul » : les deux versions se valent, garder l'active.
+- « B est meilleure » : si B est l'ancienne, `--activer` la restaure.
+- « Échantillon trop mince » ou « aucune donnée après la borne » : il faut
+  simplement laisser passer des jours. L'outil refuse de trancher plutôt que
+  d'inventer un gagnant sur 30 lignes.
+
+**Après un retour arrière**, il faut committer : le dashboard lit la copie du
+dépôt (`docs/poids_modeles.json`), pas le registre. Le recalibrage suivant
+repart de la version active — s'il produit mieux, il créera une version
+nouvelle par-dessus, sans jamais réécrire l'historique.
+
+**Si le registre est perdu ou incohérent** : le supprimer (`rm -rf
+data/modeles`) puis lancer `python3 versions.py --lister` le reconstruit à
+partir de `data/poids_modeles.json` comme nouvelle `v1`. L'historique
+antérieur est perdu, pas les poids en service.
+
 ## Reproduire le backtest complet (local)
 
 ```bash

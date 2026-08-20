@@ -21,7 +21,7 @@ import config
 import fenetre
 from openmeteo_client import appel
 from telecharge import composantes_uv, VARIABLES_HOUR0_BASE
-from verite import construire_verite
+from verite import composition_verite, construire_verite
 
 DOSSIER_VERIF = Path("data/verification")
 JOURS_RETARD = 3   # les archives sont complètes à J-3
@@ -95,10 +95,15 @@ def mettre_a_jour_verification(aujourdhui: date | None = None) -> int:
     fin = (aujourdhui - timedelta(days=JOURS_RETARD)).isoformat()
 
     prev, h0 = _telecharger_fenetre(debut, fin)
-    verite = construire_verite(h0)
+    # strict=False : un trou d'archive chez un fournisseur ne doit pas tuer le
+    # job quotidien. La composition réellement utilisée est estampillée sur
+    # chaque ligne, donc une vérité partielle reste identifiable après coup.
+    verite = construire_verite(h0, strict=False)
     apparie = prev.merge(
         verite.add_prefix("verite_"), left_on="time", right_index=True, how="inner")
     apparie = apparie.drop(columns=["verite_n_modeles"])
+    apparie["verite_version"] = config.VERITE_VERSION
+    apparie["verite_modeles"] = ",".join(composition_verite(h0))
 
     DOSSIER_VERIF.mkdir(parents=True, exist_ok=True)
     apparie["mois"] = apparie["time"].dt.strftime("%Y-%m")
@@ -172,6 +177,9 @@ def generer_forecast_json() -> dict:
         "verdicts_ensemble": verdicts,
         "fiabilite_go_par_horizon": poids.get("fiabilite_go_par_horizon", {}),
         "poids_version": poids.get("genere_le"),
+        # Version du modèle qui a produit ces verdicts : permet de rattacher
+        # une prévision passée au jeu de poids exact qui l'a calculée.
+        "version_modele": poids.get("version_modele"),
     }
 
 

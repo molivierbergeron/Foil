@@ -22,30 +22,17 @@ import pandas as pd
 
 import backtest
 import config
+import versions
 
 JOURS_TEST = 60          # validation temporelle : les 60 derniers jours
 POIDS_SAISON_COURANTE = 2.0
 
 
-def charger_apparie_complet() -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Backtest figé + partitions de vérification, dédupliqué."""
-    previsions, hour0, verite = backtest.charger()
-    apparie = backtest.apparier(previsions, verite)
-
-    partitions = sorted(Path("data/verification").glob("*.parquet"))
-    if partitions:
-        verif = pd.concat([pd.read_parquet(p) for p in partitions], ignore_index=True)
-        temps_local = verif["time"].dt.tz_convert(config.FUSEAU_LOCAL)
-        verif["heure_locale"] = temps_local.dt.hour
-        verif["date_locale"] = temps_local.dt.date
-        verif["mois"] = temps_local.dt.month
-        from verite import secteur
-        verif["secteur_verite"] = secteur(verif["verite_direction"])
-        verif = verif[verif["mois"].isin(config.MOIS_SAISON)]
-        colonnes = [c for c in apparie.columns if c in verif.columns]
-        apparie = (pd.concat([apparie[colonnes], verif[colonnes]], ignore_index=True)
-                   .drop_duplicates(subset=["time", "modele", "horizon"]))
-    return apparie, hour0
+# Le chargement et les métriques d'ensemble vivent dans backtest.py : le
+# versionnage (versions.py --comparer) évalue les mêmes quantités sur les
+# mêmes données, il ne doit pas y avoir deux implémentations qui dérivent.
+charger_apparie_complet = backtest.charger_apparie_complet
+rmse_ensemble = backtest.rmse_ensemble
 
 
 def _stats_ponderees(g: pd.DataFrame) -> pd.Series:
@@ -67,32 +54,6 @@ def biais_rmse_ponderes(apparie: pd.DataFrame) -> pd.DataFrame:
                                     POIDS_SAISON_COURANTE, 1.0)
     return (jour.groupby(["modele", "horizon"])
             .apply(_stats_ponderees, include_groups=False).reset_index())
-
-
-def rmse_ensemble(test: pd.DataFrame, poids: dict) -> dict:
-    """RMSE de l'ensemble corrigé-pondéré par horizon, selon un jeu de poids."""
-    resultats = {}
-    for horizon in config.HORIZONS:
-        rows = test[test["horizon"] == horizon]
-        if rows.empty:
-            continue
-        morceaux = []
-        for modele, g in rows.groupby("modele"):
-            info = poids["modeles"].get(modele, {}).get("horizons", {}).get(horizon)
-            if info is None:
-                continue
-            g = g.copy()
-            g["corrige"] = g["vent"].astype(float) - info["biais_nds"]
-            g["w"] = info["poids"]
-            morceaux.append(g[["time", "corrige", "w", "verite_vent"]])
-        df = pd.concat(morceaux, ignore_index=True)
-        agg = df.groupby("time").apply(
-            lambda x: pd.Series({
-                "ens": float((x["corrige"] * x["w"]).sum() / x["w"].sum()),
-                "verite": float(x["verite_vent"].iloc[0])}),
-            include_groups=False)
-        resultats[horizon] = float(np.sqrt(((agg["ens"] - agg["verite"]) ** 2).mean()))
-    return resultats
 
 
 def construire_poids(apparie: pd.DataFrame, hour0: pd.DataFrame) -> dict:
@@ -123,16 +84,29 @@ def principal():
     moy_candidat = float(np.mean(list(rmse_candidat.values())))
     applique = moy_candidat <= moy_courant
 
+    nouvelle_version = None
     if applique:
         # Les poids livrés sont recalculés sur TOUTE la fenêtre (train + test)
         poids_final = construire_poids(apparie, hour0)
-        with open(config.FICHIER_POIDS, "w") as f:
-            json.dump(poids_final, f, indent=2, ensure_ascii=False)
-
-    # Le dashboard (docs/) lit sa propre copie — tenue en phase avec data/
-    docs_poids = Path("docs/poids_modeles.json")
-    if docs_poids.parent.exists():
-        docs_poids.write_text(Path(config.FICHIER_POIDS).read_text())
+        # versions.enregistrer archive, active, et installe les deux copies
+        # (data/poids_modeles.json et docs/poids_modeles.json). Si les chiffres
+        # sont identiques à la version active, aucune version n'est créée.
+        nouvelle_version = versions.enregistrer(
+            poids_final,
+            origine="recalibrage",
+            donnees_jusqu_au=dates.max().date(),
+            n_apparie=int(len(apparie)),
+            metriques={
+                "rmse_ensemble_courant": rmse_courant,
+                "rmse_ensemble_candidat": rmse_candidat,
+                "fenetre_test_jours": JOURS_TEST,
+                "compare_a": versions.actif(),
+            },
+        )
+    else:
+        # Poids conservés : on republie quand même la copie dashboard, qui
+        # peut avoir divergé (édition manuelle, retour arrière non propagé).
+        versions.republier_actif()
 
     chemin = Path("reports/derive.md")
     if not chemin.exists():
@@ -150,7 +124,12 @@ def principal():
     def fmt(r):
         return "/".join(f"{r.get(h, float('nan')):.2f}" for h in config.HORIZONS)
 
-    decision = "appliqué" if applique else "**conservé** (candidat moins bon)"
+    # La version est glissée dans la cellule « Décision » plutôt qu'en colonne
+    # supplémentaire : le tableau existant a 4 colonnes et reste lisible.
+    if applique:
+        decision = f"appliqué → `{nouvelle_version}`"
+    else:
+        decision = f"**conservé** (candidat moins bon) — `{versions.actif()}` reste active"
     with open(chemin, "a") as f:
         f.write(f"| {datetime.now(timezone.utc).date().isoformat()} "
                 f"| {fmt(rmse_courant)} | {fmt(rmse_candidat)} | {decision} |\n")
@@ -158,6 +137,7 @@ def principal():
     print(f"RMSE ensemble courant  {rmse_courant}")
     print(f"RMSE ensemble candidat {rmse_candidat}")
     print(f"Décision : {decision}")
+    print(f"Version active : {versions.actif()}")
 
 
 if __name__ == "__main__":
