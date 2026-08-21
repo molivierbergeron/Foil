@@ -226,6 +226,33 @@ def test_verite_gelee():
         "la composition réelle exclut le modèle manquant")
 
 
+def test_crons_committent_tout_ce_qui_est_ecrit():
+    """Les workflows stagent-ils tous les chemins que le code écrit ?
+
+    Ce test existe parce que la classe de bug s'est déjà produite : le
+    recalibrage écrivait docs/poids_modeles.json sans que le workflow le
+    stage, donc le premier recalibrage appliqué aurait laissé au dashboard
+    public des biais périmés pour toujours — sans aucun symptôme visible.
+    Le versionnage ajoute data/modeles/, qui a exactement le même risque :
+    le runner part d'un checkout neuf, donc un registre non commité est un
+    registre reconstruit de zéro chaque semaine.
+    """
+    racine = Path(__file__).resolve().parent.parent
+    attendus = {
+        "recalibrage.yml": ["data/poids_modeles.json", "docs/poids_modeles.json",
+                            "data/modeles", "reports/derive.md"],
+        "quotidien.yml": ["data/verification", "data/forecast.json"],
+    }
+    for fichier, chemins in attendus.items():
+        texte = (racine / ".github/workflows" / fichier).read_text()
+        lignes_add = [l for l in texte.splitlines() if "git add" in l]
+        # La commande peut être coupée sur plusieurs lignes (\ en fin de ligne)
+        bloc = texte[texte.index("git add"):] if lignes_add else ""
+        for chemin in chemins:
+            verifier(chemin in bloc.split("git diff")[0],
+                     f"{fichier} stage {chemin}")
+
+
 def test_empreinte():
     print("\nEmpreinte du contenu calibré")
     a = poids_factices(genere_le="2026-01-01")
@@ -244,6 +271,7 @@ if __name__ == "__main__":
     test_amorcage()
     test_fenetre_hors_echantillon()
     test_verite_gelee()
+    test_crons_committent_tout_ce_qui_est_ecrit()
     test_empreinte()
 
     print()
