@@ -129,6 +129,27 @@ SAISONS_BACKTEST = [
     ("2026-05-01", None),  # None = calculé à l'exécution (aujourd'hui - 3 jours)
 ]
 
+# --- Vérification croisée sur observation réelle (piste parallèle) ---
+# Un anémomètre officiel, à 38 km, sur l'eau, horaire, sans trou depuis 1994.
+# Ce n'est PAS le lac : plan d'eau bien plus ouvert (vent médian de jour
+# 9,2 nds contre ~5 au Maskinongé), donc les biais absolus mesurés là-bas ne
+# se transplantent pas. Ce qui s'y mesure honnêtement, c'est la COMPÉTENCE
+# relative des modèles — quel modèle suit le mieux le passage réel des
+# systèmes — contre une vraie mesure et non contre un consensus de modèles.
+#
+# Étanchéité volontaire : cette piste n'alimente ni les poids, ni la vérité,
+# ni les verdicts. Elle accumule, elle diagnostique, et elle deviendra
+# comparable le jour où l'anémomètre du lac existera (phase 4).
+STATION_CROISEE = {
+    "id": "701LP0N",
+    "nom": "Lac Saint-Pierre",
+    "latitude": 46.195,
+    "longitude": -72.896,
+    "distance_km": 38,
+}
+URL_CLIMATE_HOURLY = "https://api.weather.gc.ca/collections/climate-hourly/items"
+DOSSIER_VERIF_CROISEE = "data/verification_croisee"
+
 # --- Segmentation des rapports ---
 SECTEURS = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"]  # 8 secteurs de 45°
 N_MIN_SEGMENT = 30  # taille minimale d'échantillon pour conclure sur une cellule

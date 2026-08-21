@@ -183,9 +183,28 @@ def generer_forecast_json() -> dict:
     }
 
 
+def _accumuler_verification_croisee() -> None:
+    """Piste parallèle : modèles notés contre l'anémomètre de Lac Saint-Pierre.
+
+    Encapsulée dans un try : cette piste est un diagnostic, pas le produit.
+    Une panne de l'API d'ECCC ne doit pas empêcher l'archivage principal ni
+    la génération de forecast.json — le rattrapage J-9 du lendemain
+    récupérera les jours manqués.
+    """
+    try:
+        import verification_croisee
+        debut, fin = verification_croisee._fenetre_quotidienne()
+        n = verification_croisee.mettre_a_jour(debut, fin)
+        print(f"Vérification croisée ({config.STATION_CROISEE['nom']}) : "
+              f"{n} lignes ajoutées")
+    except Exception as exc:  # noqa: BLE001 — diagnostic, jamais bloquant
+        print(f"Vérification croisée ignorée ce run : {exc}")
+
+
 def principal():
     n = mettre_a_jour_verification()
     print(f"Vérification : {n} lignes ajoutées aux partitions mensuelles")
+    _accumuler_verification_croisee()
     fc = generer_forecast_json()
     with open("data/forecast.json", "w") as f:
         json.dump(fc, f, indent=1, ensure_ascii=False)

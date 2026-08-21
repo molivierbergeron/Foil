@@ -16,6 +16,7 @@ import config
 
 ENTETES = {"User-Agent": "foil-maskinonge (usage personnel non commercial)"}
 PAUSE_ENTRE_APPELS = 1.5  # secondes, courtoisie API
+PAUSE_MAX_429 = 300.0     # plafond d'attente sur quota dépassé (5 min)
 
 
 def _chemin_cache(url: str, params: dict) -> Path:
@@ -40,6 +41,10 @@ def appel(url: str, params: dict, essais_max: int = 5) -> dict:
     delai = 2.0
     derniere_erreur: Exception | None = None
     for essai in range(essais_max):
+        # Un 429 se rejoue sur une autre échelle qu'une erreur réseau : le
+        # quota d'Open-Meteo est pondéré par la taille de la requête, et une
+        # requête d'archive sur plusieurs saisons peut le fermer pour de
+        # longues minutes. 2-4-8-16 s (30 s en tout) n'y suffit jamais.
         try:
             rep = requests.get(url, params=params, headers=ENTETES, timeout=120)
         except requests.exceptions.RequestException as exc:
@@ -62,8 +67,16 @@ def appel(url: str, params: dict, essais_max: int = 5) -> dict:
         if rep.status_code == 429 or rep.status_code >= 500:
             if essai == essais_max - 1:
                 break
-            time.sleep(delai)
-            delai *= 2
+            if rep.status_code == 429:
+                # Retry-After quand le serveur le donne, sinon un palier
+                # nettement plus long : 60 s, 120 s, 240 s...
+                entete = rep.headers.get("Retry-After")
+                attente = float(entete) if (entete or "").isdigit() else max(delai, 60.0)
+                attente = min(attente, PAUSE_MAX_429)
+            else:
+                attente = delai
+            time.sleep(attente)
+            delai = max(delai * 2, attente * 2)
             continue
         raise RuntimeError(f"HTTP {rep.status_code}: {rep.text[:300]}")
     if derniere_erreur is not None:

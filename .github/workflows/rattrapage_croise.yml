@@ -1,0 +1,50 @@
+# Rattrapage rétroactif de la vérification croisée (Lac Saint-Pierre).
+#
+# À lancer À LA MAIN, une fois, depuis l'onglet Actions : il remplit
+# data/verification_croisee/ pour les saisons passées, puis le cron quotidien
+# prend le relais tout seul. Relançable sans risque — l'archive est
+# append-only, un jour déjà présent n'est jamais réécrit.
+#
+# Pourquoi un workflow plutôt qu'une commande locale : le rattrapage fait une
+# vingtaine d'appels d'archive lourds à Open-Meteo, dont le quota est pondéré
+# par la taille des requêtes. Un runner GitHub a un réseau propre et commite
+# le résultat dans la foulée.
+name: Rattrapage vérification croisée
+
+on:
+  workflow_dispatch:
+    inputs:
+      debut:
+        description: "Première date (AAAA-MM-JJ)"
+        required: true
+        default: "2024-05-01"
+      fin:
+        description: "Dernière date (AAAA-MM-JJ)"
+        required: true
+        default: "2026-10-31"
+
+permissions:
+  contents: write
+
+jobs:
+  rattraper:
+    runs-on: ubuntu-latest
+    # Les appels d'archive sont lents et se réessaient longuement sur 429.
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python verification_croisee.py --rattraper "${{ inputs.debut }}" "${{ inputs.fin }}"
+      - run: python verification_croisee.py --rapport
+      - name: Commit et push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/verification_croisee reports/verification_croisee.md
+          git diff --cached --quiet && exit 0
+          git commit -m "Rattrapage vérification croisée ${{ inputs.debut }} → ${{ inputs.fin }}"
+          git pull --rebase origin ${GITHUB_REF_NAME} && git push

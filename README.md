@@ -103,6 +103,57 @@ Inventaire des stations réelles (~40 km) : une seule station horaire active,
 **Lac Saint-Pierre** (701LP0N, 37 km SE, sur l'eau, 1994→aujourd'hui) —
 vérité secondaire possible pour le régime synoptique. Détails dans le rapport.
 
+## Vérification croisée — les modèles notés contre un anémomètre réel
+
+`verification_croisee.py` accumule, **en parallèle et sans rien changer au
+modèle en service**, des paires « ce que le modèle prévoyait / ce que
+l'anémomètre a mesuré » à **Lac Saint-Pierre** (701LP0N, 38 km SE, sur l'eau,
+horaire). Les modèles sont interrogés *au point de la station*, donc la
+comparaison ne contient aucun écart de localisation.
+
+```bash
+python3 verification_croisee.py --rattraper 2024-05-01 2026-08-20  # rétroactif
+python3 verification_croisee.py --quotidien                        # appelé par le cron
+python3 verification_croisee.py --rapport                          # reports/verification_croisee.md
+```
+
+**Pourquoi.** La vérité du pipeline principal est la médiane hour-0 des
+modèles eux-mêmes : elle note chaque modèle contre la moyenne de ses
+semblables. Mesuré sur la saison 2026 (19 640 paires), l'écart est net :
+
+| Modèle | RMSE vs **mesure réelle** | Rang | RMSE vs consensus | Rang |
+|---|---:|---:|---:|---:|
+| GFS | 4,40 | 1 | 1,59 | 5 |
+| HRDPS | 4,60 | 2 | 2,10 | 6 |
+| GEM régional | 4,80 | 3 | 1,46 | 3 |
+| ICON | 5,03 | 4 | 1,17 | 1 |
+| GEM global | 5,19 | 5 | 1,49 | 4 |
+| ECMWF | 5,25 | 6 | 1,43 | 2 |
+
+Le classement est presque inversé et l'erreur réelle est 3 à 4 fois plus
+grande. Corollaire mesuré : à 24 h, l'écart entre le meilleur et le pire
+modèle vaut 0,85 nds alors que le débiaisage n'en gagne que 0,18 — **choisir
+et pondérer les modèles pèse ~5× plus que corriger leurs biais.**
+
+**Trois usages.** Un classement des modèles indépendant des modèles ; la
+détection de dérive d'un fournisseur (`reports/derive.md` ne peut pas la
+voir, son étalon bouge avec les modèles) ; et une base comparable le jour où
+l'anémomètre du lac existera.
+
+**Ce que cette piste ne fait pas.** Elle n'écrit ni dans
+`data/poids_modeles.json`, ni dans `data/verification/`, ne touche ni à
+`verite.py` ni au recalibrage, et ne produit aucun verdict. L'étanchéité est
+vérifiée par un test qui inspecte le code exécutable (docstrings exclues).
+
+**La limite, dite franchement.** Lac Saint-Pierre n'est pas le Lac
+Maskinongé : plan d'eau bien plus ouvert, vent médian de jour 9,2 nds contre
+~5 au spot, et les six modèles y sous-estiment tous de 1 à 3 nds. **Ce biais
+est celui du site, pas celui du lac, et ne se transplante pas.** Ce qui se
+transporte raisonnablement, c'est le classement et la corrélation. Deux
+réserves de plus : l'observation ECCC est un relevé horaire et non une
+moyenne horaire comme les modèles (ça gonfle l'erreur de tout le monde sans
+changer l'ordre), et elle est arrondie au km/h.
+
 ## Versionnage des modèles — historique, retour arrière, comparaison
 
 Un « modèle », ici, c'est un **jeu de poids complet** : c'est lui qui
