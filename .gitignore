@@ -4,3 +4,6 @@ data/raw/
 __pycache__/
 *.pyc
 .venv/
+
+# Canevas de design assemblé — régénérable depuis design/*.dc.html
+design/foil-directions-mobile.html
