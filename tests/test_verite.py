@@ -8,6 +8,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 
+import config  # noqa: E402
 from backtest import intervalle_wilson  # noqa: E402
 from telecharge import composantes_uv  # noqa: E402
 from verite import construire_verite, secteur  # noqa: E402
@@ -36,12 +37,16 @@ def test_mediane_direction_pres_du_nord():
     directions = [350.0, 0.0, 10.0]
     u, v = composantes_uv(np.array(vents), np.array(directions))
     hour0 = pd.DataFrame({
-        "time": temps, "modele": ["a", "b", "c"], "vent": vents,
+        # De vrais identifiants de modèles de vérité : depuis que la
+        # composition est gelée (config.MODELES_VERITE), construire_verite
+        # ignore tout modèle qui n'en fait pas partie.
+        "time": temps, "modele": list(config.MODELES_VERITE[:3]), "vent": vents,
         "rafales": [14.0] * 3, "u": u, "v": v, "vent80": [12.0] * 3,
         "rayonnement": [500.0] * 3, "nebulosite": [20.0] * 3,
         "temp2m": [20.0] * 3, "temp80": [19.0] * 3,
     })
-    verite = construire_verite(hour0)
+    # strict=False : ce cas de test ne fournit que 3 des 6 modèles de vérité.
+    verite = construire_verite(hour0, strict=False)
     d = verite["direction"].iloc[0]
     assert d < 10 or d > 350, f"direction médiane {d}° devrait être ~0°"
 

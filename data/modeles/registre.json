@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "actif": "v1-2026-07-15",
+  "versions": [
+    {
+      "version": "v1-2026-07-15",
+      "cree_le": "2026-08-20T23:24:13+00:00",
+      "origine": "import-initial",
+      "empreinte": "sha256:42551b87b51083b1",
+      "genere_le": "2026-07-15",
+      "periode_backtest": "2024-05-01 à 2026-07-12 (mai-octobre)",
+      "donnees_jusqu_au": "2026-07-12",
+      "n_apparie": null,
+      "verite": {
+        "version": "median_hour0"
+      },
+      "modeles_prevision": [
+        "ecmwf_ifs025",
+        "gem_global",
+        "gem_hrdps_continental",
+        "gem_regional",
+        "gfs_global",
+        "icon_global"
+      ],
+      "metriques_validation": null,
+      "notes": "Poids déjà en production, importés à la mise en place du versionnage. Borne de calibration déduite de periode_backtest."
+    }
+  ],
+  "activations": [
+    {
+      "version": "v1-2026-07-15",
+      "le": "2026-08-20T23:24:13+00:00",
+      "raison": "création (import-initial)"
+    }
+  ]
+}

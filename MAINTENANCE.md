@@ -32,6 +32,70 @@ prévisions en direct — seuls le recalibrage et l'historique dépendent des cr
   durablement (ex. 0,8 → 1,5) signalerait un changement de version chez un
   fournisseur de modèle : relancer alors `python3 rapport.py` pour requalifier.
 
+## La vérification croisée (Lac Saint-Pierre)
+
+Une piste de diagnostic qui tourne toute seule à côté du produit : chaque
+jour, le cron ajoute à `data/verification_croisee/` ce que chaque modèle
+prévoyait à 24/48/96 h et ce que l'anémomètre officiel de Lac Saint-Pierre a
+réellement mesuré. Elle ne change ni les poids, ni les verdicts, ni la page.
+
+```bash
+python3 verification_croisee.py --rapport   # -> reports/verification_croisee.md
+```
+
+**Quoi surveiller.** Le classement des modèles et leur corrélation. Un modèle
+dont le RMSE saute d'un coup (ex. 4,4 → 6,0) sans que les autres bougent
+signale un changement de version chez le fournisseur — c'est le seul endroit
+du système capable de le voir, parce que `reports/derive.md` compare les
+modèles à un étalon qui bouge avec eux.
+
+**Ce qu'il ne faut PAS en faire.** Recopier ces biais dans les poids. Lac
+Saint-Pierre est un plan d'eau bien plus ouvert que le Maskinongé (vent
+médian de jour 9,2 nds contre ~5) : les six modèles y sous-estiment tous de
+1 à 3 nds, et c'est le biais du site. Le classement se transporte
+raisonnablement, les biais absolus non.
+
+**Si l'API d'ECCC tombe.** Le job quotidien encapsule cette piste dans un
+`try` et affiche « Vérification croisée ignorée ce run » : l'archivage
+principal et `forecast.json` ne sont jamais bloqués, et la fenêtre de
+rattrapage J-9 du lendemain récupère les jours manqués.
+
+## « Le modèle s'est-il amélioré ? » — et comment revenir en arrière
+
+Chaque backtest complet et chaque recalibrage appliqué archivent une version
+du modèle dans `data/modeles/`. Trois commandes suffisent :
+
+```bash
+python3 versions.py --lister                 # qu'est-ce qui a tourné, et quand
+python3 versions.py --comparer v2-… v3-…     # laquelle prévoit le mieux
+python3 versions.py --activer v2-… --raison "v3 rate les journées de SO"
+git add -A data/modeles data/poids_modeles.json docs/poids_modeles.json && git commit
+```
+
+**Le contrôle périodique.** Après un mois ou deux de données accumulées,
+comparer la version active à celle d'avant : la fenêtre d'évaluation démarre
+automatiquement après la dernière donnée ayant servi à calibrer l'une OU
+l'autre, donc le résultat est honnête sans réglage manuel. Lire les deux
+métriques, pas une seule — le RMSE (erreur en nœuds) peut bouger sans que le
+taux de GO confirmé (ce que voit l'utilisateur) change d'un pouce.
+
+Trois sorties possibles, toutes normales :
+- « Match nul » : les deux versions se valent, garder l'active.
+- « B est meilleure » : si B est l'ancienne, `--activer` la restaure.
+- « Échantillon trop mince » ou « aucune donnée après la borne » : il faut
+  simplement laisser passer des jours. L'outil refuse de trancher plutôt que
+  d'inventer un gagnant sur 30 lignes.
+
+**Après un retour arrière**, il faut committer : le dashboard lit la copie du
+dépôt (`docs/poids_modeles.json`), pas le registre. Le recalibrage suivant
+repart de la version active — s'il produit mieux, il créera une version
+nouvelle par-dessus, sans jamais réécrire l'historique.
+
+**Si le registre est perdu ou incohérent** : le supprimer (`rm -rf
+data/modeles`) puis lancer `python3 versions.py --lister` le reconstruit à
+partir de `data/poids_modeles.json` comme nouvelle `v1`. L'historique
+antérieur est perdu, pas les poids en service.
+
 ## Reproduire le backtest complet (local)
 
 ```bash
