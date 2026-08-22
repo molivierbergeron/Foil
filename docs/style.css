@@ -182,3 +182,81 @@ footer p.versions {
   font-variant-numeric: tabular-nums;
   opacity: 0.75;
 }
+
+/* --------------------------------------------- vue « modèles vs réalité »
+   Page d'analyse (comparaison.html). Une carte par modèle plutôt qu'un
+   tableau : le fait à voir est le contraste entre les deux notations, et un
+   tableau à sept colonnes pousserait la seconde hors de l'écran sur un
+   téléphone — il faudrait scroller pour voir ce que la page existe pour
+   montrer. */
+.cartes-explication { margin-bottom: 0.8rem; }
+.carte-version h3.actif { color: var(--go); }
+.bloc-horizon { margin-bottom: 1.4rem; }
+
+.entete-modele { display: flex; align-items: center; gap: 0.1rem; flex-wrap: wrap; }
+.nom-modele { font-weight: 700; font-size: 0.9rem; }
+.entete-modele .etiquette { margin-left: auto; }
+
+.duo-scores { display: flex; gap: 0.6rem; margin-top: 0.5rem; }
+.colonne-score { flex: 1; min-width: 0; }
+.colonne-score.score-consensus { opacity: 0.72; }
+.titre-score {
+  display: block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--texte-3);
+  border-bottom: 1px solid var(--bordure);
+  padding-bottom: 0.15rem;
+  margin-bottom: 0.25rem;
+}
+.ligne-score {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.3rem;
+  margin: 0.1rem 0;
+  font-size: 0.75rem;
+}
+.libelle-score { color: var(--texte-3); }
+.valeur-score { font-variant-numeric: tabular-nums; color: var(--texte); }
+.valeur-score.gros { font-size: 1.05rem; font-weight: 700; }
+.valeur-score.gras { font-weight: 700; }
+.valeur-score.vide { font-style: italic; color: var(--texte-3); }
+
+.pastille {
+  display: inline-block;
+  width: 0.6rem; height: 0.6rem;
+  border-radius: 50%;
+  margin-right: 0.4rem;
+  background: var(--texte-3);
+}
+.pastille.m-gem_global { background: var(--m-gem_global); }
+.pastille.m-gem_regional { background: var(--m-gem_regional); }
+.pastille.m-gem_hrdps_continental { background: var(--m-gem_hrdps_continental); }
+.pastille.m-ecmwf_ifs025 { background: var(--m-ecmwf_ifs025); }
+.pastille.m-gfs_global { background: var(--m-gfs_global); }
+.pastille.m-icon_global { background: var(--m-icon_global); }
+
+/* Erreur relative au pire modèle de l'échéance : l'écart se voit d'un coup
+   d'oeil sans graphique ni dépendance. */
+.barre {
+  display: block;
+  height: 0.25rem;
+  margin-top: 0.4rem;
+  background: var(--passe);
+  border-radius: 0.125rem;
+  overflow: hidden;
+}
+.barre-remplie {
+  display: block;
+  height: 100%;
+  background: var(--m-gem_global);
+  border-radius: 0.125rem;
+}
+.note-ecart {
+  margin: 0.45rem 0 0;
+  font-size: 0.72rem;
+  color: var(--texte-3);
+}
+.note-ecart.fort { color: var(--avis-bord); }

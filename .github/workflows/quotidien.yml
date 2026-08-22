@@ -25,6 +25,8 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - run: python job_quotidien.py
+      # Régénère la vue « modèles vs réalité » (docs/comparaison.json)
+      - run: python comparaison.py
       - name: Commit et push
         run: |
           git config user.name "github-actions[bot]"
@@ -32,7 +34,8 @@ jobs:
           # data/verification_croisee : piste de diagnostic (modèles notés
           # contre l'anémomètre de Lac Saint-Pierre). Non commitée, elle
           # serait perdue à chaque run — le runner part d'un checkout neuf.
-          git add data/verification data/verification_croisee data/forecast.json
+          git add data/verification data/verification_croisee data/forecast.json \
+                  docs/comparaison.json
           git diff --cached --quiet && exit 0
           git commit -m "Vérification quotidienne $(date -u +%F)"
           git pull --rebase origin ${GITHUB_REF_NAME} && git push

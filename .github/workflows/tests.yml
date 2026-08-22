@@ -30,6 +30,7 @@ jobs:
       - run: python tests/test_openmeteo_client.py
       - run: python tests/test_versions.py
       - run: python tests/test_verification_croisee.py
+      - run: python tests/test_comparaison.py
       - uses: actions/setup-node@v4
         with:
           node-version: "20"

@@ -242,7 +242,7 @@ def test_crons_committent_tout_ce_qui_est_ecrit():
         "recalibrage.yml": ["data/poids_modeles.json", "docs/poids_modeles.json",
                             "data/modeles", "reports/derive.md"],
         "quotidien.yml": ["data/verification", "data/verification_croisee",
-                          "data/forecast.json"],
+                          "data/forecast.json", "docs/comparaison.json"],
     }
     for fichier, chemins in attendus.items():
         texte = (racine / ".github/workflows" / fichier).read_text()
