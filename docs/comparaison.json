@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "genere_le": "2026-08-22T13:11+00:00",
+ "genere_le": "2026-08-23T16:21+00:00",
  "station": {
   "nom": "Lac Saint-Pierre",
   "id": "701LP0N",
@@ -10,61 +10,24 @@
   "latitude": 46.3123,
   "longitude": -73.3638
  },
- "periode": null,
+ "periode": {
+  "debut": "2024-05-01",
+  "fin": "2026-08-20",
+  "jours": 480,
+  "paires": 171701
+ },
  "horizons": {
   "24h": [
    {
-    "modele": "icon_global",
-    "nom": "ICON (Allemagne)",
-    "reel": null,
-    "officiel": {
-     "biais": 0.05,
-     "rmse": 1.17,
-     "poids": 0.2648,
-     "n": 5292,
-     "rang": 1
-    }
-   },
-   {
-    "modele": "ecmwf_ifs025",
-    "nom": "ECMWF IFS 0.25°",
-    "reel": null,
-    "officiel": {
-     "biais": 0.54,
-     "rmse": 1.43,
-     "poids": 0.1763,
-     "n": 5292,
-     "rang": 2
-    }
-   },
-   {
-    "modele": "gem_regional",
-    "nom": "GEM régional (Canada)",
-    "reel": null,
-    "officiel": {
-     "biais": -0.83,
-     "rmse": 1.46,
-     "poids": 0.1703,
-     "n": 5149,
-     "rang": 3
-    }
-   },
-   {
-    "modele": "gem_global",
-    "nom": "GEM global (Canada)",
-    "reel": null,
-    "officiel": {
-     "biais": -0.88,
-     "rmse": 1.49,
-     "poids": 0.163,
-     "n": 5292,
-     "rang": 4
-    }
-   },
-   {
     "modele": "gfs_global",
     "nom": "GFS (États-Unis)",
-    "reel": null,
+    "reel": {
+     "biais": -1.42,
+     "rmse": 4.08,
+     "correlation": 0.723,
+     "n": 5748,
+     "rang": 1
+    },
     "officiel": {
      "biais": 0.43,
      "rmse": 1.59,
@@ -76,7 +39,13 @@
    {
     "modele": "gem_hrdps_continental",
     "nom": "HRDPS (Canada, 2.5 km)",
-    "reel": null,
+    "reel": {
+     "biais": -1.49,
+     "rmse": 4.13,
+     "correlation": 0.727,
+     "n": 5748,
+     "rang": 2
+    },
     "officiel": {
      "biais": 1.02,
      "rmse": 2.1,
@@ -84,17 +53,57 @@
      "n": 5292,
      "rang": 6
     }
-   }
-  ],
-  "48h": [
+   },
+   {
+    "modele": "gem_regional",
+    "nom": "GEM régional (Canada)",
+    "reel": {
+     "biais": -2.49,
+     "rmse": 4.44,
+     "correlation": 0.747,
+     "n": 5605,
+     "rang": 3
+    },
+    "officiel": {
+     "biais": -0.83,
+     "rmse": 1.46,
+     "poids": 0.1703,
+     "n": 5149,
+     "rang": 3
+    }
+   },
+   {
+    "modele": "gem_global",
+    "nom": "GEM global (Canada)",
+    "reel": {
+     "biais": -2.8,
+     "rmse": 4.76,
+     "correlation": 0.722,
+     "n": 5748,
+     "rang": 4
+    },
+    "officiel": {
+     "biais": -0.88,
+     "rmse": 1.49,
+     "poids": 0.163,
+     "n": 5292,
+     "rang": 4
+    }
+   },
    {
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
-    "reel": null,
+    "reel": {
+     "biais": -2.97,
+     "rmse": 4.95,
+     "correlation": 0.71,
+     "n": 5748,
+     "rang": 5
+    },
     "officiel": {
-     "biais": 0.08,
-     "rmse": 1.48,
-     "poids": 0.2469,
+     "biais": 0.05,
+     "rmse": 1.17,
+     "poids": 0.2648,
      "n": 5292,
      "rang": 1
     }
@@ -102,19 +111,51 @@
    {
     "modele": "ecmwf_ifs025",
     "nom": "ECMWF IFS 0.25°",
-    "reel": null,
+    "reel": {
+     "biais": -3.31,
+     "rmse": 5.17,
+     "correlation": 0.714,
+     "n": 5748,
+     "rang": 6
+    },
     "officiel": {
-     "biais": 0.5,
-     "rmse": 1.65,
-     "poids": 0.2006,
+     "biais": 0.54,
+     "rmse": 1.43,
+     "poids": 0.1763,
      "n": 5292,
      "rang": 2
+    }
+   }
+  ],
+  "48h": [
+   {
+    "modele": "gfs_global",
+    "nom": "GFS (États-Unis)",
+    "reel": {
+     "biais": -1.46,
+     "rmse": 4.4,
+     "correlation": 0.668,
+     "n": 5748,
+     "rang": 1
+    },
+    "officiel": {
+     "biais": 0.44,
+     "rmse": 1.8,
+     "poids": 0.1676,
+     "n": 5292,
+     "rang": 5
     }
    },
    {
     "modele": "gem_regional",
     "nom": "GEM régional (Canada)",
-    "reel": null,
+    "reel": {
+     "biais": -2.39,
+     "rmse": 4.74,
+     "correlation": 0.674,
+     "n": 5743,
+     "rang": 2
+    },
     "officiel": {
      "biais": -0.74,
      "rmse": 1.67,
@@ -126,7 +167,13 @@
    {
     "modele": "gem_global",
     "nom": "GEM global (Canada)",
-    "reel": null,
+    "reel": {
+     "biais": -2.71,
+     "rmse": 4.98,
+     "correlation": 0.654,
+     "n": 5616,
+     "rang": 3
+    },
     "officiel": {
      "biais": -0.82,
      "rmse": 1.7,
@@ -136,23 +183,71 @@
     }
    },
    {
-    "modele": "gfs_global",
-    "nom": "GFS (États-Unis)",
-    "reel": null,
+    "modele": "icon_global",
+    "nom": "ICON (Allemagne)",
+    "reel": {
+     "biais": -2.92,
+     "rmse": 5.19,
+     "correlation": 0.634,
+     "n": 5748,
+     "rang": 4
+    },
     "officiel": {
-     "biais": 0.44,
-     "rmse": 1.8,
-     "poids": 0.1676,
+     "biais": 0.08,
+     "rmse": 1.48,
+     "poids": 0.2469,
      "n": 5292,
+     "rang": 1
+    }
+   },
+   {
+    "modele": "ecmwf_ifs025",
+    "nom": "ECMWF IFS 0.25°",
+    "reel": {
+     "biais": -3.35,
+     "rmse": 5.32,
+     "correlation": 0.676,
+     "n": 5748,
      "rang": 5
+    },
+    "officiel": {
+     "biais": 0.5,
+     "rmse": 1.65,
+     "poids": 0.2006,
+     "n": 5292,
+     "rang": 2
     }
    }
   ],
   "96h": [
    {
+    "modele": "gfs_global",
+    "nom": "GFS (États-Unis)",
+    "reel": {
+     "biais": -1.48,
+     "rmse": 5.3,
+     "correlation": 0.482,
+     "n": 5748,
+     "rang": 1
+    },
+    "officiel": {
+     "biais": 0.35,
+     "rmse": 2.3,
+     "poids": 0.222,
+     "n": 5292,
+     "rang": 4
+    }
+   },
+   {
     "modele": "gem_global",
     "nom": "GEM global (Canada)",
-    "reel": null,
+    "reel": {
+     "biais": -2.75,
+     "rmse": 5.63,
+     "correlation": 0.486,
+     "n": 5688,
+     "rang": 2
+    },
     "officiel": {
      "biais": -0.82,
      "rmse": 2.1,
@@ -162,21 +257,15 @@
     }
    },
    {
-    "modele": "icon_global",
-    "nom": "ICON (Allemagne)",
-    "reel": null,
-    "officiel": {
-     "biais": -0.06,
-     "rmse": 2.12,
-     "poids": 0.2617,
-     "n": 5292,
-     "rang": 2
-    }
-   },
-   {
     "modele": "ecmwf_ifs025",
     "nom": "ECMWF IFS 0.25°",
-    "reel": null,
+    "reel": {
+     "biais": -3.34,
+     "rmse": 5.82,
+     "correlation": 0.509,
+     "n": 5748,
+     "rang": 3
+    },
     "officiel": {
      "biais": 0.53,
      "rmse": 2.17,
@@ -186,15 +275,21 @@
     }
    },
    {
-    "modele": "gfs_global",
-    "nom": "GFS (États-Unis)",
-    "reel": null,
-    "officiel": {
-     "biais": 0.35,
-     "rmse": 2.3,
-     "poids": 0.222,
-     "n": 5292,
+    "modele": "icon_global",
+    "nom": "ICON (Allemagne)",
+    "reel": {
+     "biais": -3.05,
+     "rmse": 5.84,
+     "correlation": 0.448,
+     "n": 5748,
      "rang": 4
+    },
+    "officiel": {
+     "biais": -0.06,
+     "rmse": 2.12,
+     "poids": 0.2617,
+     "n": 5292,
+     "rang": 2
     }
    }
   ]
