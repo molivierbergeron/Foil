@@ -1,0 +1,276 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+/* Dashboard vent Lac Maskinongé — mobile-first, clair/sombre automatique. */
+
+:root {
+  --surface: #fcfcfb;
+  --surface-carte: #ffffff;
+  --bordure: #e2e0da;
+  --texte: #0b0b0b;
+  --texte-2: #52514e;
+  --texte-3: #8a8983;
+  --go: #008300;
+  --go-fond: #e7f4e7;
+  --no: #6f6e69;
+  --no-fond: #efeeea;
+  --avis-fond: #fdf3e0;
+  --avis-bord: #eda100;
+  --bande: rgba(42, 120, 214, 0.10);
+  --passe: rgba(11, 11, 11, 0.05);
+  --maintenant: #4a3aa7;
+  --ensemble: #0b0b0b;
+  --m-gem_global: #2a78d6;
+  --m-gem_regional: #008300;
+  --m-gem_hrdps_continental: #e87ba4;
+  --m-ecmwf_ifs025: #eda100;
+  --m-gfs_global: #1baf7a;
+  --m-icon_global: #eb6834;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0 auto;
+  max-width: 44rem;
+  padding: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--surface);
+  color: var(--texte);
+  line-height: 1.45;
+}
+h1 { font-size: 1.35rem; margin: 0.2rem 0 0; }
+h2 { font-size: 1.1rem; margin: 1.6rem 0 0.4rem; }
+h3 { font-size: 0.95rem; margin: 1.2rem 0 0.2rem; }
+.sous-titre { color: var(--texte-2); margin: 0.15rem 0 0; font-size: 0.9rem; }
+.aide { color: var(--texte-2); font-size: 0.82rem; margin: 0.2rem 0 0.7rem; }
+.etat { color: var(--texte-2); }
+
+.cartes { display: grid; gap: 0.6rem; }
+.carte {
+  background: var(--surface-carte);
+  border: 1px solid var(--bordure);
+  border-radius: 10px;
+  padding: 0.7rem 0.85rem;
+}
+.carte .entete { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+.carte .jour { font-weight: 700; text-transform: capitalize; }
+.carte .date { color: var(--texte-3); font-size: 0.82rem; }
+.badge {
+  margin-left: auto;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+}
+.badge.go { background: var(--go-fond); color: var(--go); }
+.badge.no { background: var(--no-fond); color: var(--no); }
+.carte .resume { font-size: 0.9rem; margin: 0.25rem 0 0; }
+.carte .confiance { font-size: 0.8rem; color: var(--texte-2); margin: 0.15rem 0 0; }
+.etiquettes { margin: 0.3rem 0 0; display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.etiquette {
+  font-size: 0.72rem;
+  border: 1px solid var(--bordure);
+  color: var(--texte-2);
+  border-radius: 999px;
+  padding: 0.05rem 0.5rem;
+}
+.etiquette.bon { color: var(--go); border-color: var(--go); }
+.etiquette.moyen { color: var(--avis-bord); border-color: var(--avis-bord); }
+.etiquette.mauvais { color: #c94d2a; border-color: #c94d2a; }
+
+.meteo { font-size: 0.78rem; color: var(--texte-3); margin: 0.35rem 0 0; }
+.orage-badge {
+  color: var(--avis-bord);
+  font-weight: 700;
+}
+
+/* Bande heure par heure (aujourd'hui / demain) */
+.bande-heures {
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
+  margin-top: 0.35rem;
+}
+.cellule {
+  min-width: 3rem;
+  flex: 1;
+  text-align: center;
+  border-radius: 7px;
+  padding: 0.3rem 0.1rem;
+  background: var(--no-fond);
+  color: var(--no);
+}
+.cellule.go { background: var(--go-fond); color: var(--go); }
+.cellule.marginal { background: var(--avis-fond); color: var(--avis-bord); }
+.cellule.trop { background: var(--avis-fond); color: #c94d2a; }
+.cellule.orage { box-shadow: inset 0 0 0 2px var(--avis-bord); }
+.cellule.passee { opacity: 0.4; }
+.cellule .ch { display: block; font-size: 0.62rem; opacity: 0.75; }
+.cellule .cv { display: block; font-size: 1rem; font-weight: 700; }
+.cellule .cr { display: block; font-size: 0.62rem; }
+.cellule .cm { display: block; font-size: 0.72rem; }
+.jour-blocs .titre-jour .etiquette { margin-left: 0.5rem; font-weight: 400; }
+
+.jour-blocs { margin: 0.6rem 0; }
+.jour-blocs .titre-jour { font-weight: 700; font-size: 0.95rem; text-transform: capitalize; }
+.rangee-blocs { display: flex; gap: 0.5rem; margin-top: 0.3rem; }
+.bloc {
+  flex: 1;
+  text-align: center;
+  border-radius: 8px;
+  padding: 0.45rem 0.2rem;
+  font-size: 0.8rem;
+  background: var(--no-fond);
+  color: var(--no);
+}
+.bloc.go { background: var(--go-fond); color: var(--go); }
+.bloc .nom-bloc { display: block; }
+.bloc .nom-bloc em { font-style: normal; opacity: 0.7; font-size: 0.7rem; }
+.bloc .valeur { display: block; font-size: 1rem; font-weight: 700; }
+.bloc .valeur small { font-size: 0.72rem; font-weight: 400; }
+.carte .rangee-blocs { margin-top: 0.45rem; }
+.carte .bloc { padding: 0.3rem 0.15rem; font-size: 0.72rem; }
+.carte .bloc .valeur { font-size: 0.9rem; }
+
+.avis {
+  background: var(--avis-fond);
+  border-left: 3px solid var(--avis-bord);
+  border-radius: 6px;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.85rem;
+  margin: 0.6rem 0;
+}
+
+.graphique-cadre { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.graphique-cadre svg { display: block; touch-action: pan-x pan-y; }
+.legende { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-top: 0.4rem; }
+.legende span { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.75rem; color: var(--texte-2); }
+.legende i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+
+footer { margin-top: 2rem; border-top: 1px solid var(--bordure); padding-top: 0.7rem; }
+footer p { font-size: 0.75rem; color: var(--texte-3); margin: 0.25rem 0; }
+footer a { color: inherit; }
+/* Versions : discrètes mais lisibles et sélectionnables — c'est le premier
+   renseignement à donner quand quelque chose semble faux à l'écran. */
+footer p.versions {
+  margin-top: 0.5rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.75;
+}
+
+  a { color: #2a78d6; } a:hover { color: #1b5ea9; }
+  .pli { position: absolute; left: 0; right: 0; top: 844px; border-top: 1px dashed #c94d2a;
+         font-size: 10px; color: #c94d2a; letter-spacing: 0.04em; padding-top: 2px; }
+  .cadre-page { position: relative; }
+  </style>
+</helmet>
+<div class="cadre-page">
+<header>
+  <h1>Vent au Lac Maskinongé</h1>
+  <p class="sous-titre">Foil UFO — prévisions calibrées sur l’erreur mesurée des modèles à ce spot</p>
+</header>
+
+<main>
+  <section>
+    <h2>Aujourd’hui / demain</h2>
+    <p class="aide">Heure par heure : vent (gros chiffre, nds), rafales, météo.
+    Vert = dans la bande de foil. ⚡ = risque d’orage, on ne sort pas.</p>
+    <div><div class="jour-blocs"><div class="titre-jour">aujourd’hui</div><div class="bande-heures"><div class="cellule calme passee"><span class="ch">8 h</span><span class="cv">2</span><span class="cr">raf 3</span><span class="cm">☀️</span></div><div class="cellule calme passee"><span class="ch">9 h</span><span class="cv">3</span><span class="cr">raf 4</span><span class="cm">☀️</span></div><div class="cellule calme"><span class="ch">10 h</span><span class="cv">4</span><span class="cr">raf 6</span><span class="cm">☀️</span></div><div class="cellule calme"><span class="ch">11 h</span><span class="cv">4</span><span class="cr">raf 6</span><span class="cm">☀️</span></div><div class="cellule calme"><span class="ch">12 h</span><span class="cv">4</span><span class="cr">raf 6</span><span class="cm">☀️</span></div><div class="cellule calme"><span class="ch">13 h</span><span class="cv">3</span><span class="cr">raf 4</span><span class="cm">☀️</span></div><div class="cellule calme"><span class="ch">14 h</span><span class="cv">3</span><span class="cr">raf 4</span><span class="cm">☀️</span></div><div class="cellule calme"><span class="ch">15 h</span><span class="cv">3</span><span class="cr">raf 4</span><span class="cm">☀️</span></div><div class="cellule calme"><span class="ch">16 h</span><span class="cv">2</span><span class="cr">raf 3</span><span class="cm">☀️</span></div><div class="cellule calme"><span class="ch">17 h</span><span class="cv">2</span><span class="cr">raf 3</span><span class="cm">☀️</span></div><div class="cellule calme"><span class="ch">18 h</span><span class="cv">2</span><span class="cr">raf 3</span><span class="cm">☀️</span></div><div class="cellule calme"><span class="ch">19 h</span><span class="cv">1</span><span class="cr">raf 2</span><span class="cm">☀️</span></div></div><p class="meteo">☀️ ensoleillé</p></div><div class="jour-blocs"><div class="titre-jour">demain</div><div class="bande-heures"><div class="cellule calme"><span class="ch">8 h</span><span class="cv">3</span><span class="cr">raf 4</span><span class="cm">🌤️</span></div><div class="cellule calme"><span class="ch">9 h</span><span class="cv">4</span><span class="cr">raf 6</span><span class="cm">🌤️</span></div><div class="cellule marginal"><span class="ch">10 h</span><span class="cv">5</span><span class="cr">raf 8</span><span class="cm">🌤️</span></div><div class="cellule marginal"><span class="ch">11 h</span><span class="cv">5</span><span class="cr">raf 8</span><span class="cm">🌤️</span></div><div class="cellule marginal"><span class="ch">12 h</span><span class="cv">5</span><span class="cr">raf 8</span><span class="cm">🌤️</span></div><div class="cellule calme"><span class="ch">13 h</span><span class="cv">4</span><span class="cr">raf 6</span><span class="cm">🌤️</span></div><div class="cellule calme"><span class="ch">14 h</span><span class="cv">4</span><span class="cr">raf 6</span><span class="cm">🌤️</span></div><div class="cellule calme"><span class="ch">15 h</span><span class="cv">4</span><span class="cr">raf 6</span><span class="cm">🌤️</span></div><div class="cellule calme"><span class="ch">16 h</span><span class="cv">3</span><span class="cr">raf 4</span><span class="cm">🌤️</span></div><div class="cellule calme"><span class="ch">17 h</span><span class="cv">3</span><span class="cr">raf 4</span><span class="cm">🌤️</span></div><div class="cellule calme"><span class="ch">18 h</span><span class="cv">2</span><span class="cr">raf 3</span><span class="cm">🌤️</span></div><div class="cellule calme"><span class="ch">19 h</span><span class="cv">2</span><span class="cr">raf 3</span><span class="cm">🌤️</span></div></div><p class="meteo">🌤️ partiellement nuageux</p></div></div>
+    <h3>Vent prévu, heure par heure (48 h)</h3>
+    <p class="aide">Ligne épaisse : ensemble corrigé. Lignes fines : chaque modèle
+    après correction de son biais mesuré. Zone teintée : bande de foil (7–16 nds).
+    Glisse le doigt verticalement sur le graphique pour lire vent et rafales,
+    ou balaie horizontalement pour voir demain.</p>
+    <div class="graphique-cadre"><svg viewBox="0 0 720 260" width="100%" style="min-width:640px" role="img" aria-label="Vent prévu sur 48 heures"><rect x="30" y="63.0" width="682" height="91.7" fill="var(--bande)"/><rect x="30" y="12" width="35.0" height="214" fill="var(--passe)"/><line x1="65.0" x2="65.0" y1="12" y2="226" stroke="var(--maintenant)" stroke-width="1.6"/><text x="69.0" y="22" font-size="10" fill="var(--maintenant)">maintenant</text><line x1="30" x2="712" y1="226.0" y2="226.0" stroke="var(--bordure)" stroke-width="0.7"/><text x="25" y="229.0" text-anchor="end" font-size="10" fill="var(--texte-3)">0</text><line x1="30" x2="712" y1="175.0" y2="175.0" stroke="var(--bordure)" stroke-width="0.7"/><text x="25" y="178.0" text-anchor="end" font-size="10" fill="var(--texte-3)">5</text><line x1="30" x2="712" y1="124.1" y2="124.1" stroke="var(--bordure)" stroke-width="0.7"/><text x="25" y="127.1" text-anchor="end" font-size="10" fill="var(--texte-3)">10</text><line x1="30" x2="712" y1="73.1" y2="73.1" stroke="var(--bordure)" stroke-width="0.7"/><text x="25" y="76.1" text-anchor="end" font-size="10" fill="var(--texte-3)">15</text><line x1="30" x2="712" y1="22.2" y2="22.2" stroke="var(--bordure)" stroke-width="0.7"/><text x="25" y="25.2" text-anchor="end" font-size="10" fill="var(--texte-3)">20</text><text x="47.5" y="240" text-anchor="middle" font-size="10" fill="var(--texte-3)">9 h</text><text x="99.9" y="240" text-anchor="middle" font-size="10" fill="var(--texte-3)">12 h</text><text x="152.4" y="240" text-anchor="middle" font-size="10" fill="var(--texte-3)">15 h</text><text x="204.9" y="240" text-anchor="middle" font-size="10" fill="var(--texte-3)">18 h</text><text x="257.3" y="240" text-anchor="middle" font-size="10" fill="var(--texte-3)">21 h</text><text x="309.8" y="240" text-anchor="middle" font-size="10" fill="var(--texte-3)">0 h</text><line x1="309.8" x2="309.8" y1="12" y2="226" stroke="var(--bordure)" stroke-width="1" stroke-dasharray="3 3"/><text x="313.8" y="254" font-size="10" fill="var(--texte-2)">demain</text><text x="362.3" y="240" text-anchor="middle" font-size="10" fill="var(--texte-3)">3 h</text><text x="414.7" y="240" text-anchor="middle" font-size="10" fill="var(--texte-3)">6 h</text><text x="467.2" y="240" text-anchor="middle" font-size="10" fill="var(--texte-3)">9 h</text><text x="519.6" y="240" text-anchor="middle" font-size="10" fill="var(--texte-3)">12 h</text><text x="572.1" y="240" text-anchor="middle" font-size="10" fill="var(--texte-3)">15 h</text><text x="624.6" y="240" text-anchor="middle" font-size="10" fill="var(--texte-3)">18 h</text><text x="677.0" y="240" text-anchor="middle" font-size="10" fill="var(--texte-3)">21 h</text><text x="34" y="254" font-size="10" fill="var(--texte-2)">aujourd’hui</text><path d="M30.0,194.4 L47.5,184.2 L65.0,174.0 L82.5,174.0 L99.9,174.0 L117.4,184.2 L134.9,184.2 L152.4,184.2 L169.9,194.4 L187.4,194.4 L204.9,194.4 L222.4,204.6 L239.8,204.6 L257.3,204.6 L274.8,204.6 L292.3,204.6 L309.8,194.4 L327.3,194.4 L344.8,194.4 L362.3,194.4 L379.7,194.4 L397.2,194.4 L414.7,194.4 L432.2,194.4 L449.7,184.2 L467.2,174.0 L484.7,163.8 L502.2,163.8 L519.6,163.8 L537.1,174.0 L554.6,174.0 L572.1,174.0 L589.6,184.2 L607.1,184.2 L624.6,194.4 L642.1,194.4 L659.5,194.4 L677.0,194.4 L694.5,194.4 L712.0,194.4" fill="none" stroke="var(--m-gem_global)" stroke-width="1.3" opacity="0.55"/><path d="M30.0,213.8 L47.5,203.6 L65.0,193.4 L82.5,193.4 L99.9,193.4 L117.4,203.6 L134.9,203.6 L152.4,203.6 L169.9,213.8 L187.4,213.8 L204.9,213.8 L222.4,224.0 L239.8,224.0 L257.3,224.0 L274.8,224.0 L292.3,224.0 L309.8,213.8 L327.3,213.8 L344.8,213.8 L362.3,213.8 L379.7,213.8 L397.2,213.8 L414.7,213.8 L432.2,213.8 L449.7,203.6 L467.2,193.4 L484.7,183.2 L502.2,183.2 L519.6,183.2 L537.1,193.4 L554.6,193.4 L572.1,193.4 L589.6,203.6 L607.1,203.6 L624.6,213.8 L642.1,213.8 L659.5,213.8 L677.0,213.8 L694.5,213.8 L712.0,213.8" fill="none" stroke="var(--m-gem_regional)" stroke-width="1.3" opacity="0.55"/><path d="M30.0,186.3 L47.5,176.1 L65.0,165.9 L82.5,165.9 L99.9,165.9 L117.4,176.1 L134.9,176.1 L152.4,176.1 L169.9,186.3 L187.4,186.3 L204.9,186.3 L222.4,196.4 L239.8,196.4 L257.3,196.4 L274.8,196.4 L292.3,196.4 L309.8,186.3 L327.3,186.3 L344.8,186.3 L362.3,186.3 L379.7,186.3 L397.2,186.3 L414.7,186.3 L432.2,186.3 L449.7,176.1 L467.2,165.9 L484.7,155.7 L502.2,155.7 L519.6,155.7 L537.1,165.9 L554.6,165.9 L572.1,165.9 L589.6,176.1 L607.1,176.1 L624.6,186.3 L642.1,186.3 L659.5,186.3 L677.0,186.3 L694.5,186.3 L712.0,186.3" fill="none" stroke="var(--m-gem_hrdps_continental)" stroke-width="1.3" opacity="0.55"/><path d="M30.0,221.9 L47.5,211.7 L65.0,201.5 L82.5,201.5 L99.9,201.5 L117.4,211.7 L134.9,211.7 L152.4,211.7 L169.9,221.9 L187.4,221.9 L204.9,221.9 L222.4,232.1 L239.8,232.1 L257.3,232.1 L274.8,232.1 L292.3,232.1 L309.8,221.9 L327.3,221.9 L344.8,221.9 L362.3,221.9 L379.7,221.9 L397.2,221.9 L414.7,221.9 L432.2,221.9 L449.7,211.7 L467.2,201.5 L484.7,191.4 L502.2,191.4 L519.6,191.4 L537.1,201.5 L554.6,201.5 L572.1,201.5 L589.6,211.7 L607.1,211.7 L624.6,221.9 L642.1,221.9 L659.5,221.9 L677.0,221.9 L694.5,221.9 L712.0,221.9" fill="none" stroke="var(--m-ecmwf_ifs025)" stroke-width="1.3" opacity="0.55"/><path d="M30.0,199.5 L47.5,189.3 L65.0,179.1 L82.5,179.1 L99.9,179.1 L117.4,189.3 L134.9,189.3 L152.4,189.3 L169.9,199.5 L187.4,199.5 L204.9,199.5 L222.4,209.7 L239.8,209.7 L257.3,209.7 L274.8,209.7 L292.3,209.7 L309.8,199.5 L327.3,199.5 L344.8,199.5 L362.3,199.5 L379.7,199.5 L397.2,199.5 L414.7,199.5 L432.2,199.5 L449.7,189.3 L467.2,179.1 L484.7,168.9 L502.2,168.9 L519.6,168.9 L537.1,179.1 L554.6,179.1 L572.1,179.1 L589.6,189.3 L607.1,189.3 L624.6,199.5 L642.1,199.5 L659.5,199.5 L677.0,199.5 L694.5,199.5 L712.0,199.5" fill="none" stroke="var(--m-gfs_global)" stroke-width="1.3" opacity="0.55"/><path d="M30.0,228.0 L47.5,217.8 L65.0,207.7 L82.5,207.7 L99.9,207.7 L117.4,217.8 L134.9,217.8 L152.4,217.8 L169.9,228.0 L187.4,228.0 L204.9,228.0 L222.4,238.2 L239.8,238.2 L257.3,238.2 L274.8,238.2 L292.3,238.2 L309.8,228.0 L327.3,228.0 L344.8,228.0 L362.3,228.0 L379.7,228.0 L397.2,228.0 L414.7,228.0 L432.2,228.0 L449.7,217.8 L467.2,207.7 L484.7,197.5 L502.2,197.5 L519.6,197.5 L537.1,207.7 L554.6,207.7 L572.1,207.7 L589.6,217.8 L607.1,217.8 L624.6,228.0 L642.1,228.0 L659.5,228.0 L677.0,228.0 L694.5,228.0 L712.0,228.0" fill="none" stroke="var(--m-icon_global)" stroke-width="1.3" opacity="0.55"/><path d="M30.0,195.4 L47.5,185.2 L65.0,164.9 L82.5,164.9 L99.9,164.9 L117.4,185.2 L134.9,185.2 L152.4,185.2 L169.9,195.4 L187.4,195.4 L204.9,195.4 L222.4,205.6 L239.8,195.4 L257.3,195.4 L274.8,195.4 L292.3,195.4 L309.8,185.2 L327.3,185.2 L344.8,185.2 L362.3,185.2 L379.7,185.2 L397.2,185.2 L414.7,185.2 L432.2,185.2 L449.7,185.2 L467.2,164.9 L484.7,144.5 L502.2,144.5 L519.6,144.5 L537.1,164.9 L554.6,164.9 L572.1,164.9 L589.6,185.2 L607.1,185.2 L624.6,195.4 L642.1,195.4 L659.5,185.2 L677.0,185.2 L694.5,185.2 L712.0,185.2" fill="none" stroke="var(--maintenant)" stroke-width="1.8" stroke-dasharray="6 4" opacity="0.9"/><path d="M30.0,205.6 L47.5,195.4 L65.0,185.2 L82.5,185.2 L99.9,185.2 L117.4,195.4 L134.9,195.4 L152.4,195.4 L169.9,205.6 L187.4,205.6 L204.9,205.6 L222.4,215.8 L239.8,215.8 L257.3,215.8 L274.8,215.8 L292.3,215.8 L309.8,205.6 L327.3,205.6 L344.8,205.6 L362.3,205.6 L379.7,205.6 L397.2,205.6 L414.7,205.6 L432.2,205.6 L449.7,195.4 L467.2,185.2 L484.7,175.0 L502.2,175.0 L519.6,175.0 L537.1,185.2 L554.6,185.2 L572.1,185.2 L589.6,195.4 L607.1,195.4 L624.6,205.6 L642.1,205.6 L659.5,205.6 L677.0,205.6 L694.5,205.6 L712.0,205.6" fill="none" stroke="var(--ensemble)" stroke-width="2.6"/></svg></div>
+    <div class="legende"><span><i style="background:var(--ensemble);height:4px"></i>Ensemble corrigé</span><span><i style="background:repeating-linear-gradient(90deg,var(--maintenant) 0 5px,transparent 5px 8px);height:3px"></i>Puffs (rafales)</span><span><i style="background:var(--m-gem_global)"></i>GEM global</span><span><i style="background:var(--m-gem_regional)"></i>GEM régional</span><span><i style="background:var(--m-gem_hrdps_continental)"></i>HRDPS</span><span><i style="background:var(--m-ecmwf_ifs025)"></i>ECMWF</span><span><i style="background:var(--m-gfs_global)"></i>GFS</span><span><i style="background:var(--m-icon_global)"></i>ICON</span></div>
+  </section>
+
+  <section>
+    <h2>Cette semaine</h2>
+    <div class="cartes"><article class="carte">
+      <div class="entete">
+        <span class="jour">aujourd’hui</span>
+        <span class="date">22/8</span>
+        <span class="badge no">NO</span>
+      </div>
+      <p class="resume">↗ petit temps</p>
+      <div class="rangee-blocs"><div class="bloc "><span class="nom-bloc">matin</span><span class="valeur">4<small> / raf 6</small></span></div><div class="bloc "><span class="nom-bloc">midi</span><span class="valeur">4<small> / raf 6</small></span></div><div class="bloc "><span class="nom-bloc">après-midi</span><span class="valeur">3<small> / raf 4</small></span></div></div>
+      <p class="meteo">☀️ ensoleillé</p>
+      </article><article class="carte">
+      <div class="entete">
+        <span class="jour">demain</span>
+        <span class="date">23/8</span>
+        <span class="badge no">NO</span>
+      </div>
+      <p class="resume">↗ vent max 5 nds — sous le seuil de foil</p>
+      <div class="rangee-blocs"><div class="bloc "><span class="nom-bloc">matin</span><span class="valeur">5<small> / raf 8</small></span></div><div class="bloc "><span class="nom-bloc">midi</span><span class="valeur">5<small> / raf 8</small></span></div><div class="bloc "><span class="nom-bloc">après-midi</span><span class="valeur">4<small> / raf 6</small></span></div></div>
+      <p class="meteo">🌤️ partiellement nuageux</p>
+      </article><article class="carte">
+      <div class="entete">
+        <span class="jour">lundi</span>
+        <span class="date">24/8</span>
+        <span class="badge no">NO</span>
+      </div>
+      <p class="resume">↗ vent max 6 nds — sous le seuil de foil</p>
+      <div class="rangee-blocs"><div class="bloc "><span class="nom-bloc">matin</span><span class="valeur">5<small> / raf 8</small></span></div><div class="bloc "><span class="nom-bloc">midi</span><span class="valeur">6<small> / raf 9</small></span></div><div class="bloc "><span class="nom-bloc">après-midi</span><span class="valeur">5<small> / raf 8</small></span></div></div>
+      <p class="meteo">🌤️ partiellement nuageux</p>
+      </article><article class="carte">
+      <div class="entete">
+        <span class="jour">mardi</span>
+        <span class="date">25/8</span>
+        <span class="badge no">NO</span>
+      </div>
+      <p class="resume">↗ vent max 5 nds — sous le seuil de foil</p>
+      <div class="rangee-blocs"><div class="bloc "><span class="nom-bloc">matin</span><span class="valeur">4<small> / raf 6</small></span></div><div class="bloc "><span class="nom-bloc">midi</span><span class="valeur">5<small> / raf 8</small></span></div><div class="bloc "><span class="nom-bloc">après-midi</span><span class="valeur">4<small> / raf 6</small></span></div></div>
+      <p class="meteo">☀️ ensoleillé</p>
+      </article><article class="carte">
+      <div class="entete">
+        <span class="jour">mercredi</span>
+        <span class="date">26/8</span>
+        <span class="badge no">NO</span>
+      </div>
+      <p class="resume">↗ vent max 8 nds — sous le seuil de foil</p>
+      <div class="rangee-blocs"><div class="bloc "><span class="nom-bloc">matin</span><span class="valeur">6<small> / raf 9</small></span></div><div class="bloc "><span class="nom-bloc">midi</span><span class="valeur">8<small> / raf 12</small></span></div><div class="bloc "><span class="nom-bloc">après-midi</span><span class="valeur">5<small> / raf 8</small></span></div></div>
+      <p class="meteo">☁️ couvert, un peu de pluie (3 mm)</p>
+      </article><article class="carte">
+      <div class="entete">
+        <span class="jour">jeudi</span>
+        <span class="date">27/8</span>
+        <span class="badge no">NO</span>
+      </div>
+      <p class="resume">↗ vent max 6 nds — sous le seuil de foil</p>
+      <div class="rangee-blocs"><div class="bloc "><span class="nom-bloc">matin</span><span class="valeur">5<small> / raf 8</small></span></div><div class="bloc "><span class="nom-bloc">midi</span><span class="valeur">6<small> / raf 9</small></span></div><div class="bloc "><span class="nom-bloc">après-midi</span><span class="valeur">5<small> / raf 8</small></span></div></div>
+      <p class="meteo">⛈️ couvert, pluie (7 mm) <span class="orage-badge">⚡ risque d’orages — pas d’eau à ce moment-là</span></p>
+      </article><article class="carte">
+      <div class="entete">
+        <span class="jour">vendredi</span>
+        <span class="date">28/8</span>
+        <span class="badge go">GO · 76 %</span>
+      </div>
+      <p class="resume">↗ fenêtre 11 h–19 h · vent 13 nds · rafales 17 nds</p>
+      <div class="rangee-blocs"><div class="bloc "><span class="nom-bloc">matin</span><span class="valeur">5<small> / raf 7</small></span></div><div class="bloc go"><span class="nom-bloc">midi</span><span class="valeur">12<small> / raf 16</small></span></div><div class="bloc go"><span class="nom-bloc">après-midi</span><span class="valeur">13<small> / raf 17</small></span></div></div>
+      <p class="meteo">🌤️ généralement ensoleillé</p>
+      <div class="etiquettes"><span class="etiquette bon">vent régulier</span></div></article></div>
+  </section>
+</main>
+
+<footer>
+  <p>Prévisions récupérées à 5 h 51. Poids calibrés du 2026-07-15.</p>
+  <p>Données météo : <a href="https://open-meteo.com/">Open-Meteo.com</a> (CC BY 4.0).
+  La vérité de calibration est pour l’instant un consensus de modèles — les cotes
+  seront requalifiées quand l’anémomètre au lac sera en service.</p>
+  <p class="versions">interface 1.1.0 · modèle 2026-07-15</p>
+</footer>
+<div class="pli">bas de l’écran — iPhone 390 × 844</div>
+</div>
+</x-dc>
+</body>
+</html>

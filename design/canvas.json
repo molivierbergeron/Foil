@@ -1,0 +1,21 @@
+{
+  "artboards": [
+    { "file": "Actuel.dc.html", "x": 0, "y": 0, "w": 390, "h": 2400, "title": "Actuel — ce qu'on a", "print": "flow" },
+    { "file": "Main.dc.html", "x": 490, "y": 0, "w": 390, "h": 844, "title": "A — Verdict" },
+    { "file": "DirectionB.dc.html", "x": 980, "y": 0, "w": 390, "h": 844, "title": "B — La bande" },
+    { "file": "DirectionC.dc.html", "x": 1470, "y": 0, "w": 390, "h": 844, "title": "C — Le fil" }
+  ],
+  "annotations": [
+    { "id": "note-actuel", "x": 0, "y": -250, "w": 390,
+      "text": "CE QU'ON A AUJOURD'HUI\nRecréé à l'identique depuis docs/ : mêmes valeurs, mêmes couleurs, mêmes textes.\n\nSur un 390 × 844, la page fait ~2 200 px. Le verdict de la fin de semaine arrive après trois écrans de défilement, et deux blocs débordent en largeur (la bande horaire, le graphique 48 h). Le trait rouge marque le bas du premier écran." },
+    { "id": "note-a", "x": 490, "y": -250, "w": 390,
+      "text": "A — VERDICT · le pari : une phrase répond, tout le reste se replie.\n\nLa réponse est écrite en toutes lettres, la prochaine fenêtre est un objet unique, et la semaine devient sept barres où on voit d'un coup si le vent atteint la bande.\n\n+ Décision en deux secondes, et le même contenu part tel quel en notification.\n− Cache les données brutes : si la phrase se trompe, rien à l'écran ne permet de la contredire." },
+    { "id": "note-b", "x": 980, "y": -250, "w": 390,
+      "text": "B — LA BANDE · le pari : montrer plutôt que raconter.\n\nSept jours, sept rubans. La zone bleue est la bande de foil (7–16 nds), le vert est le temps réellement passé dedans, le pointillé les rafales. Une seule échelle, aucun texte à lire.\n\n+ La semaine entière tient dans un écran ; la marge (juste sous la bande vs largement dedans) devient visible.\n− Demande d'apprendre la grammaire visuelle ; moins immédiat pour le cousin qui ouvre deux fois par été." },
+    { "id": "note-c", "x": 1470, "y": -250, "w": 390,
+      "text": "C — LE FIL · le pari : le produit parle et rend des comptes.\n\nDes énoncés datés : révisions de fenêtre, alertes d'orage, GO confirmés, bilan du mois. Le même texte part en notification (VISION P3) et la vérification publique répond à P2.\n\n+ Utile sans même ouvrir l'app ; c'est le seul des trois qui affiche si le modèle a eu raison.\n− Demande d'écrire la génération des phrases et d'archiver les révisions ; mauvais pour comparer deux journées entre elles." },
+    { "id": "note-reco", "x": 490, "y": 900, "w": 880,
+      "text": "Ce qui change vraiment d'une direction à l'autre, c'est ce que la page montre EN PREMIER : une phrase (A), une image de la semaine (B), ou la dernière chose que le modèle a dite (C). Le reste peut se réconcilier ensuite — la bande de B ferait un très bon deuxième écran sous A, et le fil de C existe surtout pour les notifications.\n\nDonnées : la semaine réelle de data/forecast.json (aucun GO avant le vendredi 28). Les valeurs horaires et les rafales sont des exemples plausibles, pas des sorties du modèle." }
+  ],
+  "launch": { "view": "canvas" }
+}
