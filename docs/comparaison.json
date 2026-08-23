@@ -1,0 +1,221 @@
+{
+ "schema_version": 1,
+ "genere_le": "2026-08-22T13:11+00:00",
+ "station": {
+  "nom": "Lac Saint-Pierre",
+  "id": "701LP0N",
+  "distance_km": 38
+ },
+ "spot": {
+  "latitude": 46.3123,
+  "longitude": -73.3638
+ },
+ "periode": null,
+ "horizons": {
+  "24h": [
+   {
+    "modele": "icon_global",
+    "nom": "ICON (Allemagne)",
+    "reel": null,
+    "officiel": {
+     "biais": 0.05,
+     "rmse": 1.17,
+     "poids": 0.2648,
+     "n": 5292,
+     "rang": 1
+    }
+   },
+   {
+    "modele": "ecmwf_ifs025",
+    "nom": "ECMWF IFS 0.25°",
+    "reel": null,
+    "officiel": {
+     "biais": 0.54,
+     "rmse": 1.43,
+     "poids": 0.1763,
+     "n": 5292,
+     "rang": 2
+    }
+   },
+   {
+    "modele": "gem_regional",
+    "nom": "GEM régional (Canada)",
+    "reel": null,
+    "officiel": {
+     "biais": -0.83,
+     "rmse": 1.46,
+     "poids": 0.1703,
+     "n": 5149,
+     "rang": 3
+    }
+   },
+   {
+    "modele": "gem_global",
+    "nom": "GEM global (Canada)",
+    "reel": null,
+    "officiel": {
+     "biais": -0.88,
+     "rmse": 1.49,
+     "poids": 0.163,
+     "n": 5292,
+     "rang": 4
+    }
+   },
+   {
+    "modele": "gfs_global",
+    "nom": "GFS (États-Unis)",
+    "reel": null,
+    "officiel": {
+     "biais": 0.43,
+     "rmse": 1.59,
+     "poids": 0.1434,
+     "n": 5292,
+     "rang": 5
+    }
+   },
+   {
+    "modele": "gem_hrdps_continental",
+    "nom": "HRDPS (Canada, 2.5 km)",
+    "reel": null,
+    "officiel": {
+     "biais": 1.02,
+     "rmse": 2.1,
+     "poids": 0.0822,
+     "n": 5292,
+     "rang": 6
+    }
+   }
+  ],
+  "48h": [
+   {
+    "modele": "icon_global",
+    "nom": "ICON (Allemagne)",
+    "reel": null,
+    "officiel": {
+     "biais": 0.08,
+     "rmse": 1.48,
+     "poids": 0.2469,
+     "n": 5292,
+     "rang": 1
+    }
+   },
+   {
+    "modele": "ecmwf_ifs025",
+    "nom": "ECMWF IFS 0.25°",
+    "reel": null,
+    "officiel": {
+     "biais": 0.5,
+     "rmse": 1.65,
+     "poids": 0.2006,
+     "n": 5292,
+     "rang": 2
+    }
+   },
+   {
+    "modele": "gem_regional",
+    "nom": "GEM régional (Canada)",
+    "reel": null,
+    "officiel": {
+     "biais": -0.74,
+     "rmse": 1.67,
+     "poids": 0.1957,
+     "n": 5287,
+     "rang": 3
+    }
+   },
+   {
+    "modele": "gem_global",
+    "nom": "GEM global (Canada)",
+    "reel": null,
+    "officiel": {
+     "biais": -0.82,
+     "rmse": 1.7,
+     "poids": 0.1892,
+     "n": 5160,
+     "rang": 4
+    }
+   },
+   {
+    "modele": "gfs_global",
+    "nom": "GFS (États-Unis)",
+    "reel": null,
+    "officiel": {
+     "biais": 0.44,
+     "rmse": 1.8,
+     "poids": 0.1676,
+     "n": 5292,
+     "rang": 5
+    }
+   }
+  ],
+  "96h": [
+   {
+    "modele": "gem_global",
+    "nom": "GEM global (Canada)",
+    "reel": null,
+    "officiel": {
+     "biais": -0.82,
+     "rmse": 2.1,
+     "poids": 0.2669,
+     "n": 5232,
+     "rang": 1
+    }
+   },
+   {
+    "modele": "icon_global",
+    "nom": "ICON (Allemagne)",
+    "reel": null,
+    "officiel": {
+     "biais": -0.06,
+     "rmse": 2.12,
+     "poids": 0.2617,
+     "n": 5292,
+     "rang": 2
+    }
+   },
+   {
+    "modele": "ecmwf_ifs025",
+    "nom": "ECMWF IFS 0.25°",
+    "reel": null,
+    "officiel": {
+     "biais": 0.53,
+     "rmse": 2.17,
+     "poids": 0.2494,
+     "n": 5292,
+     "rang": 3
+    }
+   },
+   {
+    "modele": "gfs_global",
+    "nom": "GFS (États-Unis)",
+    "reel": null,
+    "officiel": {
+     "biais": 0.35,
+     "rmse": 2.3,
+     "poids": 0.222,
+     "n": 5292,
+     "rang": 4
+    }
+   }
+  ]
+ },
+ "modele_actif": "v1-2026-07-15",
+ "versions": [
+  {
+   "version": "v1-2026-07-15",
+   "origine": "import-initial",
+   "cree_le": "2026-08-20T23:24:13+00:00",
+   "genere_le": "2026-07-15",
+   "donnees_jusqu_au": "2026-07-12",
+   "n_apparie": null,
+   "notes": "Poids déjà en production, importés à la mise en place du versionnage. Borne de calibration déduite de periode_backtest."
+  }
+ ],
+ "activations": [
+  {
+   "version": "v1-2026-07-15",
+   "le": "2026-08-20T23:24:13+00:00",
+   "raison": "création (import-initial)"
+  }
+ ]
+}

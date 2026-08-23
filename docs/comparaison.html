@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Les modèles météo confrontés à une vraie mesure — classements, biais et versions du modèle calibré.">
+<title>Les modèles vs la réalité — Lac Maskinongé</title>
+<link rel="stylesheet" href="style.css">
+<link rel="apple-touch-icon" href="icone-180.png">
+<meta name="theme-color" content="#2a78d6">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+</head>
+<body>
+<header>
+  <h1>Les modèles vs la réalité</h1>
+  <p class="sous-titre"><a href="index.html">← Retour aux prévisions</a></p>
+</header>
+
+<main>
+  <p id="etat" class="etat">Chargement…</p>
+
+  <section id="explication" hidden>
+    <h2>Ce que tu regardes</h2>
+    <p class="aide">Chaque modèle est noté deux fois, sur les mêmes heures.</p>
+    <div class="cartes cartes-explication">
+      <div class="carte">
+        <h3>Contre une vraie mesure</h3>
+        <p class="aide">L'anémomètre officiel de <strong id="nom-station"></strong>,
+        à <span id="distance-station"></span> km. Les modèles sont interrogés
+        <em>au point de la station</em> : aucun écart de localisation dans la
+        comparaison. C'est un juge extérieur.</p>
+      </div>
+      <div class="carte">
+        <h3>Contre le consensus</h3>
+        <p class="aide">La médiane des modèles entre eux — l'étalon qui sert
+        aujourd'hui à calculer les poids. Il note chaque modèle contre la
+        moyenne de ses semblables, donc il récompense le conformisme autant
+        que la justesse.</p>
+      </div>
+    </div>
+    <div id="ecart-cle" class="avis"></div>
+  </section>
+
+  <section id="tableaux" hidden>
+    <h2>Classement par échéance</h2>
+    <p class="aide">Rang 1 = plus petite erreur typique (RMSE). La colonne
+    « poids » est la part de vote que le modèle reçoit aujourd'hui. La barre
+    bleue compare les modèles entre eux à cette échéance : trait court = le
+    plus juste du lot, ligne pleine = le moins juste.</p>
+    <div id="horizons"></div>
+  </section>
+
+  <section id="limites" hidden>
+    <h2>Ce que ça ne dit pas</h2>
+    <p class="aide" id="texte-limites"></p>
+  </section>
+
+  <section id="historique" hidden>
+    <h2>Versions du modèle calibré</h2>
+    <p class="aide">Chaque backtest complet et chaque recalibrage appliqué
+    archivent une version restaurable. La flèche marque celle qui calcule les
+    verdicts en ce moment.</p>
+    <div id="liste-versions"></div>
+  </section>
+</main>
+
+<footer id="pied">
+  <p id="fraicheur-comparaison"></p>
+  <p>Observations : <a href="https://api.weather.gc.ca/" rel="noopener">Environnement et Changement climatique Canada</a>.
+  Prévisions : <a href="https://open-meteo.com/" rel="noopener">Open-Meteo.com</a> (CC BY 4.0).</p>
+  <p id="versions" class="versions"></p>
+</footer>
+
+<script src="comparaison.js"></script>
+</body>
+</html>

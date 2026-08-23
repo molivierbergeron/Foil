@@ -46,6 +46,7 @@ from telecharge import composantes_uv
 
 DOSSIER = Path(config.DOSSIER_VERIF_CROISEE)
 PAGE = 10000            # maximum accepté par l'API OGC d'ECCC
+JOURS_ARCHIVE_COMPLETE = 3   # les archives Open-Meteo sont complètes à J-3
 NOEUDS_PAR_KMH = 0.539957
 
 
@@ -270,7 +271,7 @@ def _fenetre_quotidienne(aujourdhui: date | None = None) -> tuple[str, str]:
     """Même fenêtre de rattrapage que le job principal : J-9 à J-3."""
     aujourdhui = aujourdhui or datetime.now(timezone.utc).date()
     return ((aujourdhui - timedelta(days=9)).isoformat(),
-            (aujourdhui - timedelta(days=3)).isoformat())
+            (aujourdhui - timedelta(days=JOURS_ARCHIVE_COMPLETE)).isoformat())
 
 
 def principal(argv=None) -> int:
@@ -292,18 +293,40 @@ def principal(argv=None) -> int:
         return 0
 
     debut, fin = args.rattraper if args.rattraper else _fenetre_quotidienne()
+    # Les archives Previous Runs s'arrêtent au présent : demander la fin d'une
+    # saison encore à venir fait échouer l'appel entier (HTTP 400). On rabote
+    # sur J-3, la même borne que le job quotidien.
+    dernier_complet = (datetime.now(timezone.utc).date()
+                       - timedelta(days=JOURS_ARCHIVE_COMPLETE)).isoformat()
+    if fin > dernier_complet:
+        print(f"Fin ramenée à {dernier_complet} (archives complètes à J-"
+              f"{JOURS_ARCHIVE_COMPLETE})")
+        fin = dernier_complet
+
     # Une saison à la fois : les fenêtres hors saison ne servent à rien au
-    # diagnostic et alourdiraient l'archive pour rien.
-    total = 0
+    # diagnostic et alourdiraient l'archive pour rien. Une saison qui échoue
+    # ne doit pas emporter celles déjà récupérées — l'archive est append-only,
+    # ce qui est écrit est acquis, et un rattrapage relancé reprend le reste.
+    total, echecs = 0, []
     for annee in range(int(debut[:4]), int(fin[:4]) + 1):
         d = max(debut, f"{annee}-{config.MOIS_SAISON[0]:02d}-01")
         f = min(fin, f"{annee}-{config.MOIS_SAISON[-1]:02d}-31")
         if d > f:
             continue
-        n = mettre_a_jour(d, f)
+        try:
+            n = mettre_a_jour(d, f)
+        except Exception as exc:  # noqa: BLE001 — on passe à la saison suivante
+            echecs.append((d, f, exc))
+            print(f"  {d} → {f} : ÉCHEC — {exc}")
+            continue
         total += n
         print(f"  {d} → {f} : {n} lignes ajoutées")
+
     print(f"Total : {total} lignes dans {DOSSIER}/")
+    if echecs:
+        print(f"{len(echecs)} saison(s) en échec — les autres sont acquises, "
+              "relancer le rattrapage récupérera le reste.")
+        return 1
     return 0
 
 
