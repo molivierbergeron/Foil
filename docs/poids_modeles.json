@@ -1,8 +1,19 @@
 {
-  "schema_version": 1,
-  "genere_le": "2026-07-15",
-  "periode_backtest": "2024-05-01 à 2026-07-12 (mai-octobre)",
+  "schema_version": 2,
+  "genere_le": "2026-08-24",
+  "periode_backtest": "2024-05-01 à 2026-08-21 (mai-octobre)",
   "truth_source": "median_hour0",
+  "verite": {
+    "version": "median_hour0/v1",
+    "modeles": [
+      "gem_global",
+      "gem_regional",
+      "gem_hrdps_continental",
+      "ecmwf_ifs025",
+      "gfs_global",
+      "icon_global"
+    ]
+  },
   "spot": {
     "latitude": 46.3123,
     "longitude": -73.3638
@@ -37,125 +48,125 @@
       "nom": "ECMWF IFS 0.25°",
       "horizons": {
         "24h": {
-          "biais_nds": 0.54,
-          "rmse_nds": 1.43,
-          "n": 5292,
-          "poids": 0.1763
+          "biais_nds": 0.56,
+          "rmse_nds": 1.53,
+          "n": 5772,
+          "poids": 0.1704
         },
         "48h": {
-          "biais_nds": 0.5,
-          "rmse_nds": 1.65,
-          "n": 5292,
-          "poids": 0.2006
+          "biais_nds": 0.54,
+          "rmse_nds": 1.71,
+          "n": 5772,
+          "poids": 0.1965
         },
         "96h": {
-          "biais_nds": 0.53,
-          "rmse_nds": 2.17,
-          "n": 5292,
-          "poids": 0.2494
+          "biais_nds": 0.6,
+          "rmse_nds": 2.27,
+          "n": 5772,
+          "poids": 0.236
         }
       },
       "biais_par_secteur": {
         "24h": {
           "E": {
-            "biais_nds": 0.39,
-            "n": 505
+            "biais_nds": 0.4,
+            "n": 523
           },
           "N": {
-            "biais_nds": 0.68,
-            "n": 577
+            "biais_nds": 0.69,
+            "n": 596
           },
           "NE": {
-            "biais_nds": 0.88,
-            "n": 390
+            "biais_nds": 0.89,
+            "n": 401
           },
           "NO": {
-            "biais_nds": 0.43,
-            "n": 700
+            "biais_nds": 0.41,
+            "n": 795
           },
           "O": {
-            "biais_nds": 0.81,
-            "n": 590
+            "biais_nds": 0.82,
+            "n": 666
           },
           "S": {
-            "biais_nds": 0.17,
-            "n": 1190
+            "biais_nds": 0.14,
+            "n": 1321
           },
           "SE": {
             "biais_nds": 0.11,
-            "n": 415
+            "n": 453
           },
           "SO": {
-            "biais_nds": 0.94,
-            "n": 925
+            "biais_nds": 0.97,
+            "n": 1017
           }
         },
         "48h": {
           "E": {
-            "biais_nds": 0.6,
-            "n": 505
+            "biais_nds": 0.61,
+            "n": 523
           },
           "N": {
             "biais_nds": 0.72,
-            "n": 577
+            "n": 596
           },
           "NE": {
-            "biais_nds": 0.77,
-            "n": 390
+            "biais_nds": 0.8,
+            "n": 401
           },
           "NO": {
-            "biais_nds": 0.29,
-            "n": 700
+            "biais_nds": 0.3,
+            "n": 795
           },
           "O": {
-            "biais_nds": 0.66,
-            "n": 590
+            "biais_nds": 0.68,
+            "n": 666
           },
           "S": {
-            "biais_nds": 0.15,
-            "n": 1190
+            "biais_nds": 0.17,
+            "n": 1321
           },
           "SE": {
-            "biais_nds": 0.35,
-            "n": 415
+            "biais_nds": 0.37,
+            "n": 453
           },
           "SO": {
-            "biais_nds": 0.8,
-            "n": 925
+            "biais_nds": 0.82,
+            "n": 1017
           }
         },
         "96h": {
           "E": {
-            "biais_nds": 0.56,
-            "n": 505
+            "biais_nds": 0.59,
+            "n": 523
           },
           "N": {
-            "biais_nds": 0.47,
-            "n": 577
+            "biais_nds": 0.55,
+            "n": 596
           },
           "NE": {
-            "biais_nds": 0.91,
-            "n": 390
+            "biais_nds": 1.04,
+            "n": 401
           },
           "NO": {
             "biais_nds": 0.4,
-            "n": 700
+            "n": 795
           },
           "O": {
-            "biais_nds": 0.72,
-            "n": 590
+            "biais_nds": 0.7,
+            "n": 666
           },
           "S": {
-            "biais_nds": 0.15,
-            "n": 1190
+            "biais_nds": 0.18,
+            "n": 1321
           },
           "SE": {
-            "biais_nds": 0.73,
-            "n": 415
+            "biais_nds": 0.79,
+            "n": 453
           },
           "SO": {
             "biais_nds": 0.75,
-            "n": 925
+            "n": 1017
           }
         }
       }
@@ -164,125 +175,125 @@
       "nom": "GEM global (Canada)",
       "horizons": {
         "24h": {
-          "biais_nds": -0.88,
-          "rmse_nds": 1.49,
-          "n": 5292,
-          "poids": 0.163
+          "biais_nds": -0.92,
+          "rmse_nds": 1.58,
+          "n": 5772,
+          "poids": 0.1596
         },
         "48h": {
           "biais_nds": -0.82,
-          "rmse_nds": 1.7,
-          "n": 5160,
-          "poids": 0.1892
+          "rmse_nds": 1.72,
+          "n": 5640,
+          "poids": 0.195
         },
         "96h": {
-          "biais_nds": -0.82,
+          "biais_nds": -0.79,
           "rmse_nds": 2.1,
-          "n": 5232,
-          "poids": 0.2669
+          "n": 5712,
+          "poids": 0.2772
         }
       },
       "biais_par_secteur": {
         "24h": {
           "E": {
-            "biais_nds": -0.83,
-            "n": 505
+            "biais_nds": -0.82,
+            "n": 523
           },
           "N": {
-            "biais_nds": -0.76,
-            "n": 577
+            "biais_nds": -0.77,
+            "n": 596
           },
           "NE": {
-            "biais_nds": -0.91,
-            "n": 390
+            "biais_nds": -0.9,
+            "n": 401
           },
           "NO": {
-            "biais_nds": -0.93,
-            "n": 700
+            "biais_nds": -1.0,
+            "n": 795
           },
           "O": {
-            "biais_nds": -1.1,
-            "n": 590
+            "biais_nds": -1.08,
+            "n": 666
           },
           "S": {
-            "biais_nds": -0.83,
-            "n": 1190
+            "biais_nds": -0.81,
+            "n": 1321
           },
           "SE": {
-            "biais_nds": -0.36,
-            "n": 415
+            "biais_nds": -0.31,
+            "n": 453
           },
           "SO": {
-            "biais_nds": -1.08,
-            "n": 925
+            "biais_nds": -1.09,
+            "n": 1017
           }
         },
         "48h": {
           "E": {
-            "biais_nds": -0.77,
-            "n": 501
+            "biais_nds": -0.76,
+            "n": 519
           },
           "N": {
             "biais_nds": -0.58,
-            "n": 572
+            "n": 591
           },
           "NE": {
-            "biais_nds": -0.89,
-            "n": 390
+            "biais_nds": -0.84,
+            "n": 401
           },
           "NO": {
-            "biais_nds": -0.92,
-            "n": 689
+            "biais_nds": -0.96,
+            "n": 784
           },
           "O": {
-            "biais_nds": -1.11,
-            "n": 562
+            "biais_nds": -1.03,
+            "n": 638
           },
           "S": {
-            "biais_nds": -0.81,
-            "n": 1142
+            "biais_nds": -0.77,
+            "n": 1273
           },
           "SE": {
-            "biais_nds": -0.31,
-            "n": 410
+            "biais_nds": -0.29,
+            "n": 448
           },
           "SO": {
-            "biais_nds": -0.98,
-            "n": 894
+            "biais_nds": -0.99,
+            "n": 986
           }
         },
         "96h": {
           "E": {
-            "biais_nds": -0.61,
-            "n": 503
+            "biais_nds": -0.59,
+            "n": 521
           },
           "N": {
-            "biais_nds": -0.77,
-            "n": 567
+            "biais_nds": -0.73,
+            "n": 586
           },
           "NE": {
-            "biais_nds": -0.67,
-            "n": 386
+            "biais_nds": -0.63,
+            "n": 397
           },
           "NO": {
-            "biais_nds": -1.11,
-            "n": 699
+            "biais_nds": -1.04,
+            "n": 794
           },
           "O": {
-            "biais_nds": -0.97,
-            "n": 589
+            "biais_nds": -0.91,
+            "n": 665
           },
           "S": {
-            "biais_nds": -0.77,
-            "n": 1173
+            "biais_nds": -0.76,
+            "n": 1304
           },
           "SE": {
-            "biais_nds": -0.14,
-            "n": 407
+            "biais_nds": -0.16,
+            "n": 445
           },
           "SO": {
-            "biais_nds": -1.08,
-            "n": 908
+            "biais_nds": -1.06,
+            "n": 1000
           }
         }
       },
@@ -292,45 +303,45 @@
       "nom": "HRDPS (Canada, 2.5 km)",
       "horizons": {
         "24h": {
-          "biais_nds": 1.02,
-          "rmse_nds": 2.1,
-          "n": 5292,
-          "poids": 0.0822
+          "biais_nds": 1.0,
+          "rmse_nds": 2.18,
+          "n": 5772,
+          "poids": 0.0836
         }
       },
       "biais_par_secteur": {
         "24h": {
           "E": {
-            "biais_nds": 0.58,
-            "n": 505
+            "biais_nds": 0.6,
+            "n": 523
           },
           "N": {
-            "biais_nds": 1.33,
-            "n": 577
+            "biais_nds": 1.32,
+            "n": 596
           },
           "NE": {
-            "biais_nds": 0.72,
-            "n": 390
+            "biais_nds": 0.71,
+            "n": 401
           },
           "NO": {
-            "biais_nds": 1.33,
-            "n": 700
+            "biais_nds": 1.31,
+            "n": 795
           },
           "O": {
             "biais_nds": 0.92,
-            "n": 590
+            "n": 666
           },
           "S": {
             "biais_nds": 0.96,
-            "n": 1190
+            "n": 1321
           },
           "SE": {
             "biais_nds": 0.91,
-            "n": 415
+            "n": 453
           },
           "SO": {
-            "biais_nds": 1.13,
-            "n": 925
+            "biais_nds": 1.14,
+            "n": 1017
           }
         }
       },
@@ -340,85 +351,85 @@
       "nom": "GEM régional (Canada)",
       "horizons": {
         "24h": {
-          "biais_nds": -0.83,
-          "rmse_nds": 1.46,
-          "n": 5149,
-          "poids": 0.1703
+          "biais_nds": -0.87,
+          "rmse_nds": 1.52,
+          "n": 5629,
+          "poids": 0.1713
         },
         "48h": {
-          "biais_nds": -0.74,
-          "rmse_nds": 1.67,
-          "n": 5287,
-          "poids": 0.1957
+          "biais_nds": -0.75,
+          "rmse_nds": 1.7,
+          "n": 5767,
+          "poids": 0.1997
         }
       },
       "biais_par_secteur": {
         "24h": {
           "E": {
-            "biais_nds": -0.82,
-            "n": 501
+            "biais_nds": -0.8,
+            "n": 519
           },
           "N": {
             "biais_nds": -0.79,
-            "n": 562
+            "n": 581
           },
           "NE": {
-            "biais_nds": -0.84,
-            "n": 373
+            "biais_nds": -0.82,
+            "n": 384
           },
           "NO": {
-            "biais_nds": -1.1,
-            "n": 694
+            "biais_nds": -1.14,
+            "n": 789
           },
           "O": {
-            "biais_nds": -1.04,
-            "n": 575
+            "biais_nds": -1.03,
+            "n": 651
           },
           "S": {
             "biais_nds": -0.7,
-            "n": 1143
+            "n": 1274
           },
           "SE": {
-            "biais_nds": -0.31,
-            "n": 414
+            "biais_nds": -0.28,
+            "n": 452
           },
           "SO": {
-            "biais_nds": -0.94,
-            "n": 887
+            "biais_nds": -0.96,
+            "n": 979
           }
         },
         "48h": {
           "E": {
-            "biais_nds": -0.75,
-            "n": 502
+            "biais_nds": -0.73,
+            "n": 520
           },
           "N": {
-            "biais_nds": -0.61,
-            "n": 577
+            "biais_nds": -0.6,
+            "n": 596
           },
           "NE": {
-            "biais_nds": -0.71,
-            "n": 388
+            "biais_nds": -0.67,
+            "n": 399
           },
           "NO": {
-            "biais_nds": -0.85,
-            "n": 700
+            "biais_nds": -0.94,
+            "n": 795
           },
           "O": {
-            "biais_nds": -1.01,
-            "n": 590
+            "biais_nds": -0.95,
+            "n": 666
           },
           "S": {
-            "biais_nds": -0.7,
-            "n": 1190
+            "biais_nds": -0.68,
+            "n": 1321
           },
           "SE": {
-            "biais_nds": -0.33,
-            "n": 415
+            "biais_nds": -0.29,
+            "n": 453
           },
           "SO": {
-            "biais_nds": -0.81,
-            "n": 925
+            "biais_nds": -0.83,
+            "n": 1017
           }
         }
       },
@@ -428,125 +439,125 @@
       "nom": "GFS (États-Unis)",
       "horizons": {
         "24h": {
-          "biais_nds": 0.43,
-          "rmse_nds": 1.59,
-          "n": 5292,
-          "poids": 0.1434
+          "biais_nds": 0.44,
+          "rmse_nds": 1.65,
+          "n": 5772,
+          "poids": 0.1461
         },
         "48h": {
-          "biais_nds": 0.44,
-          "rmse_nds": 1.8,
-          "n": 5292,
-          "poids": 0.1676
+          "biais_nds": 0.5,
+          "rmse_nds": 1.88,
+          "n": 5772,
+          "poids": 0.1621
         },
         "96h": {
-          "biais_nds": 0.35,
-          "rmse_nds": 2.3,
-          "n": 5292,
-          "poids": 0.222
+          "biais_nds": 0.44,
+          "rmse_nds": 2.37,
+          "n": 5772,
+          "poids": 0.2168
         }
       },
       "biais_par_secteur": {
         "24h": {
           "E": {
-            "biais_nds": 0.54,
-            "n": 505
+            "biais_nds": 0.51,
+            "n": 523
           },
           "N": {
-            "biais_nds": 0.16,
-            "n": 577
+            "biais_nds": 0.17,
+            "n": 596
           },
           "NE": {
-            "biais_nds": 0.27,
-            "n": 390
+            "biais_nds": 0.3,
+            "n": 401
           },
           "NO": {
-            "biais_nds": 0.56,
-            "n": 700
+            "biais_nds": 0.58,
+            "n": 795
           },
           "O": {
             "biais_nds": 0.57,
-            "n": 590
+            "n": 666
           },
           "S": {
-            "biais_nds": 0.43,
-            "n": 1190
+            "biais_nds": 0.45,
+            "n": 1321
           },
           "SE": {
-            "biais_nds": 0.37,
-            "n": 415
+            "biais_nds": 0.41,
+            "n": 453
           },
           "SO": {
-            "biais_nds": 0.44,
-            "n": 925
+            "biais_nds": 0.36,
+            "n": 1017
           }
         },
         "48h": {
           "E": {
             "biais_nds": 0.62,
-            "n": 505
+            "n": 523
           },
           "N": {
-            "biais_nds": 0.28,
-            "n": 577
+            "biais_nds": 0.27,
+            "n": 596
           },
           "NE": {
-            "biais_nds": 0.34,
-            "n": 390
+            "biais_nds": 0.37,
+            "n": 401
           },
           "NO": {
-            "biais_nds": 0.44,
-            "n": 700
+            "biais_nds": 0.48,
+            "n": 795
           },
           "O": {
-            "biais_nds": 0.62,
-            "n": 590
+            "biais_nds": 0.68,
+            "n": 666
           },
           "S": {
-            "biais_nds": 0.36,
-            "n": 1190
+            "biais_nds": 0.39,
+            "n": 1321
           },
           "SE": {
-            "biais_nds": 0.45,
-            "n": 415
+            "biais_nds": 0.53,
+            "n": 453
           },
           "SO": {
-            "biais_nds": 0.45,
-            "n": 925
+            "biais_nds": 0.44,
+            "n": 1017
           }
         },
         "96h": {
           "E": {
             "biais_nds": 0.62,
-            "n": 505
+            "n": 523
           },
           "N": {
-            "biais_nds": 0.0,
-            "n": 577
+            "biais_nds": 0.06,
+            "n": 596
           },
           "NE": {
-            "biais_nds": 0.22,
-            "n": 390
+            "biais_nds": 0.27,
+            "n": 401
           },
           "NO": {
-            "biais_nds": 0.16,
-            "n": 700
+            "biais_nds": 0.32,
+            "n": 795
           },
           "O": {
-            "biais_nds": 0.33,
-            "n": 590
+            "biais_nds": 0.34,
+            "n": 666
           },
           "S": {
-            "biais_nds": 0.34,
-            "n": 1190
+            "biais_nds": 0.36,
+            "n": 1321
           },
           "SE": {
-            "biais_nds": 0.77,
-            "n": 415
+            "biais_nds": 0.83,
+            "n": 453
           },
           "SO": {
-            "biais_nds": 0.46,
-            "n": 925
+            "biais_nds": 0.47,
+            "n": 1017
           }
         }
       },
@@ -556,125 +567,125 @@
       "nom": "ICON (Allemagne)",
       "horizons": {
         "24h": {
-          "biais_nds": 0.05,
-          "rmse_nds": 1.17,
-          "n": 5292,
-          "poids": 0.2648
+          "biais_nds": 0.01,
+          "rmse_nds": 1.21,
+          "n": 5772,
+          "poids": 0.2691
         },
         "48h": {
-          "biais_nds": 0.08,
-          "rmse_nds": 1.48,
-          "n": 5292,
-          "poids": 0.2469
+          "biais_nds": 0.02,
+          "rmse_nds": 1.53,
+          "n": 5772,
+          "poids": 0.2467
         },
         "96h": {
-          "biais_nds": -0.06,
+          "biais_nds": -0.05,
           "rmse_nds": 2.12,
-          "n": 5292,
-          "poids": 0.2617
+          "n": 5772,
+          "poids": 0.2699
         }
       },
       "biais_par_secteur": {
         "24h": {
           "E": {
-            "biais_nds": 0.17,
-            "n": 505
+            "biais_nds": 0.18,
+            "n": 523
           },
           "N": {
             "biais_nds": 0.18,
-            "n": 577
+            "n": 596
           },
           "NE": {
-            "biais_nds": 0.18,
-            "n": 390
+            "biais_nds": 0.2,
+            "n": 401
           },
           "NO": {
-            "biais_nds": 0.13,
-            "n": 700
+            "biais_nds": 0.04,
+            "n": 795
           },
           "O": {
-            "biais_nds": 0.18,
-            "n": 590
+            "biais_nds": 0.16,
+            "n": 666
           },
           "S": {
-            "biais_nds": -0.17,
-            "n": 1190
+            "biais_nds": -0.15,
+            "n": 1321
           },
           "SE": {
-            "biais_nds": 0.11,
-            "n": 415
+            "biais_nds": 0.1,
+            "n": 453
           },
           "SO": {
-            "biais_nds": -0.02,
-            "n": 925
+            "biais_nds": -0.04,
+            "n": 1017
           }
         },
         "48h": {
           "E": {
-            "biais_nds": 0.19,
-            "n": 505
+            "biais_nds": 0.18,
+            "n": 523
           },
           "N": {
-            "biais_nds": 0.18,
-            "n": 577
+            "biais_nds": 0.17,
+            "n": 596
           },
           "NE": {
-            "biais_nds": 0.14,
-            "n": 390
+            "biais_nds": 0.18,
+            "n": 401
           },
           "NO": {
-            "biais_nds": 0.22,
-            "n": 700
+            "biais_nds": 0.12,
+            "n": 795
           },
           "O": {
-            "biais_nds": 0.21,
-            "n": 590
+            "biais_nds": 0.23,
+            "n": 666
           },
           "S": {
-            "biais_nds": -0.12,
-            "n": 1190
+            "biais_nds": -0.15,
+            "n": 1321
           },
           "SE": {
             "biais_nds": 0.28,
-            "n": 415
+            "n": 453
           },
           "SO": {
-            "biais_nds": -0.07,
-            "n": 925
+            "biais_nds": -0.11,
+            "n": 1017
           }
         },
         "96h": {
           "E": {
-            "biais_nds": 0.14,
-            "n": 505
+            "biais_nds": 0.17,
+            "n": 523
           },
           "N": {
-            "biais_nds": -0.22,
-            "n": 577
+            "biais_nds": -0.19,
+            "n": 596
           },
           "NE": {
-            "biais_nds": 0.06,
-            "n": 390
+            "biais_nds": 0.12,
+            "n": 401
           },
           "NO": {
-            "biais_nds": -0.1,
-            "n": 700
+            "biais_nds": -0.19,
+            "n": 795
           },
           "O": {
-            "biais_nds": 0.25,
-            "n": 590
+            "biais_nds": 0.2,
+            "n": 666
           },
           "S": {
-            "biais_nds": -0.28,
-            "n": 1190
+            "biais_nds": -0.27,
+            "n": 1321
           },
           "SE": {
-            "biais_nds": 0.44,
-            "n": 415
+            "biais_nds": 0.46,
+            "n": 453
           },
           "SO": {
-            "biais_nds": -0.21,
-            "n": 925
+            "biais_nds": -0.23,
+            "n": 1017
           }
         }
       },
@@ -683,223 +694,223 @@
   },
   "fiabilite_go_par_horizon": {
     "96h": {
-      "taux_go_confirme": 0.758,
+      "taux_go_confirme": 0.766,
       "ic95": [
-        0.686,
-        0.817
+        0.698,
+        0.822
       ],
-      "n": 161
+      "n": 175
     },
     "48h": {
-      "taux_go_confirme": 0.908,
+      "taux_go_confirme": 0.899,
       "ic95": [
-        0.852,
-        0.945
+        0.845,
+        0.936
       ],
-      "n": 153
+      "n": 169
     },
     "24h": {
-      "taux_go_confirme": 0.926,
+      "taux_go_confirme": 0.921,
       "ic95": [
-        0.878,
-        0.956
+        0.874,
+        0.952
       ],
-      "n": 176
+      "n": 191
     }
   },
   "confusion_par_modele": {
     "ecmwf_ifs025": {
       "24h": {
-        "pod": 0.924,
-        "far": 0.26,
+        "pod": 0.92,
+        "far": 0.267,
         "pod_ic95": [
-          0.877,
-          0.954
+          0.874,
+          0.95
         ],
         "far_ic95": [
-          0.207,
-          0.32
+          0.216,
+          0.325
         ]
       },
       "48h": {
-        "pod": 0.903,
-        "far": 0.271,
+        "pod": 0.905,
+        "far": 0.273,
         "pod_ic95": [
-          0.851,
+          0.856,
           0.938
         ],
         "far_ic95": [
-          0.217,
+          0.222,
           0.332
         ]
       },
       "96h": {
-        "pod": 0.805,
-        "far": 0.341,
+        "pod": 0.81,
+        "far": 0.344,
         "pod_ic95": [
-          0.742,
-          0.856
+          0.75,
+          0.858
         ],
         "far_ic95": [
-          0.282,
+          0.288,
           0.405
         ]
       }
     },
     "gem_global": {
       "24h": {
-        "pod": 0.481,
-        "far": 0.022,
+        "pod": 0.475,
+        "far": 0.021,
         "pod_ic95": [
-          0.41,
-          0.553
+          0.407,
+          0.544
         ],
         "far_ic95": [
           0.006,
-          0.077
+          0.072
         ]
       },
       "48h": {
-        "pod": 0.413,
-        "far": 0.14,
+        "pod": 0.423,
+        "far": 0.146,
         "pod_ic95": [
-          0.344,
-          0.487
+          0.355,
+          0.493
         ],
         "far_ic95": [
-          0.082,
-          0.228
+          0.089,
+          0.23
         ]
       },
       "96h": {
-        "pod": 0.372,
-        "far": 0.236,
+        "pod": 0.394,
+        "far": 0.22,
         "pod_ic95": [
-          0.305,
-          0.444
+          0.329,
+          0.463
         ],
         "far_ic95": [
-          0.16,
-          0.334
+          0.15,
+          0.311
         ]
       }
     },
     "gem_hrdps_continental": {
       "24h": {
-        "pod": 0.989,
-        "far": 0.344,
+        "pod": 0.99,
+        "far": 0.349,
         "pod_ic95": [
-          0.961,
+          0.964,
           0.997
         ],
         "far_ic95": [
-          0.291,
-          0.402
+          0.297,
+          0.404
         ]
       }
     },
     "gem_regional": {
       "24h": {
-        "pod": 0.475,
-        "far": 0.045,
+        "pod": 0.479,
+        "far": 0.042,
         "pod_ic95": [
-          0.402,
-          0.548
+          0.41,
+          0.55
         ],
         "far_ic95": [
-          0.018,
-          0.111
+          0.016,
+          0.102
         ]
       },
       "48h": {
-        "pod": 0.473,
-        "far": 0.103,
+        "pod": 0.477,
+        "far": 0.104,
         "pod_ic95": [
-          0.402,
-          0.545
+          0.409,
+          0.547
         ],
         "far_ic95": [
-          0.057,
-          0.179
+          0.059,
+          0.176
         ]
       }
     },
     "gfs_global": {
       "24h": {
-        "pod": 0.919,
-        "far": 0.3,
+        "pod": 0.92,
+        "far": 0.303,
         "pod_ic95": [
-          0.871,
+          0.874,
           0.95
         ],
         "far_ic95": [
-          0.246,
+          0.251,
           0.361
         ]
       },
       "48h": {
-        "pod": 0.876,
-        "far": 0.319,
+        "pod": 0.885,
+        "far": 0.324,
         "pod_ic95": [
-          0.82,
-          0.916
+          0.833,
+          0.922
         ],
         "far_ic95": [
-          0.263,
-          0.381
+          0.271,
+          0.383
         ]
       },
       "96h": {
-        "pod": 0.762,
-        "far": 0.412,
+        "pod": 0.78,
+        "far": 0.407,
         "pod_ic95": [
-          0.696,
-          0.818
+          0.718,
+          0.832
         ],
         "far_ic95": [
-          0.352,
-          0.476
+          0.349,
+          0.467
         ]
       }
     },
     "icon_global": {
       "24h": {
-        "pod": 0.897,
-        "far": 0.157,
+        "pod": 0.905,
+        "far": 0.158,
         "pod_ic95": [
-          0.845,
-          0.933
+          0.856,
+          0.938
         ],
         "far_ic95": [
-          0.113,
-          0.215
+          0.115,
+          0.213
         ]
       },
       "48h": {
-        "pod": 0.849,
-        "far": 0.215,
+        "pod": 0.85,
+        "far": 0.213,
         "pod_ic95": [
-          0.79,
+          0.794,
           0.893
         ],
         "far_ic95": [
           0.164,
-          0.277
+          0.272
         ]
       },
       "96h": {
-        "pod": 0.735,
-        "far": 0.323,
+        "pod": 0.745,
+        "far": 0.317,
         "pod_ic95": [
-          0.667,
-          0.793
+          0.68,
+          0.8
         ],
         "far_ic95": [
-          0.263,
-          0.391
+          0.258,
+          0.381
         ]
       }
     }
   },
-  "version_modele": "v1-2026-07-15"
+  "version_modele": "v2-2026-08-24"
 }

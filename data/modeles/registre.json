@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "actif": "v1-2026-07-15",
+  "actif": "v2-2026-08-24",
   "versions": [
     {
       "version": "v1-2026-07-15",
@@ -24,6 +24,50 @@
       ],
       "metriques_validation": null,
       "notes": "Poids déjà en production, importés à la mise en place du versionnage. Borne de calibration déduite de periode_backtest."
+    },
+    {
+      "version": "v2-2026-08-24",
+      "cree_le": "2026-08-24T11:06:20+00:00",
+      "origine": "recalibrage",
+      "empreinte": "sha256:cef44526d14b4a37",
+      "genere_le": "2026-08-24",
+      "periode_backtest": "2024-05-01 à 2026-08-21 (mai-octobre)",
+      "donnees_jusqu_au": "2026-08-21",
+      "n_apparie": 172301,
+      "verite": {
+        "version": "median_hour0/v1",
+        "modeles": [
+          "gem_global",
+          "gem_regional",
+          "gem_hrdps_continental",
+          "ecmwf_ifs025",
+          "gfs_global",
+          "icon_global"
+        ]
+      },
+      "modeles_prevision": [
+        "ecmwf_ifs025",
+        "gem_global",
+        "gem_hrdps_continental",
+        "gem_regional",
+        "gfs_global",
+        "icon_global"
+      ],
+      "metriques_validation": {
+        "rmse_ensemble_courant": {
+          "24h": 0.8810097415621502,
+          "48h": 1.0237448228713553,
+          "96h": 1.4561568217361676
+        },
+        "rmse_ensemble_candidat": {
+          "24h": 0.8813918531286916,
+          "48h": 1.023745668075428,
+          "96h": 1.4555317781579509
+        },
+        "fenetre_test_jours": 60,
+        "compare_a": "v1-2026-07-15"
+      },
+      "notes": ""
     }
   ],
   "activations": [
@@ -31,6 +75,11 @@
       "version": "v1-2026-07-15",
       "le": "2026-08-20T23:24:13+00:00",
       "raison": "création (import-initial)"
+    },
+    {
+      "version": "v2-2026-08-24",
+      "le": "2026-08-24T11:06:20+00:00",
+      "raison": "création (recalibrage)"
     }
   ]
 }

@@ -15,3 +15,4 @@ s'ils font au moins aussi bien. Une dérive soudaine d'un modèle
 | 2026-08-03 | 0.82/1.06/1.49 | 0.82/1.06/1.49 | **conservé** (candidat moins bon) |
 | 2026-08-10 | 0.91/1.08/1.49 | 0.91/1.08/1.50 | **conservé** (candidat moins bon) |
 | 2026-08-17 | 0.89/1.05/1.48 | 0.89/1.05/1.49 | **conservé** (candidat moins bon) |
+| 2026-08-24 | 0.88/1.02/1.46 | 0.88/1.02/1.46 | appliqué → `v2-2026-08-24` |
