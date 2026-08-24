@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "genere_le": "2026-08-23T16:21+00:00",
+ "genere_le": "2026-08-24T10:17+00:00",
  "station": {
   "nom": "Lac Saint-Pierre",
   "id": "701LP0N",
@@ -12,9 +12,9 @@
  },
  "periode": {
   "debut": "2024-05-01",
-  "fin": "2026-08-20",
-  "jours": 480,
-  "paires": 171701
+  "fin": "2026-08-21",
+  "jours": 481,
+  "paires": 172061
  },
  "horizons": {
   "24h": [
@@ -22,10 +22,10 @@
     "modele": "gfs_global",
     "nom": "GFS (États-Unis)",
     "reel": {
-     "biais": -1.42,
+     "biais": -1.41,
      "rmse": 4.08,
-     "correlation": 0.723,
-     "n": 5748,
+     "correlation": 0.724,
+     "n": 5760,
      "rang": 1
     },
     "officiel": {
@@ -40,10 +40,10 @@
     "modele": "gem_hrdps_continental",
     "nom": "HRDPS (Canada, 2.5 km)",
     "reel": {
-     "biais": -1.49,
+     "biais": -1.48,
      "rmse": 4.13,
-     "correlation": 0.727,
-     "n": 5748,
+     "correlation": 0.728,
+     "n": 5760,
      "rang": 2
     },
     "officiel": {
@@ -60,8 +60,8 @@
     "reel": {
      "biais": -2.49,
      "rmse": 4.44,
-     "correlation": 0.747,
-     "n": 5605,
+     "correlation": 0.748,
+     "n": 5617,
      "rang": 3
     },
     "officiel": {
@@ -77,9 +77,9 @@
     "nom": "GEM global (Canada)",
     "reel": {
      "biais": -2.8,
-     "rmse": 4.76,
-     "correlation": 0.722,
-     "n": 5748,
+     "rmse": 4.75,
+     "correlation": 0.723,
+     "n": 5760,
      "rang": 4
     },
     "officiel": {
@@ -94,10 +94,10 @@
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
     "reel": {
-     "biais": -2.97,
+     "biais": -2.96,
      "rmse": 4.95,
      "correlation": 0.71,
-     "n": 5748,
+     "n": 5760,
      "rang": 5
     },
     "officiel": {
@@ -112,10 +112,10 @@
     "modele": "ecmwf_ifs025",
     "nom": "ECMWF IFS 0.25°",
     "reel": {
-     "biais": -3.31,
-     "rmse": 5.17,
-     "correlation": 0.714,
-     "n": 5748,
+     "biais": -3.3,
+     "rmse": 5.16,
+     "correlation": 0.715,
+     "n": 5760,
      "rang": 6
     },
     "officiel": {
@@ -132,10 +132,10 @@
     "modele": "gfs_global",
     "nom": "GFS (États-Unis)",
     "reel": {
-     "biais": -1.46,
-     "rmse": 4.4,
-     "correlation": 0.668,
-     "n": 5748,
+     "biais": -1.45,
+     "rmse": 4.39,
+     "correlation": 0.669,
+     "n": 5760,
      "rang": 1
     },
     "officiel": {
@@ -153,7 +153,7 @@
      "biais": -2.39,
      "rmse": 4.74,
      "correlation": 0.674,
-     "n": 5743,
+     "n": 5755,
      "rang": 2
     },
     "officiel": {
@@ -168,10 +168,10 @@
     "modele": "gem_global",
     "nom": "GEM global (Canada)",
     "reel": {
-     "biais": -2.71,
-     "rmse": 4.98,
-     "correlation": 0.654,
-     "n": 5616,
+     "biais": -2.7,
+     "rmse": 4.97,
+     "correlation": 0.655,
+     "n": 5628,
      "rang": 3
     },
     "officiel": {
@@ -187,9 +187,9 @@
     "nom": "ICON (Allemagne)",
     "reel": {
      "biais": -2.92,
-     "rmse": 5.19,
-     "correlation": 0.634,
-     "n": 5748,
+     "rmse": 5.18,
+     "correlation": 0.635,
+     "n": 5760,
      "rang": 4
     },
     "officiel": {
@@ -206,8 +206,8 @@
     "reel": {
      "biais": -3.35,
      "rmse": 5.32,
-     "correlation": 0.676,
-     "n": 5748,
+     "correlation": 0.677,
+     "n": 5760,
      "rang": 5
     },
     "officiel": {
@@ -224,10 +224,10 @@
     "modele": "gfs_global",
     "nom": "GFS (États-Unis)",
     "reel": {
-     "biais": -1.48,
+     "biais": -1.47,
      "rmse": 5.3,
      "correlation": 0.482,
-     "n": 5748,
+     "n": 5760,
      "rang": 1
     },
     "officiel": {
@@ -242,10 +242,10 @@
     "modele": "gem_global",
     "nom": "GEM global (Canada)",
     "reel": {
-     "biais": -2.75,
-     "rmse": 5.63,
-     "correlation": 0.486,
-     "n": 5688,
+     "biais": -2.73,
+     "rmse": 5.64,
+     "correlation": 0.485,
+     "n": 5700,
      "rang": 2
     },
     "officiel": {
@@ -260,10 +260,10 @@
     "modele": "ecmwf_ifs025",
     "nom": "ECMWF IFS 0.25°",
     "reel": {
-     "biais": -3.34,
-     "rmse": 5.82,
-     "correlation": 0.509,
-     "n": 5748,
+     "biais": -3.33,
+     "rmse": 5.81,
+     "correlation": 0.51,
+     "n": 5760,
      "rang": 3
     },
     "officiel": {
@@ -278,10 +278,10 @@
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
     "reel": {
-     "biais": -3.05,
+     "biais": -3.04,
      "rmse": 5.84,
-     "correlation": 0.448,
-     "n": 5748,
+     "correlation": 0.449,
+     "n": 5760,
      "rang": 4
     },
     "officiel": {
