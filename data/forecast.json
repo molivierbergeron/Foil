@@ -1,19 +1,11 @@
 {
- "genere_le": "2026-08-24T10:17+00:00",
+ "genere_le": "2026-08-25T10:05+00:00",
  "spot": {
   "latitude": 46.3123,
   "longitude": -73.3638
  },
  "unites": "noeuds",
  "verdicts_ensemble": {
-  "2026-08-24": {
-   "go": false,
-   "blocs": {
-    "matin": false,
-    "midi": false,
-    "apres_midi": false
-   }
-  },
   "2026-08-25": {
    "go": false,
    "blocs": {
@@ -31,11 +23,11 @@
    }
   },
   "2026-08-27": {
-   "go": true,
+   "go": false,
    "blocs": {
     "matin": false,
-    "midi": true,
-    "apres_midi": true
+    "midi": false,
+    "apres_midi": false
    }
   },
   "2026-08-28": {
@@ -58,37 +50,45 @@
    "go": true,
    "blocs": {
     "matin": false,
-    "midi": true,
+    "midi": false,
     "apres_midi": true
+   }
+  },
+  "2026-08-31": {
+   "go": false,
+   "blocs": {
+    "matin": false,
+    "midi": false,
+    "apres_midi": false
    }
   }
  },
  "fiabilite_go_par_horizon": {
   "96h": {
-   "taux_go_confirme": 0.758,
+   "taux_go_confirme": 0.766,
    "ic95": [
-    0.686,
-    0.817
+    0.698,
+    0.822
    ],
-   "n": 161
+   "n": 175
   },
   "48h": {
-   "taux_go_confirme": 0.908,
+   "taux_go_confirme": 0.899,
    "ic95": [
-    0.852,
-    0.945
+    0.845,
+    0.936
    ],
-   "n": 153
+   "n": 169
   },
   "24h": {
-   "taux_go_confirme": 0.926,
+   "taux_go_confirme": 0.921,
    "ic95": [
-    0.878,
-    0.956
+    0.874,
+    0.952
    ],
-   "n": 176
+   "n": 191
   }
  },
- "poids_version": "2026-07-15",
- "version_modele": "v1-2026-07-15"
+ "poids_version": "2026-08-24",
+ "version_modele": "v2-2026-08-24"
 }
