@@ -187,6 +187,27 @@ réserves de plus : l'observation ECCC est un relevé horaire et non une
 moyenne horaire comme les modèles (ça gonfle l'erreur de tout le monde sans
 changer l'ordre), et elle est arrondie au km/h.
 
+## Ce que la repondération peut, et ne peut pas
+
+`ampleur_poids.py` (→ `reports/ampleur_ponderation.md`) répond par la mesure
+à « est-ce que retoucher les poids en vaut la peine ? ». Entraînement sur
+2024-2025, jugement sur 2026 jamais vu, bootstrap apparié par jour.
+
+Résultat : **non**. L'écart entre deux jeux de poids est de 0,31 nd médian et
+ne dépasse 1 nd que sur 4,6 % des heures. Les **poids égaux** — aucune
+pondération — battent déjà le calibrage en service, signe que le gain d'un
+nouveau jeu vient de l'abandon de l'ancien plus que de sa finesse. C'est
+cohérent avec la théorie : la pondération ∝ 1/RMSE² suppose des erreurs
+indépendantes, or les modèles partagent observations et paramétrisations.
+
+Restaient donc deux leviers, tous deux hors du calibrage : **ajouter un
+modèle vraiment différent** (HRRR 3 km) et **l'anémomètre au lac** — à la
+station de mesure, les modèles sous-estiment tous de 1 à 3 nds, et cette
+erreur de site est hors de portée de toute pondération.
+
+Le premier a depuis été mesuré, et il ne tient pas : HRRR ne fait rien
+gagner (section suivante). Il ne reste que l'anémomètre.
+
 ## HRRR (NOAA, 3 km) — le septième modèle, et ce qu'il change
 
 `gfs_hrrr` est le septième membre de prévision. Il a été ajouté pour tester
