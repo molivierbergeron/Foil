@@ -32,6 +32,25 @@ prévisions en direct — seuls le recalibrage et l'historique dépendent des cr
   durablement (ex. 0,8 → 1,5) signalerait un changement de version chez un
   fournisseur de modèle : relancer alors `python3 rapport.py` pour requalifier.
 
+## « Est-ce que ça vaut la peine de retoucher les poids ? »
+
+La réponse est mesurée, pas discutée :
+
+```bash
+python3 ampleur_poids.py     # -> reports/ampleur_ponderation.md
+```
+
+Verdict actuel : **non**. Entre deux jeux de poids, l'écart de prévision est
+de 0,31 nd médian et ne dépasse 1 nd que sur 4,6 % des heures — sous le seuil
+où une décision change. Les poids égaux battent déjà le calibrage en service,
+ce qui veut dire que le gain d'un nouveau jeu vient surtout de l'abandon de
+l'ancien, pas de sa propre finesse.
+
+Relance ce script si tu ajoutes un modèle ou changes la méthode de
+pondération : il dira en une page si le changement est de taille utile. Les
+deux leviers qui peuvent réellement produire 1-3 nds y sont nommés, et aucun
+n'est une pondération.
+
 ## La vérification croisée (Lac Saint-Pierre)
 
 Une piste de diagnostic qui tourne toute seule à côté du produit : chaque
