@@ -25,6 +25,10 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - run: python recalibrage.py
+      # Candidat pondéré par la compétence mesurée au réel. Archivé et
+      # publié à côté de l'actif, jamais à sa place.
+      - run: python candidat.py
+      - run: python comparaison.py
       - name: Commit et push
         run: |
           git config user.name "github-actions[bot]"
@@ -38,6 +42,7 @@ jobs:
           #    des modèles et la possibilité de revenir en arrière seraient
           #    perdus semaine après semaine.
           git add data/poids_modeles.json docs/poids_modeles.json \
+                  docs/poids_candidat.json docs/comparaison.json \
                   data/modeles reports/derive.md
           git diff --cached --quiet && exit 0
           git commit -m "Recalibrage hebdomadaire $(date -u +%F)"

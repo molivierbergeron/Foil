@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Le vent prévu par le modèle en service et par la proposition, côte à côte, heure par heure.">
+<title>En service vs proposition — Lac Maskinongé</title>
+<link rel="stylesheet" href="style.css">
+<link rel="apple-touch-icon" href="icone-180.png">
+<meta name="theme-color" content="#2a78d6">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>">
+</head>
+<body>
+<header>
+  <h1>En service vs proposition</h1>
+  <p class="sous-titre"><a href="index.html">← Retour aux prévisions</a></p>
+</header>
+
+<main>
+  <p id="etat" class="etat">Chargement des prévisions…</p>
+
+  <section id="intro" hidden>
+    <p class="aide">Le vent prévu, heure par heure, calculé deux fois sur les
+    <strong>mêmes prévisions brutes</strong>. Pas de verdict GO/NO ici : juste
+    les nœuds, pour que tu puisses regarder le lac et juger toi-même qui a
+    raison.</p>
+    <div class="cartes cartes-explication">
+      <div class="carte">
+        <h3><span class="jeton jeton-service"></span> En service</h3>
+        <p class="aide" id="desc-service"></p>
+      </div>
+      <div class="carte">
+        <h3><span class="jeton jeton-proposition"></span> Proposition</h3>
+        <p class="aide" id="desc-proposition"></p>
+      </div>
+    </div>
+    <div id="resume" class="avis"></div>
+  </section>
+
+  <section id="jours" hidden>
+    <h2>Heure par heure</h2>
+    <p class="aide">Deux bandes alignées sur les mêmes heures. Une heure est
+    encadrée quand les deux modèles s'écartent d'au moins
+    <span id="seuil-ecart"></span> nds — ce sont ces heures-là qui tranchent.</p>
+    <div id="bandes"></div>
+  </section>
+
+  <section id="verdict-essai" hidden>
+    <h2>Comment décider</h2>
+    <p class="aide">Regarde les heures encadrées, celles où les deux ne
+    s'entendent pas. Quand tu es au lac, note laquelle des deux valeurs
+    ressemblait au vent réel. Après une poignée de sorties, la réponse se
+    dégage toute seule — et rien ne bouge en attendant : la page principale
+    continue de tourner sur le modèle en service.</p>
+    <p class="aide">Quand tu seras convaincu, la bascule est une commande :
+    <code>python3 versions.py --activer &lt;version&gt;</code>. L'ancien
+    modèle reste archivé et se restaure de la même façon — on n'écrase
+    jamais.</p>
+  </section>
+</main>
+
+<footer id="pied">
+  <p id="fraicheur-essai"></p>
+  <p><a href="comparaison.html">Les modèles vs la réalité →</a> — d'où vient
+  la proposition, et ce que chaque modèle vaut face à un anémomètre.</p>
+  <p id="versions" class="versions"></p>
+</footer>
+
+<script src="essai.js"></script>
+</body>
+</html>

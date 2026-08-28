@@ -32,6 +32,9 @@ import config
 DOSSIER = Path("data/modeles")
 REGISTRE = DOSSIER / "registre.json"
 COPIE_DASHBOARD = Path("docs/poids_modeles.json")
+# Le candidat est publié À CÔTÉ de l'actif, jamais à sa place : la vue d'essai
+# lit les deux, le dashboard ne lit que l'actif.
+COPIE_CANDIDAT = Path("docs/poids_candidat.json")
 SCHEMA_REGISTRE = 1
 
 
@@ -68,7 +71,10 @@ def _borne_depuis_periode(poids: dict) -> str | None:
 
 
 def _registre_vide() -> dict:
-    return {"schema_version": SCHEMA_REGISTRE, "actif": None,
+    # "candidat" : version archivée mise à l'essai en parallèle, visible dans
+    # la vue d'essai mais qui ne calcule aucun verdict tant qu'elle n'est pas
+    # promue. C'est ce qui permet d'essayer sans jamais rien écraser.
+    return {"schema_version": SCHEMA_REGISTRE, "actif": None, "candidat": None,
             "versions": [], "activations": []}
 
 
@@ -111,8 +117,12 @@ def _prochain_id(reg: dict, poids: dict) -> str:
 
 
 def _ajouter(reg: dict, poids: dict, origine: str, donnees_jusqu_au=None,
-             n_apparie=None, metriques=None, notes="") -> dict:
-    """Écrit une nouvelle version dans le registre et l'active. Modifie reg."""
+             n_apparie=None, metriques=None, notes="", role: str = "actif") -> dict:
+    """Écrit une nouvelle version dans le registre. Modifie reg.
+
+    role="actif"    : elle prend le service.
+    role="candidat" : elle est archivée et mise à l'essai, sans rien remplacer.
+    """
     version = _prochain_id(reg, poids)
     dossier = DOSSIER / version
     dossier.mkdir(parents=True, exist_ok=True)
@@ -135,9 +145,17 @@ def _ajouter(reg: dict, poids: dict, origine: str, donnees_jusqu_au=None,
         "metriques_validation": metriques,
         "notes": notes,
     })
-    reg["actif"] = version
-    reg["activations"].append(
-        {"version": version, "le": _maintenant(), "raison": f"création ({origine})"})
+    if role == "candidat":
+        reg["candidat"] = version
+        reg["activations"].append({
+            "version": version, "le": _maintenant(),
+            "raison": f"mise à l'essai comme candidat ({origine}) — "
+                      f"actif inchangé : {reg.get('actif')}"})
+    else:
+        reg["actif"] = version
+        reg["activations"].append({
+            "version": version, "le": _maintenant(),
+            "raison": f"création ({origine})"})
     return reg
 
 
@@ -158,6 +176,11 @@ def actif() -> str | None:
     return registre()["actif"]
 
 
+def candidat() -> str | None:
+    """Version actuellement à l'essai, s'il y en a une."""
+    return registre().get("candidat")
+
+
 # -------------------------------------------------------- écriture / bascule
 
 def _publier(version: str) -> None:
@@ -176,24 +199,50 @@ def _publier(version: str) -> None:
         COPIE_DASHBOARD.write_text(texte)
 
 
-def enregistrer(poids: dict, origine: str, donnees_jusqu_au=None,
-                n_apparie=None, metriques=None, notes="") -> str:
-    """Archive un jeu de poids comme nouvelle version, et l'active.
+def _publier_candidat(version: str) -> None:
+    """Publie le candidat pour la vue d'essai, et rien d'autre.
 
-    Si son contenu calibré est identique à la version active, rien n'est créé :
-    on retourne la version existante. Évite d'empiler des doublons.
+    N'écrit ni data/poids_modeles.json ni docs/poids_modeles.json : le
+    dashboard continue de calculer ses verdicts avec l'actif, quoi qu'il
+    arrive. Un candidat n'entre dans les verdicts que par un activer() explicite.
     """
+    poids = json.loads((DOSSIER / version / "poids.json").read_text())
+    poids["version_modele"] = version
+    if COPIE_CANDIDAT.parent.exists():
+        COPIE_CANDIDAT.write_text(
+            json.dumps(poids, indent=2, ensure_ascii=False) + "\n")
+
+
+def enregistrer(poids: dict, origine: str, donnees_jusqu_au=None,
+                n_apparie=None, metriques=None, notes="",
+                role: str = "actif") -> str:
+    """Archive un jeu de poids comme nouvelle version.
+
+    role="actif" (défaut) : elle prend le service, comme avant.
+    role="candidat" : elle est archivée et publiée À CÔTÉ de l'actif, pour
+    être jugée en conditions réelles. Rien n'est écrasé, aucun verdict ne
+    change — c'est le mode « essai » du versionnage.
+
+    Si son contenu calibré est identique à la version de référence du rôle,
+    rien n'est créé : on retourne la version existante.
+    """
+    if role not in ("actif", "candidat"):
+        raise ValueError(f"role inconnu : {role} (attendu 'actif' ou 'candidat')")
     reg = registre()
-    if reg["actif"]:
+    reference = reg.get("candidat") if role == "candidat" else reg.get("actif")
+    if reference:
         try:
-            if empreinte(charger_poids(reg["actif"])) == empreinte(poids):
-                return reg["actif"]
+            if empreinte(charger_poids(reference)) == empreinte(poids):
+                return reference
         except (KeyError, FileNotFoundError):
             pass  # registre incohérent : on enregistre quand même
 
     reg = _ajouter(reg, poids, origine, donnees_jusqu_au, n_apparie,
-                   metriques, notes)
+                   metriques, notes, role=role)
     _ecrire_registre(reg)
+    if role == "candidat":
+        _publier_candidat(reg["candidat"])
+        return reg["candidat"]
     _publier(reg["actif"])
     return reg["actif"]
 
@@ -219,9 +268,18 @@ def activer(version: str, raison: str = "") -> str:
     """
     meta(version)
     reg = registre()
+    ancien = reg.get("actif")
+    promotion = version == reg.get("candidat")
     reg["actif"] = version
-    reg["activations"].append(
-        {"version": version, "le": _maintenant(), "raison": raison or "bascule manuelle"})
+    if promotion:
+        # Le candidat prend le service : il cesse d'être « à l'essai », et
+        # l'ancien actif reste archivé, restaurable par un activer() inverse.
+        reg["candidat"] = None
+    reg["activations"].append({
+        "version": version, "le": _maintenant(),
+        "raison": (raison or ("promotion du candidat" if promotion
+                              else "bascule manuelle"))
+                  + (f" — remplace {ancien}" if ancien else "")})
     _ecrire_registre(reg)
     _publier(version)
     return version

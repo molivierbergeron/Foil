@@ -260,3 +260,61 @@ footer p.versions {
   color: var(--texte-3);
 }
 .note-ecart.fort { color: var(--avis-bord); }
+
+/* ------------------------------------------------ vue d'essai (essai.html)
+   Deux bandes horaires alignées, une par jeu de poids. Même vocabulaire
+   visuel que le dashboard (cellules, bande de foil) pour que l'oeil ne
+   change pas de repère en passant d'une page à l'autre. */
+.jeton {
+  display: inline-block;
+  width: 0.65rem; height: 0.65rem;
+  border-radius: 3px;
+  margin-right: 0.4rem;
+  vertical-align: baseline;
+}
+.jeton-service { background: var(--ensemble); }
+.jeton-proposition {
+  background: transparent;
+  border: 2px solid var(--maintenant);
+}
+
+.jour-essai {
+  margin: 1.1rem 0 1.4rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--bordure);
+}
+.titre-jour-essai {
+  display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap;
+}
+.titre-jour-essai .nom-jour {
+  font-weight: 700; font-size: 0.95rem; text-transform: capitalize;
+}
+.titre-jour-essai .compte-ecarts {
+  margin-left: auto; font-size: 0.75rem; color: var(--texte-3);
+}
+.ligne-bande { margin-top: 0.45rem; }
+.etiquette-bande {
+  font-size: 0.72rem;
+  color: var(--texte-2);
+  margin-bottom: 0.15rem;
+}
+/* Les heures où les deux modèles divergent : c'est là que l'oeil doit aller,
+   d'où un contour plutôt qu'une couleur de fond (qui entrerait en conflit
+   avec le codage de la bande de foil). */
+.bande-heures .cellule.ecart {
+  box-shadow: inset 0 0 0 2px var(--maintenant);
+}
+.note-jour {
+  margin: 0.45rem 0 0;
+  font-size: 0.75rem;
+  color: var(--texte-2);
+}
+.cellule .cd {
+  display: block;
+  font-size: 0.62rem;
+  opacity: 0.8;
+  font-variant-numeric: tabular-nums;
+}
+#resume p { margin: 0 0 0.4rem; }
+#resume p:last-child { margin-bottom: 0; }
+.resume-ecart { font-weight: 600; }
