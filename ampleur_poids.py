@@ -67,7 +67,14 @@ def _prepare(train, test, horizon, poids_actif):
     te = test[test["horizon"] == horizon]
     if tr.empty or te.empty:
         return None
-    modeles = sorted(set(tr["modele"]) & set(te["modele"]))
+    # Les membres EN SERVICE seulement. L'archive contient aussi des modèles
+    # à l'essai (gfs_hrrr) que le jeu de poids actif ne pondère pas : les
+    # inclure donnerait un « en service » à six voix contre un « poids égaux »
+    # à sept, et la comparaison ne mesurerait plus la pondération mais la
+    # composition. Ce que vaut un membre de plus se mesure ailleurs
+    # (reports/hrrr.md).
+    modeles = sorted(set(tr["modele"]) & set(te["modele"])
+                     & set(config.MODELES_ENSEMBLE))
 
     biais, rmse = {}, {}
     for m in modeles:

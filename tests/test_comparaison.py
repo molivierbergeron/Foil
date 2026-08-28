@@ -123,6 +123,8 @@ def test_hors_portee():
     h96 = {e["modele"] for e in d["horizons"]["96h"]}
     verifier("gem_hrdps_continental" not in h96,
              "HRDPS (portée 48 h) n'apparaît pas à l'échéance 96 h")
+    verifier("gfs_hrrr" not in h96,
+             "HRRR (portée 48 h) n'apparaît pas non plus à l'échéance 96 h")
 
 
 if __name__ == "__main__":

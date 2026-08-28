@@ -12,10 +12,13 @@
  */
 "use strict";
 
-const VERSION_UI = "1.3.0";
+const VERSION_UI = "1.4.0";
 
+// Un modèle absent d'un jeu de poids ne vote simplement pas dans son
+// ensemble (horizonPour renvoie null) : la page peut donc afficher côte à
+// côte un actif à six membres et un candidat à sept.
 const MODELES = ["gem_global", "gem_regional", "gem_hrdps_continental",
-                 "ecmwf_ifs025", "gfs_global", "icon_global"];
+                 "gfs_hrrr", "ecmwf_ifs025", "gfs_global", "icon_global"];
 const SECTEURS = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"];
 const JOURS = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
 const HEURE_DEBUT = 8, HEURE_FIN = 20;

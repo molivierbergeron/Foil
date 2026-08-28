@@ -17,12 +17,13 @@
  * séparément, et quand quelque chose cloche il faut pouvoir dire lequel des
  * deux a bougé. Pas de numéro injecté au déploiement : docs/ doit rester
  * copiable tel quel par FTP, sans étape de build. */
-const VERSION_UI = "1.2.0";
+const VERSION_UI = "1.3.0";
 
 const MODELES = {
   gem_global: "GEM global",
   gem_regional: "GEM régional",
   gem_hrdps_continental: "HRDPS",
+  gfs_hrrr: "HRRR",
   ecmwf_ifs025: "ECMWF",
   gfs_global: "GFS",
   icon_global: "ICON",
@@ -464,10 +465,14 @@ function rendreGraphique(heures, sport) {
     }
   }
   svg += `<text x="${mg.g + 4}" y="${H - mg.b + 28}" font-size="10" fill="var(--texte-2)">aujourd'hui</text>`;
-  for (const m of Object.keys(MODELES)) {
-    const points = h48.map((h) => h.parModele[m] ?? null);
-    if (points.every((p) => p == null)) continue;
-    svg += `<path d="${chemin(points)}" fill="none" stroke="var(--m-${m})" stroke-width="1.3" opacity="0.55"/>`;
+  /* Un modèle absent du jeu de poids en service ne produit aucune valeur
+   * (corrige() renvoie null) : il ne trace pas de courbe, et il ne doit pas
+   * non plus occuper une pastille dans la légende — sinon la page annonce un
+   * modèle qu'elle n'affiche pas. */
+  const modelesTraces = Object.keys(MODELES).filter(
+    (m) => h48.some((h) => h.parModele[m] != null));
+  for (const m of modelesTraces) {
+    svg += `<path d="${chemin(h48.map((h) => h.parModele[m] ?? null))}" fill="none" stroke="var(--m-${m})" stroke-width="1.3" opacity="0.55"/>`;
   }
   svg += `<path d="${chemin(h48.map((h) => h.rafales))}" fill="none" stroke="var(--maintenant)" stroke-width="1.8" stroke-dasharray="6 4" opacity="0.9"/>`;
   svg += `<path d="${chemin(h48.map((h) => h.ensemble))}" fill="none" stroke="var(--ensemble)" stroke-width="2.6"/>`;
@@ -512,8 +517,8 @@ function rendreGraphique(heures, sport) {
   const legende = document.getElementById("legende");
   legende.innerHTML = `<span><i style="background:var(--ensemble);height:4px"></i>Ensemble corrigé</span>`
     + `<span><i style="background:repeating-linear-gradient(90deg,var(--maintenant) 0 5px,transparent 5px 8px);height:3px"></i>Puffs (rafales)</span>`
-    + Object.entries(MODELES).map(
-      ([m, nom]) => `<span><i style="background:var(--m-${m})"></i>${nom}</span>`).join("");
+    + modelesTraces.map(
+      (m) => `<span><i style="background:var(--m-${m})"></i>${MODELES[m]}</span>`).join("");
 }
 
 // ---------------------------------------------------------------- démarrage

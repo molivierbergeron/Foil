@@ -41,25 +41,40 @@ URL_FORECAST = "https://api.open-meteo.com/v1/forecast"
 # Horizons de vérification : étiquette -> suffixe Previous Runs
 HORIZONS = {"24h": "previous_day1", "48h": "previous_day2", "96h": "previous_day4"}
 
-# Modèles et couverture d'archives, VALIDÉES par appels réels le 2026-07-15 :
+# Modèles et couverture d'archives, VALIDÉES par appels réels le 2026-07-15
+# (gfs_hrrr ajouté et validé de la même façon le 2026-08-28) :
 # - horizons : quels previous_dayN sont archivés (portée de prévision du modèle)
 # - rafales_previous : rafales archivées dans Previous Runs ?
-# - rafales_hour0 / vent80_hour0 : dispo dans Historical Forecast ?
+# - rafales_hour0 / vent80_hour0 / temp80_hour0 : dispo dans Historical Forecast ?
+#   (temp80 est un drapeau distinct de vent80 : HRRR archive le vent à 80 m
+#    mais pas la température à 80 m — le gradient thermique lui est donc
+#    indisponible, contrairement aux cinq autres modèles qui ont les deux.)
 MODELES = {
     "gem_global": {
         "nom": "GEM global (Canada)",
         "horizons": ["24h", "48h", "96h"],
         "rafales_previous": True, "rafales_hour0": True, "vent80_hour0": True,
+        "temp80_hour0": True,
     },
     "gem_regional": {
         "nom": "GEM régional (Canada)",
         "horizons": ["24h", "48h"],  # portée 84 h : pas de day4
         "rafales_previous": True, "rafales_hour0": True, "vent80_hour0": True,
+        "temp80_hour0": True,
     },
     "gem_hrdps_continental": {
         "nom": "HRDPS (Canada, 2.5 km)",
         "horizons": ["24h"],  # portée 48 h : day1 seulement
         "rafales_previous": True, "rafales_hour0": True, "vent80_hour0": True,
+        "temp80_hour0": True,
+    },
+    "gfs_hrrr": {
+        "nom": "HRRR (États-Unis, 3 km)",
+        "horizons": ["24h"],  # portée 48 h : day1 seulement, comme HRDPS
+        "rafales_previous": True, "rafales_hour0": True, "vent80_hour0": True,
+        # Seul modèle sans temperature_80m archivée (vérifié 2026-08-28) : il
+        # ne participe donc pas au gradient thermique du diagnostic de busts.
+        "temp80_hour0": False,
     },
     "ecmwf_ifs025": {
         "nom": "ECMWF IFS 0.25°",
@@ -67,18 +82,56 @@ MODELES = {
         # Rafales absentes des archives Previous Runs ET de Historical Forecast :
         # repli = ratio rafales/vent appris sur les autres modèles.
         "rafales_previous": False, "rafales_hour0": False, "vent80_hour0": False,
+        "temp80_hour0": False,
     },
     "gfs_global": {
         "nom": "GFS (États-Unis)",
         "horizons": ["24h", "48h", "96h"],
         "rafales_previous": True, "rafales_hour0": True, "vent80_hour0": True,
+        "temp80_hour0": True,
     },
     "icon_global": {
         "nom": "ICON (Allemagne)",
         "horizons": ["24h", "48h", "96h"],
         "rafales_previous": True, "rafales_hour0": True, "vent80_hour0": True,
+        "temp80_hour0": True,
     },
 }
+
+# --- Membres de l'ensemble EN SERVICE ---
+# Les modèles qui VOTENT dans le jeu de poids actif. Troisième liste
+# volontairement distincte, pour la même raison que MODELES_VERITE :
+#
+#   MODELES         = ce qu'on télécharge, archive, note et affiche
+#   MODELES_ENSEMBLE = ce qui calcule le verdict en service
+#   MODELES_VERITE   = ce qui définit la cible (gelée)
+#
+# Sans cette séparation, ajouter une clé à MODELES ferait entrer le nouveau
+# modèle dans les poids au recalibrage hebdomadaire suivant — donc en
+# service, tout seul, un lundi matin, sans qu'aucune décision ait été prise
+# ni qu'aucun test n'échoue. C'est précisément ce qu'un modèle à l'essai ne
+# doit pas pouvoir faire : il entre par un `versions.py --activer` explicite,
+# jamais par un cron.
+#
+# Pour promouvoir un modèle : l'ajouter ici, relancer un backtest complet,
+# et comparer les versions avant d'activer.
+MODELES_ENSEMBLE = (
+    "gem_global",
+    "gem_regional",
+    "gem_hrdps_continental",
+    "ecmwf_ifs025",
+    "gfs_global",
+    "icon_global",
+)
+
+_hors = [m for m in MODELES_ENSEMBLE if m not in MODELES]
+if _hors:
+    raise ValueError(
+        f"MODELES_ENSEMBLE contient des modèles absents de MODELES : {_hors}. "
+        "Un membre de l'ensemble doit être téléchargé, donc déclaré dans MODELES."
+    )
+del _hors
+
 
 # --- Composition de la vérité terrain (GELÉE) ---
 # Les six modèles dont la médiane hour-0 fait la vérité. Cette liste est

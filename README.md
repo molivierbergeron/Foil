@@ -49,14 +49,24 @@ Tout vient d'Open-Meteo (gratuit, sans clé, CC BY 4.0, usage non commercial) :
 
 ### Couverture d'archives par modèle (vérifiée, pas supposée)
 
-| Modèle (identifiant Open-Meteo) | 24 h | 48 h | 96 h | Rafales archivées | Vent 80 m hour-0 |
-|---|---|---|---|---|---|
-| `gem_global` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `gem_regional` (portée 84 h) | ✓ | ✓ | — | ✓ (24/48 h) | ✓ |
-| `gem_hrdps_continental` (portée 48 h) | ✓ | — | — | ✓ (24 h) | ✓ |
-| `ecmwf_ifs025` | ✓ | ✓ | ✓ | **✗ nulle part** | ✗ |
-| `gfs_global` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `icon_global` | ✓ | ✓ | ✓ | ✓ | ✓ |
+Validée par appels réels le 2026-07-15, et le 2026-08-28 pour `gfs_hrrr`.
+
+| Modèle (identifiant Open-Meteo) | 24 h | 48 h | 96 h | Rafales archivées | Vent 80 m hour-0 | Temp. 80 m hour-0 |
+|---|---|---|---|---|---|---|
+| `gem_global` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `gem_regional` (portée 84 h) | ✓ | ✓ | — | ✓ (24/48 h) | ✓ | ✓ |
+| `gem_hrdps_continental` (portée 48 h) | ✓ | — | — | ✓ (24 h) | ✓ | ✓ |
+| `gfs_hrrr` (portée 48 h) | ✓ | — | — | ✓ (24 h) | ✓ | **✗** |
+| `ecmwf_ifs025` | ✓ | ✓ | ✓ | **✗ nulle part** | ✗ | ✗ |
+| `gfs_global` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `icon_global` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+
+`gfs_hrrr` (HRRR, NOAA, 3 km) est le seul modèle qui archive le vent à 80 m
+sans la température à 80 m : il ne participe donc pas au gradient thermique
+du diagnostic de découplage. D'où le drapeau `temp80_hour0`, distinct de
+`vent80_hour0`, dans `config.MODELES` — Open-Meteo ne refuse pas une variable
+qu'un modèle n'archive pas, il renvoie une colonne nulle, donc la couverture
+doit être déclarée et non devinée.
 
 Repli rafales ECMWF : ratio médian rafales/vent moyen appris par modèle sur
 les séries hour-0, stocké dans `data/poids_modeles.json`
@@ -94,6 +104,25 @@ qu'aucun test n'échoue.
   relancer un backtest complet. Deux jeux de poids dont les blocs `verite`
   diffèrent ne sont pas comparables entre eux.
 
+### Trois listes, trois rôles
+
+`config.py` sépare volontairement trois choses qu'il serait tentant de
+confondre :
+
+| Liste | Ce qu'elle décide | Aujourd'hui |
+|---|---|---|
+| `MODELES` | ce qu'on télécharge, archive, note et affiche | 7 modèles |
+| `MODELES_ENSEMBLE` | ce qui **calcule le verdict en service** | 6 modèles |
+| `MODELES_VERITE` | ce qui **définit la cible** (gelée) | 6 modèles |
+
+Sans la deuxième, ajouter une clé à `MODELES` ferait entrer le nouveau modèle
+dans les poids au recalibrage hebdomadaire suivant — donc en service, tout
+seul, un lundi matin, sans décision et sans qu'aucun test n'échoue. Un modèle
+entre en service par un `versions.py --activer` explicite, jamais par un
+cron. Sans la troisième, il déplacerait la cible et rendrait l'archive
+append-only incomparable d'avant à après. Les deux garde-fous sont testés
+(`tests/test_versions.py`).
+
 Limite :
 c'est une vérité de modèles — elle capture le synoptique, pas l'écart
 grille-vs-lac. La phase 4 la remplacera par l'anémomètre au bord du lac
@@ -119,17 +148,18 @@ python3 verification_croisee.py --rapport                          # reports/ver
 
 **Pourquoi.** La vérité du pipeline principal est la médiane hour-0 des
 modèles eux-mêmes : elle note chaque modèle contre la moyenne de ses
-semblables. Mesuré sur trois saisons (2024–2026, **171 701 paires**,
+semblables. Mesuré sur trois saisons (2024–2026, **184 712 paires**,
 heures navigables), l'écart est net — à 24 h :
 
 | Modèle | RMSE vs **mesure réelle** | Rang | RMSE vs consensus | Rang |
 |---|---:|---:|---:|---:|
 | GFS | 4,08 | 1 | 1,59 | 5 |
 | HRDPS | 4,13 | 2 | 2,10 | 6 |
-| GEM régional | 4,44 | 3 | 1,46 | 3 |
-| GEM global | 4,76 | 4 | 1,49 | 4 |
-| ICON | 4,95 | 5 | 1,17 | 1 |
-| ECMWF | 5,17 | 6 | 1,43 | 2 |
+| GEM régional | 4,43 | 3 | 1,46 | 3 |
+| HRRR | 4,62 | 4 | 2,28 | 7 |
+| GEM global | 4,75 | 5 | 1,49 | 4 |
+| ICON | 4,95 | 6 | 1,17 | 1 |
+| ECMWF | 5,17 | 7 | 1,43 | 2 |
 
 Le classement est presque inversé et l'erreur réelle est 3 à 4 fois plus
 grande. Corollaire mesuré : à 24 h, l'écart entre le meilleur et le pire
@@ -150,7 +180,7 @@ vérifiée par un test qui inspecte le code exécutable (docstrings exclues).
 
 **La limite, dite franchement.** Lac Saint-Pierre n'est pas le Lac
 Maskinongé : plan d'eau bien plus ouvert, vent médian de jour 9,2 nds contre
-~5 au spot, et les six modèles y sous-estiment tous de 1 à 3 nds. **Ce biais
+~5 au spot, et les sept modèles y sous-estiment tous de 1 à 3 nds. **Ce biais
 est celui du site, pas celui du lac, et ne se transplante pas.** Ce qui se
 transporte raisonnablement, c'est le classement et la corrélation. Deux
 réserves de plus : l'observation ECCC est un relevé horaire et non une
@@ -170,10 +200,64 @@ nouveau jeu vient de l'abandon de l'ancien plus que de sa finesse. C'est
 cohérent avec la théorie : la pondération ∝ 1/RMSE² suppose des erreurs
 indépendantes, or les modèles partagent observations et paramétrisations.
 
-Les deux leviers capables de produire 1-3 nds ne sont pas des pondérations :
-**ajouter un modèle vraiment différent** (HRRR 3 km) et **l'anémomètre au
-lac** — à la station de mesure, les six modèles sous-estiment tous de 1 à
-3 nds, et cette erreur de site est hors de portée de tout calibrage.
+Restaient donc deux leviers, tous deux hors du calibrage : **ajouter un
+modèle vraiment différent** (HRRR 3 km) et **l'anémomètre au lac** — à la
+station de mesure, les modèles sous-estiment tous de 1 à 3 nds, et cette
+erreur de site est hors de portée de toute pondération.
+
+Le premier a depuis été mesuré, et il ne tient pas : HRRR ne fait rien
+gagner (section suivante). Il ne reste que l'anémomètre.
+
+## HRRR (NOAA, 3 km) — le septième modèle, et ce qu'il change
+
+`gfs_hrrr` est le septième membre de prévision. Il a été ajouté pour tester
+une hypothèse précise : puisque repondérer six modèles ne déplace la
+prévision que de 0,31 nd médian, il faut changer les **ingrédients**, et
+HRRR était le seul ingrédient neuf disponible — maille 3 km contre 13-25 km
+pour les globaux, centre indépendant (NOAA), et il couvre le lac.
+
+**Mesuré, l'hypothèse est fausse.** Entraîné sur 2024-2025 et jugé sur 2026
+jamais vu, contre l'anémomètre de Lac Saint-Pierre, à 24 h :
+
+| Ensemble | RMSE 2026 (hors échantillon) |
+|---|---:|
+| Six membres | **3,779 nds** |
+| Sept membres (+ HRRR) | **3,793 nds** |
+
+Écart **+0,014 nd — une dégradation**, IC 95 % par bootstrap apparié par
+jour : [−0,052 ; +0,023]. P(gain > 1 nd) = **0,000**. Le gain d'un nœud
+n'est pas indécidable faute de données : il est exclu par les données.
+
+La raison est mesurable : l'erreur de HRRR est corrélée à **r = 0,83** avec
+celle de l'ensemble des six. Il ne se trompe pas différemment, il se trompe
+en même temps. Un septième membre qui se trompe avec les six autres est, du
+point de vue de la moyenne, le même ingrédient. À 24 h, ce qui fait l'erreur
+n'est pas la finesse de la grille mais le placement du système synoptique —
+et HRRR est initialisé et forcé aux frontières par GFS.
+
+Analyse complète, variantes de robustesse et corollaires :
+**`reports/hrrr.md`**.
+
+**Ce qui a quand même été fait, et pourquoi.** HRRR reste dans
+`config.MODELES` : il est téléchargé, archivé par le job quotidien dans
+`data/verification/` et `data/verification_croisee/`, noté sur la page de
+comparaison, et affiché dans la vue d'essai. Le coût est d'un appel d'API
+par jour ; le bénéfice, à gain de prévision nul, est un septième point de
+vue indépendant pour détecter la dérive d'un fournisseur.
+
+L'ensemble à sept membres est archivé comme **candidat** (`v4-2026-08-28`,
+`origine: hrrr`, construit par `python3 candidat_hrrr.py`) et **n'est pas
+promu**. La vérité terrain n'a pas bougé : `config.MODELES_VERITE` reste
+gelée sur les six modèles d'origine, et un test le vérifie
+(`tests/test_versions.py::test_verite_gelee`). HRRR est un membre de
+prévision, jamais un membre de la cible — sinon l'archive append-only
+cesserait d'être comparable d'avant à après.
+
+Deux limites de portée, dites d'avance : HRRR n'archive que
+`previous_day1`, donc il ne touche **jamais** à la décision de planification
+(J-4 à J-2), celle où un gain aurait le plus de valeur ; et il n'archive pas
+`temperature_80m`, donc il ne participe pas au gradient thermique du
+diagnostic de découplage.
 
 ## Mettre un modèle à l'essai sans rien écraser
 
@@ -182,11 +266,22 @@ dashboard. **Le candidat** est archivé et publié à côté, visible dans la vu
 d'essai, et ne touche à aucun verdict tant qu'un `--activer` explicite ne le
 promeut pas.
 
+Il n'y a **qu'un seul** emplacement de candidat : construire un nouveau
+candidat remplace le précédent dans la vue d'essai, sans jamais l'effacer du
+registre (`data/modeles/` garde tout, `--activer` peut toujours le rappeler).
+
 ```bash
-python3 candidat.py                        # construit et publie un candidat
-python3 versions.py --activer v3-…         # le promeut (l'ancien reste archivé)
+python3 candidat.py                        # candidat « poids réels » (six membres)
+python3 candidat_hrrr.py                   # candidat « sept membres » (+ HRRR)
+python3 versions.py --activer v4-…         # le promeut (l'ancien reste archivé)
 python3 versions.py --activer v2-…         # et se restaure de la même façon
 ```
+
+**Candidat en place aujourd'hui : `v4-2026-08-28`** (`origine: hrrr`),
+l'ensemble à sept membres. Il n'est pas promu, et il ne devrait pas l'être :
+il dégrade la prévision de 0,014 nd hors échantillon (`reports/hrrr.md`).
+Le candidat précédent, `v3-2026-08-28` (`origine: competence-reelle`), reste
+archivé et restaurable.
 
 `candidat.py` fabrique une variante qui ne change **qu'une chose** : les
 poids, recalculés ∝ 1/RMSE² sur les RMSE mesurés contre l'anémomètre de Lac
@@ -195,7 +290,7 @@ ne se transplantent pas (voir la section précédente). Chaque poids remplacé
 porte son `rmse_reel_nds` et son `n_reel` : un poids venu d'ailleurs doit
 pouvoir se justifier.
 
-Sur 3 saisons, ça déplace nettement les poids à 24 h — HRDPS 8 % → 20 %,
+Sur 3 saisons, `candidat.py` déplace nettement les poids à 24 h — HRDPS 8 % → 20 %,
 GFS 15 % → 21 %, ICON 27 % → 14 %. **Mais sur la prévision, l'effet est
 minuscule** : mesuré sur 60 heures réelles, l'écart entre les deux modèles
 est de **0,15 nds en moyenne, 0,50 nds au pire**. C'est écrit sur la page
@@ -213,7 +308,7 @@ mieux, ça se verra sur des semaines de statistiques, pas sur une sortie.
 ## Versionnage des modèles — historique, retour arrière, comparaison
 
 Un « modèle », ici, c'est un **jeu de poids complet** : c'est lui qui
-transforme six prévisions brutes en un verdict. Il est donc archivé,
+transforme les prévisions brutes de plusieurs modèles en un verdict. Il est donc archivé,
 restaurable et comparable.
 
 ```
@@ -413,7 +508,7 @@ Tout ce qu'il faut pour opérer, diagnostiquer et continuer le projet sans
 assistance est dans **`MAINTENANCE.md`** : quoi surveiller, comment brancher
 la station (phase 4), relancer l'essai MOS (phase 5), activer les alertes
 (phase 6), ou déménager le dashboard par FTP. Un workflow `tests.yml`
-exécute les 4 suites de tests à chaque modification de code.
+exécute les 9 suites de tests à chaque modification de code.
 
 Le dashboard s'installe sur l'écran d'accueil iPhone (Partager → « Sur
 l'écran d'accueil ») : icône et plein écran fournis par

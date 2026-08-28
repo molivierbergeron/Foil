@@ -76,17 +76,32 @@ def telecharger_previous_runs() -> pd.DataFrame:
 
 VARIABLES_HOUR0_BASE = ["wind_speed_10m", "wind_direction_10m",
                         "shortwave_radiation", "cloud_cover",
-                        "temperature_2m", "temperature_80m"]
+                        "temperature_2m"]
+
+
+def variables_hour0(info: dict) -> list[str]:
+    """Variables hour-0 à demander pour un modèle, selon sa couverture réelle.
+
+    Open-Meteo ne rejette pas une variable qu'un modèle n'archive pas : il
+    renvoie une colonne entièrement nulle. Demander quand même serait donc
+    silencieux, mais mensonger dans le cache (une réponse « complète » qui ne
+    l'est pas) et inutilement lourd. On s'en tient à ce que config.MODELES
+    déclare avoir vérifié.
+    """
+    variables = list(VARIABLES_HOUR0_BASE)
+    if info["temp80_hour0"]:
+        variables.append("temperature_80m")
+    if info["rafales_hour0"]:
+        variables.append("wind_gusts_10m")
+    if info["vent80_hour0"]:
+        variables.append("wind_speed_80m")
+    return variables
 
 
 def telecharger_hour0() -> pd.DataFrame:
     lignes = []
     for modele, info in config.MODELES.items():
-        variables = list(VARIABLES_HOUR0_BASE)
-        if info["rafales_hour0"]:
-            variables.append("wind_gusts_10m")
-        if info["vent80_hour0"]:
-            variables.append("wind_speed_80m")
+        variables = variables_hour0(info)
         for debut, fin in saisons():
             print(f"  Historical (hour-0) {modele} {debut}..{fin}")
             donnees = appel(config.URL_HISTORICAL, {

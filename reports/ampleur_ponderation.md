@@ -90,7 +90,7 @@ Il y a aussi une raison théorique à ce que les poids égaux tiennent si bien :
 1. **Ajouter un modèle vraiment différent** — HRRR (3 km, NOAA) est backtestable sur trois saisons et couvre le lac. Une septième voix indépendante change le nuage ; redistribuer six voix, non.
 2. **L'anémomètre au lac.** À la station de mesure, les six modèles sous-estiment tous de 1 à 3 nds : c'est l'erreur de SITE, pile dans la fourchette qui compte. Aucune pondération ne peut la toucher, parce qu'elle ne vient pas du choix des modèles mais de ce que la grille ignore du plan d'eau. Le Lac Maskinongé a la sienne, et personne ne la connaît.
 
-**Recommandation : arrêter de régler les poids.** Le candidat actuel (v3-2026-08-28) reste archivé et hors service ; il sera rejugé quand la vérité sera meilleure.
+**Recommandation : arrêter de régler les poids.** Le candidat actuel (v4-2026-08-28) reste archivé et hors service ; il sera rejugé quand la vérité sera meilleure.
 
 ## Limite de cette analyse
 

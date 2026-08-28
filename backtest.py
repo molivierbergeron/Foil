@@ -312,8 +312,16 @@ def ratios_rafales(hour0: pd.DataFrame) -> dict:
 
 def calculer_poids(stats_globales: pd.DataFrame, stats_secteur: pd.DataFrame,
                    conf: pd.DataFrame, surv: pd.DataFrame, ratios: dict,
-                   periode: str) -> dict:
-    """Assemble data/poids_modeles.json (schéma documenté dans le README)."""
+                   periode: str, membres: tuple[str, ...] | None = None) -> dict:
+    """Assemble data/poids_modeles.json (schéma documenté dans le README).
+
+    `membres` : qui a le droit de voter. Par défaut config.MODELES_ENSEMBLE,
+    donc un modèle simplement ajouté à config.MODELES est téléchargé, archivé
+    et noté — mais n'entre PAS dans les poids en service. Un candidat à
+    composition différente passe sa propre liste (voir candidat_hrrr.py).
+    """
+    membres = tuple(config.MODELES_ENSEMBLE if membres is None else membres)
+    stats_globales = stats_globales[stats_globales["modele"].isin(membres)]
     modeles = {}
     for modele, g in stats_globales.groupby("modele"):
         entree = {"nom": config.MODELES[modele]["nom"], "horizons": {}}

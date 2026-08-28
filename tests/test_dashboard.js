@@ -1,6 +1,7 @@
 // Tests de la logique JS du dashboard (mêmes cas que tests/test_fenetre.py)
 const { fenetresDuJour, secteurDe, horizonPour } = require("../docs/app.js");
 const poids = require("../docs/poids_modeles.json");
+const candidat = require("../docs/poids_candidat.json");
 const sport = poids.sport;
 
 const egal = (a, b, nom) => {
@@ -24,6 +25,12 @@ egal(secteurDe(337.4), "NO", "secteur_frontiere");
 egal(horizonPour("gem_hrdps_continental", 3, poids), "24h", "horizon_repli_hrdps");
 egal(horizonPour("gem_global", 3, poids), "96h", "horizon_96h");
 egal(horizonPour("gem_regional", 4, poids), "48h", "horizon_repli_regional");
+// HRRR a la même portée que HRDPS (48 h) : tout ce qui dépasse retombe à 24 h.
+egal(horizonPour("gfs_hrrr", 3, candidat), "24h", "horizon_repli_hrrr");
+// Et un modèle absent d'un jeu de poids ne vote pas : c'est ce qui permet
+// d'afficher côte à côte un actif à six membres et un candidat à sept sans
+// que la page casse ni qu'un poids soit inventé.
+egal(horizonPour("gfs_hrrr", 1, poids), null, "horizon_modele_absent");
 console.log("Tous les tests dashboard passent.");
 
 // Tests régularité des puffs et météo
