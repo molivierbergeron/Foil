@@ -21,6 +21,7 @@
   --m-gem_global: #2a78d6;
   --m-gem_regional: #008300;
   --m-gem_hrdps_continental: #e87ba4;
+  --m-gfs_hrrr: #7d5bbe;
   --m-ecmwf_ifs025: #eda100;
   --m-gfs_global: #1baf7a;
   --m-icon_global: #eb6834;
@@ -46,6 +47,7 @@
     --m-gem_global: #3987e5;
     --m-gem_regional: #008300;
     --m-gem_hrdps_continental: #d55181;
+    --m-gfs_hrrr: #a68ae0;
     --m-ecmwf_ifs025: #c98500;
     --m-gfs_global: #199e70;
     --m-icon_global: #d95926;
@@ -234,6 +236,7 @@ footer p.versions {
 .pastille.m-gem_global { background: var(--m-gem_global); }
 .pastille.m-gem_regional { background: var(--m-gem_regional); }
 .pastille.m-gem_hrdps_continental { background: var(--m-gem_hrdps_continental); }
+.pastille.m-gfs_hrrr { background: var(--m-gfs_hrrr); }
 .pastille.m-ecmwf_ifs025 { background: var(--m-ecmwf_ifs025); }
 .pastille.m-gfs_global { background: var(--m-gfs_global); }
 .pastille.m-icon_global { background: var(--m-icon_global); }

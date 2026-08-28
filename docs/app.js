@@ -17,12 +17,13 @@
  * séparément, et quand quelque chose cloche il faut pouvoir dire lequel des
  * deux a bougé. Pas de numéro injecté au déploiement : docs/ doit rester
  * copiable tel quel par FTP, sans étape de build. */
-const VERSION_UI = "1.2.0";
+const VERSION_UI = "1.3.0";
 
 const MODELES = {
   gem_global: "GEM global",
   gem_regional: "GEM régional",
   gem_hrdps_continental: "HRDPS",
+  gfs_hrrr: "HRRR",
   ecmwf_ifs025: "ECMWF",
   gfs_global: "GFS",
   icon_global: "ICON",

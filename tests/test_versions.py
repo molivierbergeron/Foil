@@ -191,6 +191,14 @@ def test_verite_gelee():
              "MODELES_VERITE est inclus dans MODELES")
     verifier(len(config.MODELES_VERITE) == 6,
              "la vérité repose bien sur 6 modèles")
+    # HRRR est un MEMBRE DE PRÉVISION, jamais un membre de la cible. S'il
+    # entrait dans la vérité, l'archive append-only data/verification/
+    # cesserait d'être comparable d'avant à après, et tous les biais/RMSE
+    # publiés deviendraient faux sans qu'aucun autre test n'échoue.
+    verifier("gfs_hrrr" in config.MODELES,
+             "gfs_hrrr est bien un membre de prévision")
+    verifier("gfs_hrrr" not in config.MODELES_VERITE,
+             "gfs_hrrr n'entre PAS dans la vérité terrain")
 
     # hour-0 factice : les 6 modèles de vérité + un modèle de prévision en plus
     heures = pd.date_range("2026-07-01", periods=6, freq="h", tz="UTC")
@@ -228,6 +236,32 @@ def test_verite_gelee():
     verifier(verite.composition_verite(ampute) == [
         m for m in config.MODELES_VERITE if m != "icon_global"],
         "la composition réelle exclut le modèle manquant")
+
+
+def test_ensemble_en_service_ne_bouge_pas_tout_seul():
+    """Un modèle ajouté à MODELES n'entre pas en service par un cron.
+
+    Cette classe de bug est invisible : le recalibrage hebdomadaire calcule
+    ses poids sur TOUS les modèles présents dans les données appariées. Sans
+    la liste MODELES_ENSEMBLE, ajouter une clé à MODELES suffisait à faire
+    voter le nouveau modèle dans les verdicts du dashboard le lundi suivant —
+    sans décision, sans trace, et sans qu'aucun test n'échoue. Un modèle
+    n'entre en service que par un versions.py --activer explicite.
+    """
+    print("\nComposition de l'ensemble en service")
+    verifier(set(config.MODELES_ENSEMBLE) <= set(config.MODELES),
+             "MODELES_ENSEMBLE est inclus dans MODELES")
+    verifier("gfs_hrrr" in config.MODELES and "gfs_hrrr" not in config.MODELES_ENSEMBLE,
+             "gfs_hrrr est téléchargé et noté, mais ne vote pas en service")
+
+    racine = Path(__file__).resolve().parent.parent
+    for nom in ("data/poids_modeles.json", "docs/poids_modeles.json"):
+        chemin = racine / nom
+        if not chemin.exists():
+            continue
+        membres = set(json.loads(chemin.read_text())["modeles"])
+        verifier(membres == set(config.MODELES_ENSEMBLE),
+                 f"{nom} ne contient que les membres en service")
 
 
 def test_crons_committent_tout_ce_qui_est_ecrit():
@@ -277,6 +311,7 @@ if __name__ == "__main__":
     test_amorcage()
     test_fenetre_hors_echantillon()
     test_verite_gelee()
+    test_ensemble_en_service_ne_bouge_pas_tout_seul()
     test_crons_committent_tout_ce_qui_est_ecrit()
     test_empreinte()
 

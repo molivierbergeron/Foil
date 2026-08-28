@@ -20,7 +20,7 @@ import pandas as pd
 import config
 import fenetre
 from openmeteo_client import appel
-from telecharge import composantes_uv, VARIABLES_HOUR0_BASE
+from telecharge import composantes_uv, variables_hour0
 from verite import composition_verite, construire_verite
 
 DOSSIER_VERIF = Path("data/verification")
@@ -56,11 +56,7 @@ def _telecharger_fenetre(debut: str, fin: str) -> tuple[pd.DataFrame, pd.DataFra
                                           [None] * len(temps)), dtype="Float64"),
             }))
 
-        variables_h0 = list(VARIABLES_HOUR0_BASE)
-        if info["rafales_hour0"]:
-            variables_h0.append("wind_gusts_10m")
-        if info["vent80_hour0"]:
-            variables_h0.append("wind_speed_80m")
+        variables_h0 = variables_hour0(info)
         donnees = appel(config.URL_HISTORICAL, {
             "latitude": config.LATITUDE, "longitude": config.LONGITUDE,
             "hourly": ",".join(variables_h0), "models": modele,

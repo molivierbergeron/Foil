@@ -51,7 +51,7 @@ modèles à un étalon qui bouge avec eux.
 
 **Ce qu'il ne faut PAS en faire.** Recopier ces biais dans les poids. Lac
 Saint-Pierre est un plan d'eau bien plus ouvert que le Maskinongé (vent
-médian de jour 9,2 nds contre ~5) : les six modèles y sous-estiment tous de
+médian de jour 9,2 nds contre ~5) : les sept modèles y sous-estiment tous de
 1 à 3 nds, et c'est le biais du site. Le classement se transporte
 raisonnablement, les biais absolus non.
 
@@ -71,6 +71,12 @@ python3 versions.py --comparer v2-… v3-…     # laquelle prévoit le mieux
 python3 versions.py --activer v2-… --raison "v3 rate les journées de SO"
 git add -A data/modeles data/poids_modeles.json docs/poids_modeles.json && git commit
 ```
+
+**Le candidat en place.** `v4-2026-08-28` (`origine: hrrr`), l'ensemble à
+sept membres, à l'essai et **non promu** : mesuré hors échantillon contre
+l'anémomètre réel, il dégrade la prévision de 0,014 nd (`reports/hrrr.md`).
+Le laisser tel quel est la bonne décision ; le reconstruire après quelques
+mois de données de plus se fait avec `python3 candidat_hrrr.py`.
 
 **Le contrôle périodique.** Après un mois ou deux de données accumulées,
 comparer la version active à celle d'avant : la fenêtre d'évaluation démarre
@@ -102,8 +108,11 @@ antérieur est perdu, pas les poids en service.
 pip install -r requirements.txt
 python3 telecharge.py   # ~10 min, cache dans data/raw/
 python3 rapport.py      # backtest -> rapport + poids
-python3 tests/test_fenetre.py && python3 tests/test_verite.py \
-  && python3 tests/test_station_ecowitt.py && node tests/test_dashboard.js
+# les 9 suites, dans l'ordre de .github/workflows/tests.yml
+for t in fenetre verite station_ecowitt openmeteo_client versions \
+         verification_croisee comparaison candidat; do
+  python3 tests/test_$t.py || break
+done && node tests/test_dashboard.js
 ```
 
 ## Brancher la station Ecowitt (phase 4, prête)

@@ -18,6 +18,7 @@ COULEURS = {
     "gem_global": "#2a78d6",
     "gem_regional": "#008300",
     "gem_hrdps_continental": "#e87ba4",
+    "gfs_hrrr": "#7d5bbe",
     "ecmwf_ifs025": "#eda100",
     "gfs_global": "#1baf7a",
     "icon_global": "#eb6834",

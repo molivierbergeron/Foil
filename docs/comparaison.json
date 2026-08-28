@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "genere_le": "2026-08-27T19:59+00:00",
+ "genere_le": "2026-08-28T01:58+00:00",
  "station": {
   "nom": "Lac Saint-Pierre",
   "id": "701LP0N",
@@ -14,7 +14,7 @@
   "debut": "2024-05-01",
   "fin": "2026-08-24",
   "jours": 484,
-  "paires": 173141
+  "paires": 184712
  },
  "horizons": {
   "24h": [
@@ -73,6 +73,18 @@
     }
    },
    {
+    "modele": "gfs_hrrr",
+    "nom": "HRRR (États-Unis, 3 km)",
+    "reel": {
+     "biais": -2.15,
+     "rmse": 4.62,
+     "correlation": 0.673,
+     "n": 5791,
+     "rang": 4
+    },
+    "officiel": null
+   },
+   {
     "modele": "gem_global",
     "nom": "GEM global (Canada)",
     "reel": {
@@ -80,7 +92,7 @@
      "rmse": 4.75,
      "correlation": 0.722,
      "n": 5796,
-     "rang": 4
+     "rang": 5
     },
     "officiel": {
      "biais": -0.92,
@@ -98,7 +110,7 @@
      "rmse": 4.95,
      "correlation": 0.709,
      "n": 5796,
-     "rang": 5
+     "rang": 6
     },
     "officiel": {
      "biais": 0.01,
@@ -116,7 +128,7 @@
      "rmse": 5.17,
      "correlation": 0.713,
      "n": 5796,
-     "rang": 6
+     "rang": 7
     },
     "officiel": {
      "biais": 0.56,
@@ -313,6 +325,24 @@
    "donnees_jusqu_au": "2026-08-21",
    "n_apparie": 172301,
    "notes": ""
+  },
+  {
+   "version": "v3-2026-08-28",
+   "origine": "competence-reelle",
+   "cree_le": "2026-08-28T00:45:42+00:00",
+   "genere_le": "2026-08-28",
+   "donnees_jusqu_au": "2026-08-24",
+   "n_apparie": 173141,
+   "notes": "Poids recalculés sur la compétence mesurée contre l'anémomètre de Lac Saint-Pierre ; biais locaux inchangés. À l'essai, hors service."
+  },
+  {
+   "version": "v4-2026-08-28",
+   "origine": "hrrr",
+   "cree_le": "2026-08-28T01:53:14+00:00",
+   "genere_le": "2026-08-28",
+   "donnees_jusqu_au": "2026-07-12",
+   "n_apparie": 168456,
+   "notes": "Ensemble à sept membres : les six modèles en service + HRRR (NOAA, 3 km, horizon 24 h). Vérité inchangée (six modèles). À l'essai, hors service — voir reports/hrrr.md pour le jugement hors échantillon contre l'anémomètre réel."
   }
  ],
  "activations": [
@@ -325,6 +355,16 @@
    "version": "v2-2026-08-24",
    "le": "2026-08-24T11:06:20+00:00",
    "raison": "création (recalibrage)"
+  },
+  {
+   "version": "v3-2026-08-28",
+   "le": "2026-08-28T00:45:42+00:00",
+   "raison": "mise à l'essai comme candidat (competence-reelle) — actif inchangé : v2-2026-08-24"
+  },
+  {
+   "version": "v4-2026-08-28",
+   "le": "2026-08-28T01:53:14+00:00",
+   "raison": "mise à l'essai comme candidat (hrrr) — actif inchangé : v2-2026-08-24"
   }
  ]
 }

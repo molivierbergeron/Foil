@@ -119,6 +119,57 @@
         "n_min_poids": 500
       },
       "notes": "Poids recalculés sur la compétence mesurée contre l'anémomètre de Lac Saint-Pierre ; biais locaux inchangés. À l'essai, hors service."
+    },
+    {
+      "version": "v4-2026-08-28",
+      "cree_le": "2026-08-28T01:53:14+00:00",
+      "origine": "hrrr",
+      "empreinte": "sha256:0a42f7e355b995d1",
+      "genere_le": "2026-08-28",
+      "periode_backtest": "2024-05-01 à 2026-07-12 (mai-octobre)",
+      "donnees_jusqu_au": "2026-07-12",
+      "n_apparie": 168456,
+      "verite": {
+        "version": "median_hour0/v1",
+        "modeles": [
+          "gem_global",
+          "gem_regional",
+          "gem_hrdps_continental",
+          "ecmwf_ifs025",
+          "gfs_global",
+          "icon_global"
+        ]
+      },
+      "modeles_prevision": [
+        "ecmwf_ifs025",
+        "gem_global",
+        "gem_hrdps_continental",
+        "gem_regional",
+        "gfs_global",
+        "gfs_hrrr",
+        "icon_global"
+      ],
+      "metriques_validation": {
+        "membres": [
+          "ecmwf_ifs025",
+          "gem_global",
+          "gem_hrdps_continental",
+          "gem_regional",
+          "gfs_global",
+          "gfs_hrrr",
+          "icon_global"
+        ],
+        "membre_ajoute": "gfs_hrrr",
+        "verite_inchangee": [
+          "gem_global",
+          "gem_regional",
+          "gem_hrdps_continental",
+          "ecmwf_ifs025",
+          "gfs_global",
+          "icon_global"
+        ]
+      },
+      "notes": "Ensemble à sept membres : les six modèles en service + HRRR (NOAA, 3 km, horizon 24 h). Vérité inchangée (six modèles). À l'essai, hors service — voir reports/hrrr.md pour le jugement hors échantillon contre l'anémomètre réel."
     }
   ],
   "activations": [
@@ -136,7 +187,12 @@
       "version": "v3-2026-08-28",
       "le": "2026-08-28T00:45:42+00:00",
       "raison": "mise à l'essai comme candidat (competence-reelle) — actif inchangé : v2-2026-08-24"
+    },
+    {
+      "version": "v4-2026-08-28",
+      "le": "2026-08-28T01:53:14+00:00",
+      "raison": "mise à l'essai comme candidat (hrrr) — actif inchangé : v2-2026-08-24"
     }
   ],
-  "candidat": "v3-2026-08-28"
+  "candidat": "v4-2026-08-28"
 }
