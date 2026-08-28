@@ -68,6 +68,57 @@
         "compare_a": "v1-2026-07-15"
       },
       "notes": ""
+    },
+    {
+      "version": "v3-2026-08-28",
+      "cree_le": "2026-08-28T00:45:42+00:00",
+      "origine": "competence-reelle",
+      "empreinte": "sha256:c5bd1735b8951d8a",
+      "genere_le": "2026-08-28",
+      "periode_backtest": "2024-05-01 à 2026-08-21 (mai-octobre)",
+      "donnees_jusqu_au": "2026-08-24",
+      "n_apparie": 173141,
+      "verite": {
+        "version": "median_hour0/v1",
+        "modeles": [
+          "gem_global",
+          "gem_regional",
+          "gem_hrdps_continental",
+          "ecmwf_ifs025",
+          "gfs_global",
+          "icon_global"
+        ]
+      },
+      "modeles_prevision": [
+        "ecmwf_ifs025",
+        "gem_global",
+        "gem_hrdps_continental",
+        "gem_regional",
+        "gfs_global",
+        "icon_global"
+      ],
+      "metriques_validation": {
+        "poids_remplaces": [
+          "ecmwf_ifs025/24h",
+          "gem_global/24h",
+          "gem_hrdps_continental/24h",
+          "gem_regional/24h",
+          "gfs_global/24h",
+          "icon_global/24h",
+          "ecmwf_ifs025/48h",
+          "gem_global/48h",
+          "gem_regional/48h",
+          "gfs_global/48h",
+          "icon_global/48h",
+          "ecmwf_ifs025/96h",
+          "gem_global/96h",
+          "gfs_global/96h",
+          "icon_global/96h"
+        ],
+        "poids_conserves": [],
+        "n_min_poids": 500
+      },
+      "notes": "Poids recalculés sur la compétence mesurée contre l'anémomètre de Lac Saint-Pierre ; biais locaux inchangés. À l'essai, hors service."
     }
   ],
   "activations": [
@@ -80,6 +131,12 @@
       "version": "v2-2026-08-24",
       "le": "2026-08-24T11:06:20+00:00",
       "raison": "création (recalibrage)"
+    },
+    {
+      "version": "v3-2026-08-28",
+      "le": "2026-08-28T00:45:42+00:00",
+      "raison": "mise à l'essai comme candidat (competence-reelle) — actif inchangé : v2-2026-08-24"
     }
-  ]
+  ],
+  "candidat": "v3-2026-08-28"
 }

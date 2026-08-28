@@ -1,0 +1,953 @@
+{
+  "schema_version": 2,
+  "genere_le": "2026-08-28",
+  "periode_backtest": "2024-05-01 à 2026-08-21 (mai-octobre)",
+  "truth_source": "median_hour0",
+  "verite": {
+    "version": "median_hour0/v1",
+    "modeles": [
+      "gem_global",
+      "gem_regional",
+      "gem_hrdps_continental",
+      "ecmwf_ifs025",
+      "gfs_global",
+      "icon_global"
+    ]
+  },
+  "spot": {
+    "latitude": 46.3123,
+    "longitude": -73.3638
+  },
+  "unites": "noeuds",
+  "sport": {
+    "vent_min": 7.0,
+    "vent_max": 16.0,
+    "vent_marginal": 5.0,
+    "duree_min_fenetre": 2,
+    "heure_debut": 8,
+    "heure_fin": 20,
+    "ratio_rafaleux": 1.6,
+    "blocs": {
+      "matin": [
+        8,
+        11
+      ],
+      "midi": [
+        11,
+        14
+      ],
+      "apres_midi": [
+        14,
+        18
+      ]
+    }
+  },
+  "ratio_rafales_defaut": 2.4105263157894736,
+  "modeles": {
+    "ecmwf_ifs025": {
+      "nom": "ECMWF IFS 0.25°",
+      "horizons": {
+        "24h": {
+          "biais_nds": 0.56,
+          "rmse_nds": 1.53,
+          "n": 5772,
+          "poids": 0.1281,
+          "rmse_reel_nds": 5.17,
+          "n_reel": 5796
+        },
+        "48h": {
+          "biais_nds": 0.54,
+          "rmse_nds": 1.71,
+          "n": 5772,
+          "poids": 0.1695,
+          "rmse_reel_nds": 5.32,
+          "n_reel": 5796
+        },
+        "96h": {
+          "biais_nds": 0.6,
+          "rmse_nds": 2.27,
+          "n": 5772,
+          "poids": 0.2348,
+          "rmse_reel_nds": 5.82,
+          "n_reel": 5796
+        }
+      },
+      "biais_par_secteur": {
+        "24h": {
+          "E": {
+            "biais_nds": 0.4,
+            "n": 523
+          },
+          "N": {
+            "biais_nds": 0.69,
+            "n": 596
+          },
+          "NE": {
+            "biais_nds": 0.89,
+            "n": 401
+          },
+          "NO": {
+            "biais_nds": 0.41,
+            "n": 795
+          },
+          "O": {
+            "biais_nds": 0.82,
+            "n": 666
+          },
+          "S": {
+            "biais_nds": 0.14,
+            "n": 1321
+          },
+          "SE": {
+            "biais_nds": 0.11,
+            "n": 453
+          },
+          "SO": {
+            "biais_nds": 0.97,
+            "n": 1017
+          }
+        },
+        "48h": {
+          "E": {
+            "biais_nds": 0.61,
+            "n": 523
+          },
+          "N": {
+            "biais_nds": 0.72,
+            "n": 596
+          },
+          "NE": {
+            "biais_nds": 0.8,
+            "n": 401
+          },
+          "NO": {
+            "biais_nds": 0.3,
+            "n": 795
+          },
+          "O": {
+            "biais_nds": 0.68,
+            "n": 666
+          },
+          "S": {
+            "biais_nds": 0.17,
+            "n": 1321
+          },
+          "SE": {
+            "biais_nds": 0.37,
+            "n": 453
+          },
+          "SO": {
+            "biais_nds": 0.82,
+            "n": 1017
+          }
+        },
+        "96h": {
+          "E": {
+            "biais_nds": 0.59,
+            "n": 523
+          },
+          "N": {
+            "biais_nds": 0.55,
+            "n": 596
+          },
+          "NE": {
+            "biais_nds": 1.04,
+            "n": 401
+          },
+          "NO": {
+            "biais_nds": 0.4,
+            "n": 795
+          },
+          "O": {
+            "biais_nds": 0.7,
+            "n": 666
+          },
+          "S": {
+            "biais_nds": 0.18,
+            "n": 1321
+          },
+          "SE": {
+            "biais_nds": 0.79,
+            "n": 453
+          },
+          "SO": {
+            "biais_nds": 0.75,
+            "n": 1017
+          }
+        }
+      }
+    },
+    "gem_global": {
+      "nom": "GEM global (Canada)",
+      "horizons": {
+        "24h": {
+          "biais_nds": -0.92,
+          "rmse_nds": 1.58,
+          "n": 5772,
+          "poids": 0.1519,
+          "rmse_reel_nds": 4.75,
+          "n_reel": 5796
+        },
+        "48h": {
+          "biais_nds": -0.82,
+          "rmse_nds": 1.72,
+          "n": 5640,
+          "poids": 0.193,
+          "rmse_reel_nds": 4.98,
+          "n_reel": 5664
+        },
+        "96h": {
+          "biais_nds": -0.79,
+          "rmse_nds": 2.1,
+          "n": 5712,
+          "poids": 0.2505,
+          "rmse_reel_nds": 5.63,
+          "n_reel": 5736
+        }
+      },
+      "biais_par_secteur": {
+        "24h": {
+          "E": {
+            "biais_nds": -0.82,
+            "n": 523
+          },
+          "N": {
+            "biais_nds": -0.77,
+            "n": 596
+          },
+          "NE": {
+            "biais_nds": -0.9,
+            "n": 401
+          },
+          "NO": {
+            "biais_nds": -1.0,
+            "n": 795
+          },
+          "O": {
+            "biais_nds": -1.08,
+            "n": 666
+          },
+          "S": {
+            "biais_nds": -0.81,
+            "n": 1321
+          },
+          "SE": {
+            "biais_nds": -0.31,
+            "n": 453
+          },
+          "SO": {
+            "biais_nds": -1.09,
+            "n": 1017
+          }
+        },
+        "48h": {
+          "E": {
+            "biais_nds": -0.76,
+            "n": 519
+          },
+          "N": {
+            "biais_nds": -0.58,
+            "n": 591
+          },
+          "NE": {
+            "biais_nds": -0.84,
+            "n": 401
+          },
+          "NO": {
+            "biais_nds": -0.96,
+            "n": 784
+          },
+          "O": {
+            "biais_nds": -1.03,
+            "n": 638
+          },
+          "S": {
+            "biais_nds": -0.77,
+            "n": 1273
+          },
+          "SE": {
+            "biais_nds": -0.29,
+            "n": 448
+          },
+          "SO": {
+            "biais_nds": -0.99,
+            "n": 986
+          }
+        },
+        "96h": {
+          "E": {
+            "biais_nds": -0.59,
+            "n": 521
+          },
+          "N": {
+            "biais_nds": -0.73,
+            "n": 586
+          },
+          "NE": {
+            "biais_nds": -0.63,
+            "n": 397
+          },
+          "NO": {
+            "biais_nds": -1.04,
+            "n": 794
+          },
+          "O": {
+            "biais_nds": -0.91,
+            "n": 665
+          },
+          "S": {
+            "biais_nds": -0.76,
+            "n": 1304
+          },
+          "SE": {
+            "biais_nds": -0.16,
+            "n": 445
+          },
+          "SO": {
+            "biais_nds": -1.06,
+            "n": 1000
+          }
+        }
+      },
+      "ratio_rafales": 2.59
+    },
+    "gem_hrdps_continental": {
+      "nom": "HRDPS (Canada, 2.5 km)",
+      "horizons": {
+        "24h": {
+          "biais_nds": 1.0,
+          "rmse_nds": 2.18,
+          "n": 5772,
+          "poids": 0.2009,
+          "rmse_reel_nds": 4.13,
+          "n_reel": 5796
+        }
+      },
+      "biais_par_secteur": {
+        "24h": {
+          "E": {
+            "biais_nds": 0.6,
+            "n": 523
+          },
+          "N": {
+            "biais_nds": 1.32,
+            "n": 596
+          },
+          "NE": {
+            "biais_nds": 0.71,
+            "n": 401
+          },
+          "NO": {
+            "biais_nds": 1.31,
+            "n": 795
+          },
+          "O": {
+            "biais_nds": 0.92,
+            "n": 666
+          },
+          "S": {
+            "biais_nds": 0.96,
+            "n": 1321
+          },
+          "SE": {
+            "biais_nds": 0.91,
+            "n": 453
+          },
+          "SO": {
+            "biais_nds": 1.14,
+            "n": 1017
+          }
+        }
+      },
+      "ratio_rafales": 1.416
+    },
+    "gem_regional": {
+      "nom": "GEM régional (Canada)",
+      "horizons": {
+        "24h": {
+          "biais_nds": -0.87,
+          "rmse_nds": 1.52,
+          "n": 5629,
+          "poids": 0.1741,
+          "rmse_reel_nds": 4.43,
+          "n_reel": 5653
+        },
+        "48h": {
+          "biais_nds": -0.75,
+          "rmse_nds": 1.7,
+          "n": 5767,
+          "poids": 0.2125,
+          "rmse_reel_nds": 4.75,
+          "n_reel": 5791
+        }
+      },
+      "biais_par_secteur": {
+        "24h": {
+          "E": {
+            "biais_nds": -0.8,
+            "n": 519
+          },
+          "N": {
+            "biais_nds": -0.79,
+            "n": 581
+          },
+          "NE": {
+            "biais_nds": -0.82,
+            "n": 384
+          },
+          "NO": {
+            "biais_nds": -1.14,
+            "n": 789
+          },
+          "O": {
+            "biais_nds": -1.03,
+            "n": 651
+          },
+          "S": {
+            "biais_nds": -0.7,
+            "n": 1274
+          },
+          "SE": {
+            "biais_nds": -0.28,
+            "n": 452
+          },
+          "SO": {
+            "biais_nds": -0.96,
+            "n": 979
+          }
+        },
+        "48h": {
+          "E": {
+            "biais_nds": -0.73,
+            "n": 520
+          },
+          "N": {
+            "biais_nds": -0.6,
+            "n": 596
+          },
+          "NE": {
+            "biais_nds": -0.67,
+            "n": 399
+          },
+          "NO": {
+            "biais_nds": -0.94,
+            "n": 795
+          },
+          "O": {
+            "biais_nds": -0.95,
+            "n": 666
+          },
+          "S": {
+            "biais_nds": -0.68,
+            "n": 1321
+          },
+          "SE": {
+            "biais_nds": -0.29,
+            "n": 453
+          },
+          "SO": {
+            "biais_nds": -0.83,
+            "n": 1017
+          }
+        }
+      },
+      "ratio_rafales": 2.582
+    },
+    "gfs_global": {
+      "nom": "GFS (États-Unis)",
+      "horizons": {
+        "24h": {
+          "biais_nds": 0.44,
+          "rmse_nds": 1.65,
+          "n": 5772,
+          "poids": 0.2054,
+          "rmse_reel_nds": 4.08,
+          "n_reel": 5796
+        },
+        "48h": {
+          "biais_nds": 0.5,
+          "rmse_nds": 1.88,
+          "n": 5772,
+          "poids": 0.2475,
+          "rmse_reel_nds": 4.4,
+          "n_reel": 5796
+        },
+        "96h": {
+          "biais_nds": 0.44,
+          "rmse_nds": 2.37,
+          "n": 5772,
+          "poids": 0.2819,
+          "rmse_reel_nds": 5.31,
+          "n_reel": 5796
+        }
+      },
+      "biais_par_secteur": {
+        "24h": {
+          "E": {
+            "biais_nds": 0.51,
+            "n": 523
+          },
+          "N": {
+            "biais_nds": 0.17,
+            "n": 596
+          },
+          "NE": {
+            "biais_nds": 0.3,
+            "n": 401
+          },
+          "NO": {
+            "biais_nds": 0.58,
+            "n": 795
+          },
+          "O": {
+            "biais_nds": 0.57,
+            "n": 666
+          },
+          "S": {
+            "biais_nds": 0.45,
+            "n": 1321
+          },
+          "SE": {
+            "biais_nds": 0.41,
+            "n": 453
+          },
+          "SO": {
+            "biais_nds": 0.36,
+            "n": 1017
+          }
+        },
+        "48h": {
+          "E": {
+            "biais_nds": 0.62,
+            "n": 523
+          },
+          "N": {
+            "biais_nds": 0.27,
+            "n": 596
+          },
+          "NE": {
+            "biais_nds": 0.37,
+            "n": 401
+          },
+          "NO": {
+            "biais_nds": 0.48,
+            "n": 795
+          },
+          "O": {
+            "biais_nds": 0.68,
+            "n": 666
+          },
+          "S": {
+            "biais_nds": 0.39,
+            "n": 1321
+          },
+          "SE": {
+            "biais_nds": 0.53,
+            "n": 453
+          },
+          "SO": {
+            "biais_nds": 0.44,
+            "n": 1017
+          }
+        },
+        "96h": {
+          "E": {
+            "biais_nds": 0.62,
+            "n": 523
+          },
+          "N": {
+            "biais_nds": 0.06,
+            "n": 596
+          },
+          "NE": {
+            "biais_nds": 0.27,
+            "n": 401
+          },
+          "NO": {
+            "biais_nds": 0.32,
+            "n": 795
+          },
+          "O": {
+            "biais_nds": 0.34,
+            "n": 666
+          },
+          "S": {
+            "biais_nds": 0.36,
+            "n": 1321
+          },
+          "SE": {
+            "biais_nds": 0.83,
+            "n": 453
+          },
+          "SO": {
+            "biais_nds": 0.47,
+            "n": 1017
+          }
+        }
+      },
+      "ratio_rafales": 1.879
+    },
+    "icon_global": {
+      "nom": "ICON (Allemagne)",
+      "horizons": {
+        "24h": {
+          "biais_nds": 0.01,
+          "rmse_nds": 1.21,
+          "n": 5772,
+          "poids": 0.1396,
+          "rmse_reel_nds": 4.95,
+          "n_reel": 5796
+        },
+        "48h": {
+          "biais_nds": 0.02,
+          "rmse_nds": 1.53,
+          "n": 5772,
+          "poids": 0.1775,
+          "rmse_reel_nds": 5.19,
+          "n_reel": 5796
+        },
+        "96h": {
+          "biais_nds": -0.05,
+          "rmse_nds": 2.12,
+          "n": 5772,
+          "poids": 0.2328,
+          "rmse_reel_nds": 5.84,
+          "n_reel": 5796
+        }
+      },
+      "biais_par_secteur": {
+        "24h": {
+          "E": {
+            "biais_nds": 0.18,
+            "n": 523
+          },
+          "N": {
+            "biais_nds": 0.18,
+            "n": 596
+          },
+          "NE": {
+            "biais_nds": 0.2,
+            "n": 401
+          },
+          "NO": {
+            "biais_nds": 0.04,
+            "n": 795
+          },
+          "O": {
+            "biais_nds": 0.16,
+            "n": 666
+          },
+          "S": {
+            "biais_nds": -0.15,
+            "n": 1321
+          },
+          "SE": {
+            "biais_nds": 0.1,
+            "n": 453
+          },
+          "SO": {
+            "biais_nds": -0.04,
+            "n": 1017
+          }
+        },
+        "48h": {
+          "E": {
+            "biais_nds": 0.18,
+            "n": 523
+          },
+          "N": {
+            "biais_nds": 0.17,
+            "n": 596
+          },
+          "NE": {
+            "biais_nds": 0.18,
+            "n": 401
+          },
+          "NO": {
+            "biais_nds": 0.12,
+            "n": 795
+          },
+          "O": {
+            "biais_nds": 0.23,
+            "n": 666
+          },
+          "S": {
+            "biais_nds": -0.15,
+            "n": 1321
+          },
+          "SE": {
+            "biais_nds": 0.28,
+            "n": 453
+          },
+          "SO": {
+            "biais_nds": -0.11,
+            "n": 1017
+          }
+        },
+        "96h": {
+          "E": {
+            "biais_nds": 0.17,
+            "n": 523
+          },
+          "N": {
+            "biais_nds": -0.19,
+            "n": 596
+          },
+          "NE": {
+            "biais_nds": 0.12,
+            "n": 401
+          },
+          "NO": {
+            "biais_nds": -0.19,
+            "n": 795
+          },
+          "O": {
+            "biais_nds": 0.2,
+            "n": 666
+          },
+          "S": {
+            "biais_nds": -0.27,
+            "n": 1321
+          },
+          "SE": {
+            "biais_nds": 0.46,
+            "n": 453
+          },
+          "SO": {
+            "biais_nds": -0.23,
+            "n": 1017
+          }
+        }
+      },
+      "ratio_rafales": 2.411
+    }
+  },
+  "fiabilite_go_par_horizon": {
+    "96h": {
+      "taux_go_confirme": 0.766,
+      "ic95": [
+        0.698,
+        0.822
+      ],
+      "n": 175
+    },
+    "48h": {
+      "taux_go_confirme": 0.899,
+      "ic95": [
+        0.845,
+        0.936
+      ],
+      "n": 169
+    },
+    "24h": {
+      "taux_go_confirme": 0.921,
+      "ic95": [
+        0.874,
+        0.952
+      ],
+      "n": 191
+    }
+  },
+  "confusion_par_modele": {
+    "ecmwf_ifs025": {
+      "24h": {
+        "pod": 0.92,
+        "far": 0.267,
+        "pod_ic95": [
+          0.874,
+          0.95
+        ],
+        "far_ic95": [
+          0.216,
+          0.325
+        ]
+      },
+      "48h": {
+        "pod": 0.905,
+        "far": 0.273,
+        "pod_ic95": [
+          0.856,
+          0.938
+        ],
+        "far_ic95": [
+          0.222,
+          0.332
+        ]
+      },
+      "96h": {
+        "pod": 0.81,
+        "far": 0.344,
+        "pod_ic95": [
+          0.75,
+          0.858
+        ],
+        "far_ic95": [
+          0.288,
+          0.405
+        ]
+      }
+    },
+    "gem_global": {
+      "24h": {
+        "pod": 0.475,
+        "far": 0.021,
+        "pod_ic95": [
+          0.407,
+          0.544
+        ],
+        "far_ic95": [
+          0.006,
+          0.072
+        ]
+      },
+      "48h": {
+        "pod": 0.423,
+        "far": 0.146,
+        "pod_ic95": [
+          0.355,
+          0.493
+        ],
+        "far_ic95": [
+          0.089,
+          0.23
+        ]
+      },
+      "96h": {
+        "pod": 0.394,
+        "far": 0.22,
+        "pod_ic95": [
+          0.329,
+          0.463
+        ],
+        "far_ic95": [
+          0.15,
+          0.311
+        ]
+      }
+    },
+    "gem_hrdps_continental": {
+      "24h": {
+        "pod": 0.99,
+        "far": 0.349,
+        "pod_ic95": [
+          0.964,
+          0.997
+        ],
+        "far_ic95": [
+          0.297,
+          0.404
+        ]
+      }
+    },
+    "gem_regional": {
+      "24h": {
+        "pod": 0.479,
+        "far": 0.042,
+        "pod_ic95": [
+          0.41,
+          0.55
+        ],
+        "far_ic95": [
+          0.016,
+          0.102
+        ]
+      },
+      "48h": {
+        "pod": 0.477,
+        "far": 0.104,
+        "pod_ic95": [
+          0.409,
+          0.547
+        ],
+        "far_ic95": [
+          0.059,
+          0.176
+        ]
+      }
+    },
+    "gfs_global": {
+      "24h": {
+        "pod": 0.92,
+        "far": 0.303,
+        "pod_ic95": [
+          0.874,
+          0.95
+        ],
+        "far_ic95": [
+          0.251,
+          0.361
+        ]
+      },
+      "48h": {
+        "pod": 0.885,
+        "far": 0.324,
+        "pod_ic95": [
+          0.833,
+          0.922
+        ],
+        "far_ic95": [
+          0.271,
+          0.383
+        ]
+      },
+      "96h": {
+        "pod": 0.78,
+        "far": 0.407,
+        "pod_ic95": [
+          0.718,
+          0.832
+        ],
+        "far_ic95": [
+          0.349,
+          0.467
+        ]
+      }
+    },
+    "icon_global": {
+      "24h": {
+        "pod": 0.905,
+        "far": 0.158,
+        "pod_ic95": [
+          0.856,
+          0.938
+        ],
+        "far_ic95": [
+          0.115,
+          0.213
+        ]
+      },
+      "48h": {
+        "pod": 0.85,
+        "far": 0.213,
+        "pod_ic95": [
+          0.794,
+          0.893
+        ],
+        "far_ic95": [
+          0.164,
+          0.272
+        ]
+      },
+      "96h": {
+        "pod": 0.745,
+        "far": 0.317,
+        "pod_ic95": [
+          0.68,
+          0.8
+        ],
+        "far_ic95": [
+          0.258,
+          0.381
+        ]
+      }
+    }
+  },
+  "origine_poids": {
+    "methode": "1/RMSE² mesuré contre observation réelle",
+    "station": "Lac Saint-Pierre (701LP0N)",
+    "distance_km": 38,
+    "periode": "2024-05-01 à 2026-08-24",
+    "n_paires": 173141,
+    "biais": "inchangés — repris du modèle actif (les biais du site de mesure ne se transplantent pas au lac)"
+  }
+}

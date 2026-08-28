@@ -119,21 +119,24 @@ python3 verification_croisee.py --rapport                          # reports/ver
 
 **Pourquoi.** La vérité du pipeline principal est la médiane hour-0 des
 modèles eux-mêmes : elle note chaque modèle contre la moyenne de ses
-semblables. Mesuré sur la saison 2026 (19 640 paires), l'écart est net :
+semblables. Mesuré sur trois saisons (2024–2026, **171 701 paires**,
+heures navigables), l'écart est net — à 24 h :
 
 | Modèle | RMSE vs **mesure réelle** | Rang | RMSE vs consensus | Rang |
 |---|---:|---:|---:|---:|
-| GFS | 4,40 | 1 | 1,59 | 5 |
-| HRDPS | 4,60 | 2 | 2,10 | 6 |
-| GEM régional | 4,80 | 3 | 1,46 | 3 |
-| ICON | 5,03 | 4 | 1,17 | 1 |
-| GEM global | 5,19 | 5 | 1,49 | 4 |
-| ECMWF | 5,25 | 6 | 1,43 | 2 |
+| GFS | 4,08 | 1 | 1,59 | 5 |
+| HRDPS | 4,13 | 2 | 2,10 | 6 |
+| GEM régional | 4,44 | 3 | 1,46 | 3 |
+| GEM global | 4,76 | 4 | 1,49 | 4 |
+| ICON | 4,95 | 5 | 1,17 | 1 |
+| ECMWF | 5,17 | 6 | 1,43 | 2 |
 
 Le classement est presque inversé et l'erreur réelle est 3 à 4 fois plus
 grande. Corollaire mesuré : à 24 h, l'écart entre le meilleur et le pire
-modèle vaut 0,85 nds alors que le débiaisage n'en gagne que 0,18 — **choisir
-et pondérer les modèles pèse ~5× plus que corriger leurs biais.**
+modèle vaut 1,09 nds alors que le débiaisage n'en gagne que 0,18 — **choisir
+et pondérer les modèles pèse plusieurs fois plus que corriger leurs biais.**
+Le tableau complet, par échéance, est régénéré dans
+`reports/verification_croisee.md`.
 
 **Trois usages.** Un classement des modèles indépendant des modèles ; la
 détection de dérive d'un fournisseur (`reports/derive.md` ne peut pas la
@@ -153,6 +156,41 @@ transporte raisonnablement, c'est le classement et la corrélation. Deux
 réserves de plus : l'observation ECCC est un relevé horaire et non une
 moyenne horaire comme les modèles (ça gonfle l'erreur de tout le monde sans
 changer l'ordre), et elle est arrondie au km/h.
+
+## Mettre un modèle à l'essai sans rien écraser
+
+Le registre distingue deux rôles. **L'actif** calcule les verdicts du
+dashboard. **Le candidat** est archivé et publié à côté, visible dans la vue
+d'essai, et ne touche à aucun verdict tant qu'un `--activer` explicite ne le
+promeut pas.
+
+```bash
+python3 candidat.py                        # construit et publie un candidat
+python3 versions.py --activer v3-…         # le promeut (l'ancien reste archivé)
+python3 versions.py --activer v2-…         # et se restaure de la même façon
+```
+
+`candidat.py` fabrique une variante qui ne change **qu'une chose** : les
+poids, recalculés ∝ 1/RMSE² sur les RMSE mesurés contre l'anémomètre de Lac
+Saint-Pierre. Les biais restent ceux du modèle actif — ceux du site de mesure
+ne se transplantent pas (voir la section précédente). Chaque poids remplacé
+porte son `rmse_reel_nds` et son `n_reel` : un poids venu d'ailleurs doit
+pouvoir se justifier.
+
+Sur 3 saisons, ça déplace nettement les poids à 24 h — HRDPS 8 % → 20 %,
+GFS 15 % → 21 %, ICON 27 % → 14 %. **Mais sur la prévision, l'effet est
+minuscule** : mesuré sur 60 heures réelles, l'écart entre les deux modèles
+est de **0,15 nds en moyenne, 0,50 nds au pire**. C'est écrit sur la page
+plutôt que caché : la repondération déplace des décimales, et si elle vaut
+mieux, ça se verra sur des semaines de statistiques, pas sur une sortie.
+
+### Les trois pages
+
+| Page | Ce qu'elle montre |
+|---|---|
+| `index.html` | Le produit : verdicts GO/NO, calculés par l'**actif** seulement |
+| `essai.html` | Le vent prévu par l'actif et le candidat, heure par heure, avec l'écart |
+| `comparaison.html` | Ce que vaut chaque modèle face à un anémomètre, et l'historique des versions |
 
 ## Versionnage des modèles — historique, retour arrière, comparaison
 

@@ -129,9 +129,13 @@ def test_retour_arriere():
 
         verifier((versions.DOSSIER / v2 / "poids.json").exists(),
                  "v2 reste archivée (rien n'est détruit)")
+        # La raison journalisée porte aussi la version remplacée, d'où le
+        # test par inclusion : « v2 sur-prévoit — remplace v2-2026-02-02 ».
         raisons = [a["raison"] for a in versions.registre()["activations"]]
-        verifier("v2 sur-prévoit" in raisons,
+        verifier(any("v2 sur-prévoit" in r for r in raisons),
                  "la bascule est journalisée avec sa raison")
+        verifier(any(v2 in r for r in raisons if "v2 sur-prévoit" in r),
+                 "et avec la version qu'elle remplace")
 
 
 def test_version_inconnue():
@@ -240,6 +244,7 @@ def test_crons_committent_tout_ce_qui_est_ecrit():
     racine = Path(__file__).resolve().parent.parent
     attendus = {
         "recalibrage.yml": ["data/poids_modeles.json", "docs/poids_modeles.json",
+                            "docs/poids_candidat.json", "docs/comparaison.json",
                             "data/modeles", "reports/derive.md"],
         "quotidien.yml": ["data/verification", "data/verification_croisee",
                           "data/forecast.json", "docs/comparaison.json"],
