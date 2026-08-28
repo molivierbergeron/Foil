@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "genere_le": "2026-08-27T19:59+00:00",
+ "genere_le": "2026-08-28T21:07+00:00",
  "station": {
   "nom": "Lac Saint-Pierre",
   "id": "701LP0N",
@@ -12,9 +12,9 @@
  },
  "periode": {
   "debut": "2024-05-01",
-  "fin": "2026-08-24",
-  "jours": 484,
-  "paires": 173141
+  "fin": "2026-08-25",
+  "jours": 485,
+  "paires": 173501
  },
  "horizons": {
   "24h": [
@@ -25,7 +25,7 @@
      "biais": -1.42,
      "rmse": 4.08,
      "correlation": 0.722,
-     "n": 5796,
+     "n": 5808,
      "rang": 1
     },
     "officiel": {
@@ -43,7 +43,7 @@
      "biais": -1.48,
      "rmse": 4.13,
      "correlation": 0.727,
-     "n": 5796,
+     "n": 5808,
      "rang": 2
     },
     "officiel": {
@@ -61,7 +61,7 @@
      "biais": -2.48,
      "rmse": 4.43,
      "correlation": 0.747,
-     "n": 5653,
+     "n": 5665,
      "rang": 3
     },
     "officiel": {
@@ -79,7 +79,7 @@
      "biais": -2.79,
      "rmse": 4.75,
      "correlation": 0.722,
-     "n": 5796,
+     "n": 5808,
      "rang": 4
     },
     "officiel": {
@@ -94,10 +94,10 @@
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
     "reel": {
-     "biais": -2.97,
+     "biais": -2.96,
      "rmse": 4.95,
      "correlation": 0.709,
-     "n": 5796,
+     "n": 5808,
      "rang": 5
     },
     "officiel": {
@@ -113,9 +113,9 @@
     "nom": "ECMWF IFS 0.25°",
     "reel": {
      "biais": -3.3,
-     "rmse": 5.17,
+     "rmse": 5.16,
      "correlation": 0.713,
-     "n": 5796,
+     "n": 5808,
      "rang": 6
     },
     "officiel": {
@@ -132,10 +132,10 @@
     "modele": "gfs_global",
     "nom": "GFS (États-Unis)",
     "reel": {
-     "biais": -1.46,
+     "biais": -1.45,
      "rmse": 4.4,
      "correlation": 0.667,
-     "n": 5796,
+     "n": 5808,
      "rang": 1
     },
     "officiel": {
@@ -151,9 +151,9 @@
     "nom": "GEM régional (Canada)",
     "reel": {
      "biais": -2.38,
-     "rmse": 4.75,
+     "rmse": 4.74,
      "correlation": 0.671,
-     "n": 5791,
+     "n": 5803,
      "rang": 2
     },
     "officiel": {
@@ -171,7 +171,7 @@
      "biais": -2.69,
      "rmse": 4.98,
      "correlation": 0.651,
-     "n": 5664,
+     "n": 5676,
      "rang": 3
     },
     "officiel": {
@@ -186,10 +186,10 @@
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
     "reel": {
-     "biais": -2.93,
+     "biais": -2.92,
      "rmse": 5.19,
      "correlation": 0.632,
-     "n": 5796,
+     "n": 5808,
      "rang": 4
     },
     "officiel": {
@@ -205,9 +205,9 @@
     "nom": "ECMWF IFS 0.25°",
     "reel": {
      "biais": -3.34,
-     "rmse": 5.32,
+     "rmse": 5.31,
      "correlation": 0.676,
-     "n": 5796,
+     "n": 5808,
      "rang": 5
     },
     "officiel": {
@@ -226,8 +226,8 @@
     "reel": {
      "biais": -1.47,
      "rmse": 5.31,
-     "correlation": 0.48,
-     "n": 5796,
+     "correlation": 0.481,
+     "n": 5808,
      "rang": 1
     },
     "officiel": {
@@ -242,10 +242,10 @@
     "modele": "gem_global",
     "nom": "GEM global (Canada)",
     "reel": {
-     "biais": -2.73,
+     "biais": -2.71,
      "rmse": 5.63,
-     "correlation": 0.484,
-     "n": 5736,
+     "correlation": 0.481,
+     "n": 5748,
      "rang": 2
     },
     "officiel": {
@@ -260,10 +260,10 @@
     "modele": "ecmwf_ifs025",
     "nom": "ECMWF IFS 0.25°",
     "reel": {
-     "biais": -3.34,
-     "rmse": 5.82,
-     "correlation": 0.507,
-     "n": 5796,
+     "biais": -3.33,
+     "rmse": 5.81,
+     "correlation": 0.508,
+     "n": 5808,
      "rang": 3
     },
     "officiel": {
@@ -278,10 +278,10 @@
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
     "reel": {
-     "biais": -3.05,
+     "biais": -3.04,
      "rmse": 5.84,
      "correlation": 0.447,
-     "n": 5796,
+     "n": 5808,
      "rang": 4
     },
     "officiel": {
@@ -313,6 +313,15 @@
    "donnees_jusqu_au": "2026-08-21",
    "n_apparie": 172301,
    "notes": ""
+  },
+  {
+   "version": "v3-2026-08-28",
+   "origine": "competence-reelle",
+   "cree_le": "2026-08-28T00:45:42+00:00",
+   "genere_le": "2026-08-28",
+   "donnees_jusqu_au": "2026-08-24",
+   "n_apparie": 173141,
+   "notes": "Poids recalculés sur la compétence mesurée contre l'anémomètre de Lac Saint-Pierre ; biais locaux inchangés. À l'essai, hors service."
   }
  ],
  "activations": [
@@ -325,6 +334,11 @@
    "version": "v2-2026-08-24",
    "le": "2026-08-24T11:06:20+00:00",
    "raison": "création (recalibrage)"
+  },
+  {
+   "version": "v3-2026-08-28",
+   "le": "2026-08-28T00:45:42+00:00",
+   "raison": "mise à l'essai comme candidat (competence-reelle) — actif inchangé : v2-2026-08-24"
   }
  ]
 }
