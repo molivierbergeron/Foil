@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "genere_le": "2026-08-28T21:07+00:00",
+ "genere_le": "2026-08-29T14:42+00:00",
  "station": {
   "nom": "Lac Saint-Pierre",
   "id": "701LP0N",
@@ -12,9 +12,9 @@
  },
  "periode": {
   "debut": "2024-05-01",
-  "fin": "2026-08-25",
-  "jours": 485,
-  "paires": 173501
+  "fin": "2026-08-26",
+  "jours": 486,
+  "paires": 173861
  },
  "horizons": {
   "24h": [
@@ -22,10 +22,10 @@
     "modele": "gfs_global",
     "nom": "GFS (États-Unis)",
     "reel": {
-     "biais": -1.42,
+     "biais": -1.41,
      "rmse": 4.08,
-     "correlation": 0.722,
-     "n": 5808,
+     "correlation": 0.723,
+     "n": 5820,
      "rang": 1
     },
     "officiel": {
@@ -41,9 +41,9 @@
     "nom": "HRDPS (Canada, 2.5 km)",
     "reel": {
      "biais": -1.48,
-     "rmse": 4.13,
-     "correlation": 0.727,
-     "n": 5808,
+     "rmse": 4.12,
+     "correlation": 0.728,
+     "n": 5820,
      "rang": 2
     },
     "officiel": {
@@ -60,8 +60,8 @@
     "reel": {
      "biais": -2.48,
      "rmse": 4.43,
-     "correlation": 0.747,
-     "n": 5665,
+     "correlation": 0.748,
+     "n": 5677,
      "rang": 3
     },
     "officiel": {
@@ -76,10 +76,10 @@
     "modele": "gem_global",
     "nom": "GEM global (Canada)",
     "reel": {
-     "biais": -2.79,
-     "rmse": 4.75,
-     "correlation": 0.722,
-     "n": 5808,
+     "biais": -2.78,
+     "rmse": 4.74,
+     "correlation": 0.723,
+     "n": 5820,
      "rang": 4
     },
     "officiel": {
@@ -94,10 +94,10 @@
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
     "reel": {
-     "biais": -2.96,
-     "rmse": 4.95,
+     "biais": -2.95,
+     "rmse": 4.94,
      "correlation": 0.709,
-     "n": 5808,
+     "n": 5820,
      "rang": 5
     },
     "officiel": {
@@ -114,8 +114,8 @@
     "reel": {
      "biais": -3.3,
      "rmse": 5.16,
-     "correlation": 0.713,
-     "n": 5808,
+     "correlation": 0.714,
+     "n": 5820,
      "rang": 6
     },
     "officiel": {
@@ -135,7 +135,7 @@
      "biais": -1.45,
      "rmse": 4.4,
      "correlation": 0.667,
-     "n": 5808,
+     "n": 5820,
      "rang": 1
     },
     "officiel": {
@@ -150,10 +150,10 @@
     "modele": "gem_regional",
     "nom": "GEM régional (Canada)",
     "reel": {
-     "biais": -2.38,
+     "biais": -2.37,
      "rmse": 4.74,
-     "correlation": 0.671,
-     "n": 5803,
+     "correlation": 0.672,
+     "n": 5815,
      "rang": 2
     },
     "officiel": {
@@ -168,10 +168,10 @@
     "modele": "gem_global",
     "nom": "GEM global (Canada)",
     "reel": {
-     "biais": -2.69,
-     "rmse": 4.98,
-     "correlation": 0.651,
-     "n": 5676,
+     "biais": -2.68,
+     "rmse": 4.97,
+     "correlation": 0.652,
+     "n": 5688,
      "rang": 3
     },
     "officiel": {
@@ -189,7 +189,7 @@
      "biais": -2.92,
      "rmse": 5.19,
      "correlation": 0.632,
-     "n": 5808,
+     "n": 5820,
      "rang": 4
     },
     "officiel": {
@@ -206,8 +206,8 @@
     "reel": {
      "biais": -3.34,
      "rmse": 5.31,
-     "correlation": 0.676,
-     "n": 5808,
+     "correlation": 0.677,
+     "n": 5820,
      "rang": 5
     },
     "officiel": {
@@ -224,10 +224,10 @@
     "modele": "gfs_global",
     "nom": "GFS (États-Unis)",
     "reel": {
-     "biais": -1.47,
+     "biais": -1.46,
      "rmse": 5.31,
-     "correlation": 0.481,
-     "n": 5808,
+     "correlation": 0.479,
+     "n": 5820,
      "rang": 1
     },
     "officiel": {
@@ -244,8 +244,8 @@
     "reel": {
      "biais": -2.71,
      "rmse": 5.63,
-     "correlation": 0.481,
-     "n": 5748,
+     "correlation": 0.482,
+     "n": 5760,
      "rang": 2
     },
     "officiel": {
@@ -263,7 +263,7 @@
      "biais": -3.33,
      "rmse": 5.81,
      "correlation": 0.508,
-     "n": 5808,
+     "n": 5820,
      "rang": 3
     },
     "officiel": {
@@ -278,10 +278,10 @@
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
     "reel": {
-     "biais": -3.04,
-     "rmse": 5.84,
+     "biais": -3.03,
+     "rmse": 5.83,
      "correlation": 0.447,
-     "n": 5808,
+     "n": 5820,
      "rang": 4
     },
     "officiel": {
