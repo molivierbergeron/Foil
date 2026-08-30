@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "genere_le": "2026-08-29T14:42+00:00",
+ "genere_le": "2026-08-30T14:37+00:00",
  "station": {
   "nom": "Lac Saint-Pierre",
   "id": "701LP0N",
@@ -12,9 +12,9 @@
  },
  "periode": {
   "debut": "2024-05-01",
-  "fin": "2026-08-26",
-  "jours": 486,
-  "paires": 173861
+  "fin": "2026-08-27",
+  "jours": 487,
+  "paires": 174221
  },
  "horizons": {
   "24h": [
@@ -22,10 +22,10 @@
     "modele": "gfs_global",
     "nom": "GFS (États-Unis)",
     "reel": {
-     "biais": -1.41,
+     "biais": -1.42,
      "rmse": 4.08,
-     "correlation": 0.723,
-     "n": 5820,
+     "correlation": 0.722,
+     "n": 5832,
      "rang": 1
     },
     "officiel": {
@@ -41,9 +41,9 @@
     "nom": "HRDPS (Canada, 2.5 km)",
     "reel": {
      "biais": -1.48,
-     "rmse": 4.12,
-     "correlation": 0.728,
-     "n": 5820,
+     "rmse": 4.13,
+     "correlation": 0.727,
+     "n": 5832,
      "rang": 2
     },
     "officiel": {
@@ -61,7 +61,7 @@
      "biais": -2.48,
      "rmse": 4.43,
      "correlation": 0.748,
-     "n": 5677,
+     "n": 5689,
      "rang": 3
     },
     "officiel": {
@@ -76,10 +76,10 @@
     "modele": "gem_global",
     "nom": "GEM global (Canada)",
     "reel": {
-     "biais": -2.78,
-     "rmse": 4.74,
-     "correlation": 0.723,
-     "n": 5820,
+     "biais": -2.79,
+     "rmse": 4.75,
+     "correlation": 0.722,
+     "n": 5832,
      "rang": 4
     },
     "officiel": {
@@ -94,10 +94,10 @@
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
     "reel": {
-     "biais": -2.95,
-     "rmse": 4.94,
-     "correlation": 0.709,
-     "n": 5820,
+     "biais": -2.96,
+     "rmse": 4.95,
+     "correlation": 0.707,
+     "n": 5832,
      "rang": 5
     },
     "officiel": {
@@ -115,7 +115,7 @@
      "biais": -3.3,
      "rmse": 5.16,
      "correlation": 0.714,
-     "n": 5820,
+     "n": 5832,
      "rang": 6
     },
     "officiel": {
@@ -135,7 +135,7 @@
      "biais": -1.45,
      "rmse": 4.4,
      "correlation": 0.667,
-     "n": 5820,
+     "n": 5832,
      "rang": 1
     },
     "officiel": {
@@ -153,7 +153,7 @@
      "biais": -2.37,
      "rmse": 4.74,
      "correlation": 0.672,
-     "n": 5815,
+     "n": 5827,
      "rang": 2
     },
     "officiel": {
@@ -171,7 +171,7 @@
      "biais": -2.68,
      "rmse": 4.97,
      "correlation": 0.652,
-     "n": 5688,
+     "n": 5700,
      "rang": 3
     },
     "officiel": {
@@ -188,8 +188,8 @@
     "reel": {
      "biais": -2.92,
      "rmse": 5.19,
-     "correlation": 0.632,
-     "n": 5820,
+     "correlation": 0.631,
+     "n": 5832,
      "rang": 4
     },
     "officiel": {
@@ -207,7 +207,7 @@
      "biais": -3.34,
      "rmse": 5.31,
      "correlation": 0.677,
-     "n": 5820,
+     "n": 5832,
      "rang": 5
     },
     "officiel": {
@@ -224,10 +224,10 @@
     "modele": "gfs_global",
     "nom": "GFS (États-Unis)",
     "reel": {
-     "biais": -1.46,
+     "biais": -1.47,
      "rmse": 5.31,
      "correlation": 0.479,
-     "n": 5820,
+     "n": 5832,
      "rang": 1
     },
     "officiel": {
@@ -244,8 +244,8 @@
     "reel": {
      "biais": -2.71,
      "rmse": 5.63,
-     "correlation": 0.482,
-     "n": 5760,
+     "correlation": 0.483,
+     "n": 5772,
      "rang": 2
     },
     "officiel": {
@@ -262,8 +262,8 @@
     "reel": {
      "biais": -3.33,
      "rmse": 5.81,
-     "correlation": 0.508,
-     "n": 5820,
+     "correlation": 0.509,
+     "n": 5832,
      "rang": 3
     },
     "officiel": {
@@ -279,9 +279,9 @@
     "nom": "ICON (Allemagne)",
     "reel": {
      "biais": -3.03,
-     "rmse": 5.83,
+     "rmse": 5.84,
      "correlation": 0.447,
-     "n": 5820,
+     "n": 5832,
      "rang": 4
     },
     "officiel": {
