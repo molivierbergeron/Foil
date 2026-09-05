@@ -504,6 +504,15 @@ function rendreGraphique(heures, sport) {
       + `vent ${hh.ensemble.toFixed(1)}`
       + (hh.rafales != null ? ` · raf ${hh.rafales.toFixed(0)} nds` : " nds");
   };
+  let luUneFois = false;
+  const marquerLecture = () => {
+    if (luUneFois) return;
+    luUneFois = true;
+    window.track?.("foil-chart-read", {});
+  };
+  el.addEventListener("mousemove", () => marquerLecture(), { once: true });
+  el.addEventListener("touchstart", () => marquerLecture(), { once: true });
+
   el.addEventListener("mousemove", bouger);
   el.addEventListener("touchstart", bouger, { passive: true });
   el.addEventListener("touchmove", bouger, { passive: true });
@@ -591,7 +600,9 @@ if (typeof document !== "undefined") {
   const reveil = () => {
     const perime = Date.now() - derniereMaj > 30 * 60 * 1000
       || (dateAffichee && dateAffichee !== dateMontreal());
-    if (perime) demarrer();
+    if (!perime) return;
+    window.track?.("foil-forecast-refresh", {});
+    demarrer();
   };
   document.addEventListener("visibilitychange", () => { if (!document.hidden) reveil(); });
   window.addEventListener("pageshow", reveil);
