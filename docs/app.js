@@ -601,7 +601,11 @@ if (typeof document !== "undefined") {
     const perime = Date.now() - derniereMaj > 30 * 60 * 1000
       || (dateAffichee && dateAffichee !== dateMontreal());
     if (!perime) return;
-    window.track?.("foil-forecast-refresh", {});
+    // `pageshow` se déclenche aussi à l'ouverture, avant que la première
+    // prévision ne soit arrivée : derniereMaj vaut encore 0 et la page passe
+    // ici. Compter ce cas ferait un événement par page vue, qui ne dirait
+    // rien. Seul un vrai retour sur une page déjà servie compte.
+    if (derniereMaj) window.track?.("foil-forecast-refresh", {});
     demarrer();
   };
   document.addEventListener("visibilitychange", () => { if (!document.hidden) reveil(); });
