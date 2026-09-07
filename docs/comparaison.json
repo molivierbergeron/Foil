@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "genere_le": "2026-09-07T15:14+00:00",
+ "genere_le": "2026-09-07T16:04+00:00",
  "station": {
   "nom": "Lac Saint-Pierre",
   "id": "701LP0N",
@@ -331,6 +331,15 @@
    "donnees_jusqu_au": "2026-08-28",
    "n_apparie": 174581,
    "notes": "Poids recalculés sur la compétence mesurée contre l'anémomètre de Lac Saint-Pierre ; biais locaux inchangés. À l'essai, hors service."
+  },
+  {
+   "version": "v5-2026-09-07",
+   "origine": "competence-reelle",
+   "cree_le": "2026-09-07T16:04:02+00:00",
+   "genere_le": "2026-09-07",
+   "donnees_jusqu_au": "2026-09-04",
+   "n_apparie": 177101,
+   "notes": "Poids recalculés sur la compétence mesurée contre l'anémomètre de Lac Saint-Pierre ; biais locaux inchangés. À l'essai, hors service."
   }
  ],
  "activations": [
@@ -352,6 +361,11 @@
   {
    "version": "v4-2026-08-31",
    "le": "2026-08-31T17:42:43+00:00",
+   "raison": "mise à l'essai comme candidat (competence-reelle) — actif inchangé : v2-2026-08-24"
+  },
+  {
+   "version": "v5-2026-09-07",
+   "le": "2026-09-07T16:04:02+00:00",
    "raison": "mise à l'essai comme candidat (competence-reelle) — actif inchangé : v2-2026-08-24"
   }
  ]
