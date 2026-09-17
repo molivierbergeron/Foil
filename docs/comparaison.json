@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "genere_le": "2026-09-16T14:25+00:00",
+ "genere_le": "2026-09-17T14:31+00:00",
  "station": {
   "nom": "Lac Saint-Pierre",
   "id": "701LP0N",
@@ -12,9 +12,9 @@
  },
  "periode": {
   "debut": "2024-05-01",
-  "fin": "2026-09-13",
-  "jours": 504,
-  "paires": 180341
+  "fin": "2026-09-14",
+  "jours": 505,
+  "paires": 180701
  },
  "horizons": {
   "24h": [
@@ -25,7 +25,7 @@
      "biais": -1.43,
      "rmse": 4.08,
      "correlation": 0.721,
-     "n": 6036,
+     "n": 6048,
      "rang": 1
     },
     "officiel": {
@@ -43,7 +43,7 @@
      "biais": -1.46,
      "rmse": 4.11,
      "correlation": 0.728,
-     "n": 6036,
+     "n": 6048,
      "rang": 2
     },
     "officiel": {
@@ -59,9 +59,9 @@
     "nom": "GEM régional (Canada)",
     "reel": {
      "biais": -2.49,
-     "rmse": 4.42,
+     "rmse": 4.43,
      "correlation": 0.748,
-     "n": 5893,
+     "n": 5905,
      "rang": 3
     },
     "officiel": {
@@ -79,7 +79,7 @@
      "biais": -2.79,
      "rmse": 4.74,
      "correlation": 0.723,
-     "n": 6036,
+     "n": 6048,
      "rang": 4
     },
     "officiel": {
@@ -97,7 +97,7 @@
      "biais": -3.01,
      "rmse": 4.98,
      "correlation": 0.706,
-     "n": 6036,
+     "n": 6048,
      "rang": 5
     },
     "officiel": {
@@ -115,7 +115,7 @@
      "biais": -3.32,
      "rmse": 5.17,
      "correlation": 0.714,
-     "n": 6036,
+     "n": 6048,
      "rang": 6
     },
     "officiel": {
@@ -135,7 +135,7 @@
      "biais": -1.45,
      "rmse": 4.39,
      "correlation": 0.667,
-     "n": 6036,
+     "n": 6048,
      "rang": 1
     },
     "officiel": {
@@ -153,7 +153,7 @@
      "biais": -2.38,
      "rmse": 4.73,
      "correlation": 0.674,
-     "n": 6031,
+     "n": 6043,
      "rang": 2
     },
     "officiel": {
@@ -171,7 +171,7 @@
      "biais": -2.69,
      "rmse": 4.97,
      "correlation": 0.652,
-     "n": 5904,
+     "n": 5916,
      "rang": 3
     },
     "officiel": {
@@ -186,10 +186,10 @@
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
     "reel": {
-     "biais": -2.96,
+     "biais": -2.97,
      "rmse": 5.2,
      "correlation": 0.633,
-     "n": 6036,
+     "n": 6048,
      "rang": 4
     },
     "officiel": {
@@ -207,7 +207,7 @@
      "biais": -3.37,
      "rmse": 5.32,
      "correlation": 0.677,
-     "n": 6036,
+     "n": 6048,
      "rang": 5
     },
     "officiel": {
@@ -227,7 +227,7 @@
      "biais": -1.48,
      "rmse": 5.29,
      "correlation": 0.482,
-     "n": 6036,
+     "n": 6048,
      "rang": 1
     },
     "officiel": {
@@ -244,8 +244,8 @@
     "reel": {
      "biais": -2.71,
      "rmse": 5.6,
-     "correlation": 0.486,
-     "n": 5976,
+     "correlation": 0.487,
+     "n": 5988,
      "rang": 2
     },
     "officiel": {
@@ -263,7 +263,7 @@
      "biais": -3.37,
      "rmse": 5.82,
      "correlation": 0.509,
-     "n": 6036,
+     "n": 6048,
      "rang": 3
     },
     "officiel": {
@@ -278,10 +278,10 @@
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
     "reel": {
-     "biais": -3.1,
+     "biais": -3.11,
      "rmse": 5.87,
      "correlation": 0.445,
-     "n": 6036,
+     "n": 6048,
      "rang": 4
     },
     "officiel": {
