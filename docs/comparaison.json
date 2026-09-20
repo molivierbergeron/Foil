@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "genere_le": "2026-09-19T13:24+00:00",
+ "genere_le": "2026-09-20T13:45+00:00",
  "station": {
   "nom": "Lac Saint-Pierre",
   "id": "701LP0N",
@@ -12,9 +12,9 @@
  },
  "periode": {
   "debut": "2024-05-01",
-  "fin": "2026-09-16",
-  "jours": 507,
-  "paires": 181421
+  "fin": "2026-09-17",
+  "jours": 508,
+  "paires": 181751
  },
  "horizons": {
   "24h": [
@@ -23,9 +23,9 @@
     "nom": "GFS (États-Unis)",
     "reel": {
      "biais": -1.42,
-     "rmse": 4.08,
+     "rmse": 4.07,
      "correlation": 0.721,
-     "n": 6072,
+     "n": 6082,
      "rang": 1
     },
     "officiel": {
@@ -40,10 +40,10 @@
     "modele": "gem_hrdps_continental",
     "nom": "HRDPS (Canada, 2.5 km)",
     "reel": {
-     "biais": -1.46,
-     "rmse": 4.11,
-     "correlation": 0.727,
-     "n": 6072,
+     "biais": -1.45,
+     "rmse": 4.1,
+     "correlation": 0.728,
+     "n": 6082,
      "rang": 2
     },
     "officiel": {
@@ -61,7 +61,7 @@
      "biais": -2.48,
      "rmse": 4.42,
      "correlation": 0.748,
-     "n": 5929,
+     "n": 5939,
      "rang": 3
     },
     "officiel": {
@@ -78,8 +78,8 @@
     "reel": {
      "biais": -2.79,
      "rmse": 4.73,
-     "correlation": 0.723,
-     "n": 6072,
+     "correlation": 0.724,
+     "n": 6082,
      "rang": 4
     },
     "officiel": {
@@ -96,8 +96,8 @@
     "reel": {
      "biais": -3.01,
      "rmse": 4.98,
-     "correlation": 0.705,
-     "n": 6072,
+     "correlation": 0.706,
+     "n": 6082,
      "rang": 5
     },
     "officiel": {
@@ -113,9 +113,9 @@
     "nom": "ECMWF IFS 0.25°",
     "reel": {
      "biais": -3.32,
-     "rmse": 5.17,
-     "correlation": 0.713,
-     "n": 6072,
+     "rmse": 5.16,
+     "correlation": 0.714,
+     "n": 6082,
      "rang": 6
     },
     "officiel": {
@@ -133,9 +133,9 @@
     "nom": "GFS (États-Unis)",
     "reel": {
      "biais": -1.44,
-     "rmse": 4.39,
-     "correlation": 0.666,
-     "n": 6072,
+     "rmse": 4.38,
+     "correlation": 0.667,
+     "n": 6082,
      "rang": 1
     },
     "officiel": {
@@ -150,10 +150,10 @@
     "modele": "gem_regional",
     "nom": "GEM régional (Canada)",
     "reel": {
-     "biais": -2.38,
+     "biais": -2.37,
      "rmse": 4.72,
      "correlation": 0.674,
-     "n": 6067,
+     "n": 6077,
      "rang": 2
     },
     "officiel": {
@@ -171,7 +171,7 @@
      "biais": -2.68,
      "rmse": 4.96,
      "correlation": 0.652,
-     "n": 5940,
+     "n": 5950,
      "rang": 3
     },
     "officiel": {
@@ -186,10 +186,10 @@
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
     "reel": {
-     "biais": -2.97,
+     "biais": -2.96,
      "rmse": 5.2,
-     "correlation": 0.632,
-     "n": 6072,
+     "correlation": 0.633,
+     "n": 6082,
      "rang": 4
     },
     "officiel": {
@@ -204,10 +204,10 @@
     "modele": "ecmwf_ifs025",
     "nom": "ECMWF IFS 0.25°",
     "reel": {
-     "biais": -3.37,
+     "biais": -3.36,
      "rmse": 5.32,
      "correlation": 0.676,
-     "n": 6072,
+     "n": 6082,
      "rang": 5
     },
     "officiel": {
@@ -224,10 +224,10 @@
     "modele": "gfs_global",
     "nom": "GFS (États-Unis)",
     "reel": {
-     "biais": -1.48,
+     "biais": -1.47,
      "rmse": 5.28,
      "correlation": 0.483,
-     "n": 6072,
+     "n": 6082,
      "rang": 1
     },
     "officiel": {
@@ -242,10 +242,10 @@
     "modele": "gem_global",
     "nom": "GEM global (Canada)",
     "reel": {
-     "biais": -2.7,
+     "biais": -2.69,
      "rmse": 5.59,
-     "correlation": 0.487,
-     "n": 6012,
+     "correlation": 0.488,
+     "n": 6022,
      "rang": 2
     },
     "officiel": {
@@ -260,10 +260,10 @@
     "modele": "ecmwf_ifs025",
     "nom": "ECMWF IFS 0.25°",
     "reel": {
-     "biais": -3.38,
+     "biais": -3.37,
      "rmse": 5.82,
-     "correlation": 0.509,
-     "n": 6072,
+     "correlation": 0.51,
+     "n": 6082,
      "rang": 3
     },
     "officiel": {
@@ -280,8 +280,8 @@
     "reel": {
      "biais": -3.11,
      "rmse": 5.87,
-     "correlation": 0.445,
-     "n": 6072,
+     "correlation": 0.444,
+     "n": 6082,
      "rang": 4
     },
     "officiel": {
