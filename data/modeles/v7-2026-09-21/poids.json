@@ -949,6 +949,5 @@
     "periode": "2024-05-01 à 2026-09-18",
     "n_paires": 182111,
     "biais": "inchangés — repris du modèle actif (les biais du site de mesure ne se transplantent pas au lac)"
-  },
-  "version_modele": "v7-2026-09-21"
+  }
 }
