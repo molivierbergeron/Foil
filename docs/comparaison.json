@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "genere_le": "2026-09-24T14:23+00:00",
+ "genere_le": "2026-09-25T14:47+00:00",
  "station": {
   "nom": "Lac Saint-Pierre",
   "id": "701LP0N",
@@ -12,9 +12,9 @@
  },
  "periode": {
   "debut": "2024-05-01",
-  "fin": "2026-09-21",
-  "jours": 512,
-  "paires": 183191
+  "fin": "2026-09-22",
+  "jours": 513,
+  "paires": 183551
  },
  "horizons": {
   "24h": [
@@ -22,10 +22,10 @@
     "modele": "gfs_global",
     "nom": "GFS (États-Unis)",
     "reel": {
-     "biais": -1.42,
+     "biais": -1.41,
      "rmse": 4.07,
-     "correlation": 0.722,
-     "n": 6130,
+     "correlation": 0.721,
+     "n": 6142,
      "rang": 1
     },
     "officiel": {
@@ -40,10 +40,10 @@
     "modele": "gem_hrdps_continental",
     "nom": "HRDPS (Canada, 2.5 km)",
     "reel": {
-     "biais": -1.45,
-     "rmse": 4.09,
-     "correlation": 0.728,
-     "n": 6130,
+     "biais": -1.44,
+     "rmse": 4.1,
+     "correlation": 0.727,
+     "n": 6142,
      "rang": 2
     },
     "officiel": {
@@ -58,10 +58,10 @@
     "modele": "gem_regional",
     "nom": "GEM régional (Canada)",
     "reel": {
-     "biais": -2.48,
+     "biais": -2.47,
      "rmse": 4.41,
-     "correlation": 0.749,
-     "n": 5987,
+     "correlation": 0.748,
+     "n": 5999,
      "rang": 3
     },
     "officiel": {
@@ -79,7 +79,7 @@
      "biais": -2.78,
      "rmse": 4.72,
      "correlation": 0.724,
-     "n": 6130,
+     "n": 6142,
      "rang": 4
     },
     "officiel": {
@@ -97,7 +97,7 @@
      "biais": -3.01,
      "rmse": 4.97,
      "correlation": 0.707,
-     "n": 6130,
+     "n": 6142,
      "rang": 5
     },
     "officiel": {
@@ -112,10 +112,10 @@
     "modele": "ecmwf_ifs025",
     "nom": "ECMWF IFS 0.25°",
     "reel": {
-     "biais": -3.32,
+     "biais": -3.31,
      "rmse": 5.16,
      "correlation": 0.714,
-     "n": 6130,
+     "n": 6142,
      "rang": 6
     },
     "officiel": {
@@ -132,10 +132,10 @@
     "modele": "gfs_global",
     "nom": "GFS (États-Unis)",
     "reel": {
-     "biais": -1.43,
+     "biais": -1.42,
      "rmse": 4.38,
-     "correlation": 0.667,
-     "n": 6130,
+     "correlation": 0.666,
+     "n": 6142,
      "rang": 1
     },
     "officiel": {
@@ -150,10 +150,10 @@
     "modele": "gem_regional",
     "nom": "GEM régional (Canada)",
     "reel": {
-     "biais": -2.37,
+     "biais": -2.36,
      "rmse": 4.71,
-     "correlation": 0.675,
-     "n": 6125,
+     "correlation": 0.674,
+     "n": 6137,
      "rang": 2
     },
     "officiel": {
@@ -168,10 +168,10 @@
     "modele": "gem_global",
     "nom": "GEM global (Canada)",
     "reel": {
-     "biais": -2.68,
+     "biais": -2.67,
      "rmse": 4.95,
      "correlation": 0.653,
-     "n": 5998,
+     "n": 6010,
      "rang": 3
     },
     "officiel": {
@@ -189,7 +189,7 @@
      "biais": -2.96,
      "rmse": 5.19,
      "correlation": 0.634,
-     "n": 6130,
+     "n": 6142,
      "rang": 4
     },
     "officiel": {
@@ -206,8 +206,8 @@
     "reel": {
      "biais": -3.36,
      "rmse": 5.31,
-     "correlation": 0.676,
-     "n": 6130,
+     "correlation": 0.677,
+     "n": 6142,
      "rang": 5
     },
     "officiel": {
@@ -224,10 +224,10 @@
     "modele": "gfs_global",
     "nom": "GFS (États-Unis)",
     "reel": {
-     "biais": -1.48,
+     "biais": -1.47,
      "rmse": 5.27,
      "correlation": 0.484,
-     "n": 6130,
+     "n": 6142,
      "rang": 1
     },
     "officiel": {
@@ -245,7 +245,7 @@
      "biais": -2.69,
      "rmse": 5.58,
      "correlation": 0.489,
-     "n": 6070,
+     "n": 6082,
      "rang": 2
     },
     "officiel": {
@@ -260,10 +260,10 @@
     "modele": "ecmwf_ifs025",
     "nom": "ECMWF IFS 0.25°",
     "reel": {
-     "biais": -3.37,
-     "rmse": 5.81,
-     "correlation": 0.511,
-     "n": 6130,
+     "biais": -3.36,
+     "rmse": 5.8,
+     "correlation": 0.512,
+     "n": 6142,
      "rang": 3
     },
     "officiel": {
@@ -278,10 +278,10 @@
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
     "reel": {
-     "biais": -3.11,
+     "biais": -3.1,
      "rmse": 5.86,
      "correlation": 0.445,
-     "n": 6130,
+     "n": 6142,
      "rang": 4
     },
     "officiel": {
