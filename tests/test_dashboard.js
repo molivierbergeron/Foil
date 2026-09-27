@@ -49,3 +49,29 @@ egal(resumeMeteoJour([heureSeche(2), heureSeche(2), heureSeche(1)]).texte,
      "partiellement nuageux", "ciel_partiellement_nuageux");
 egal(resumeMeteoJour([heureSeche(45)]).texte, "brumeux", "ciel_brumeux");
 console.log("Tests météo/régularité passent.");
+
+// Direction : moyenne vectorielle, accord entre modèles, fiabilité de la flèche
+const { construireHeures, directionFiable, flecheSVG } = require("../docs/app.js");
+const donneesDir = (dirs, vent) => {
+  const hourly = { time: ["2026-09-10T14:00"] };
+  Object.keys(poids.modeles).forEach((m, k) => {
+    hourly[`wind_speed_10m_${m}`] = [vent];
+    hourly[`wind_gusts_10m_${m}`] = [vent * 1.3];
+    hourly[`wind_direction_10m_${m}`] = [dirs[k % dirs.length]];
+  });
+  return { hourly };
+};
+const [hAccord] = construireHeures(donneesDir([270], 10), null, poids);
+egal(Math.round(hAccord.direction), 270, "direction_ouest");
+egal(Math.round(hAccord.accordDirection * 100), 100, "accord_parfait");
+egal(directionFiable(hAccord), true, "direction_fiable");
+egal(flecheSVG(hAccord).includes("rotate(90)"), true, "fleche_ouest_vers_est");
+const [hNord] = construireHeures(donneesDir([350, 10], 10), null, poids);
+egal(secteurDe(hNord.direction), "N", "direction_nord_sans_saut_360");
+const [hDesaccord] = construireHeures(donneesDir([0, 180], 10), null, poids);
+egal(hDesaccord.accordDirection < 0.8, true, "accord_directions_opposees");
+egal(directionFiable(hDesaccord), false, "desaccord_pale");
+const [hFaible] = construireHeures(donneesDir([270], 2), null, poids);
+egal(directionFiable(hFaible), false, "vent_faible_pale");
+egal(flecheSVG(hFaible).includes(' pale"'), true, "fleche_pale_vent_faible");
+console.log("Tests direction passent.");

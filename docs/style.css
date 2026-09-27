@@ -134,6 +134,11 @@ h3 { font-size: 0.95rem; margin: 1.2rem 0 0.2rem; }
 .cellule .cv { display: block; font-size: 1rem; font-weight: 700; }
 .cellule .cr { display: block; font-size: 0.62rem; }
 .cellule .cm { display: block; font-size: 0.72rem; }
+/* Flèche de direction : pointe où va le vent ; pâle quand la direction est
+   peu fiable (vent faible ou modèles en désaccord). */
+.cellule .cd { display: block; line-height: 1; }
+.cellule .fl { display: block; margin: 0.1rem auto 0; fill: currentColor; }
+.cellule .fl.pale { opacity: 0.35; }
 .jour-blocs .titre-jour .etiquette { margin-left: 0.5rem; font-weight: 400; }
 
 .jour-blocs { margin: 0.6rem 0; }

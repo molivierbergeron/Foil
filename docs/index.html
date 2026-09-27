@@ -23,14 +23,17 @@
 
   <section id="execution" hidden>
     <h2>Aujourd'hui / demain</h2>
-    <p class="aide">Heure par heure : vent (gros chiffre, nds), rafales, météo.
-    Vert = dans la bande de foil. ⚡ = risque d'orage, on ne sort pas.</p>
+    <p class="aide">Heure par heure : vent (gros chiffre, nds), rafales, direction, météo.
+    La flèche pointe où va le vent (↗ = vent du sud-ouest) ; pâle = direction peu
+    fiable (vent faible ou modèles en désaccord). Vert = dans la bande de foil.
+    ⚡ = risque d'orage, on ne sort pas.</p>
     <div id="blocs-jours"></div>
     <div id="divergence" class="avis" hidden></div>
     <h3>Vent prévu, heure par heure (48 h)</h3>
     <p class="aide">Ligne épaisse : ensemble corrigé. Lignes fines : chaque modèle
     après correction de son biais mesuré. Zone teintée : bande de foil (7–16 nds).
-    Glisse le doigt verticalement sur le graphique pour lire vent et rafales,
+    Flèches sous l'axe : direction du vent, heure par heure.
+    Glisse le doigt verticalement sur le graphique pour lire vent, rafales et direction,
     ou balaie horizontalement pour voir demain.</p>
     <div id="graphique" class="graphique-cadre"></div>
     <div id="legende" class="legende"></div>
