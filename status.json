@@ -1,0 +1,712 @@
+{
+ "schema": 4,
+ "id": "foil",
+ "repo": "Foil",
+ "name": "Vent Lac Maskinongé",
+ "one_liner": "Dit s'il vaut la peine d'aller faire du foil au Lac Maskinongé : GO ou NO, avec le pourcentage de GO qui se sont vraiment confirmés.",
+ "status": "actif",
+ "version": "Page 1.3.0 · calcul v2 du 24 août",
+ "posture": {
+  "verdict": "Préparer 2027",
+  "why": "La saison de foil se termine en octobre. Cet hiver sert à faire le bilan de 2026 et à décider des deux seuls leviers qui peuvent encore améliorer la précision."
+ },
+ "doing": "On clôt la saison 2026 : bilan de précision, calcul qui tourne seul tout l'hiver, et choix des améliorations pour mai 2027.",
+ "headline": "Le produit marche et tourne seul depuis juillet. Retoucher les réglages actuels ne rapporte plus rien. Deux leviers restent : mesurer le vent au lac (anémomètre) ou ajouter un modèle météo plus fin (HRRR, déjà testé sur une branche).",
+ "resume": [
+  "Rien à faire pour que la page reste à jour : le calcul tourne seul chaque matin.",
+  "Pour vérifier : ouvre la page, le bas indique la version et l'heure du dernier calcul.",
+  "Les décisions en attente sont en haut ; chacune a ma recommandation."
+ ],
+ "links": [
+  {
+   "label": "Ouvrir la page GO/NO",
+   "url": "https://molivierbergeron.github.io/Foil/",
+   "kind": "app"
+  },
+  {
+   "label": "Comparer les modèles météo",
+   "url": "https://molivierbergeron.github.io/Foil/comparaison.html",
+   "kind": "app"
+  },
+  {
+   "label": "Statistiques de visite",
+   "url": "https://mobergeron.goatcounter.com/",
+   "kind": "stats"
+  },
+  {
+   "label": "Code sur GitHub",
+   "url": "https://github.com/molivierbergeron/Foil",
+   "kind": "code"
+  }
+ ],
+ "phases": [
+  {
+   "id": "idee",
+   "name": "Idée",
+   "goal": "Décider d'aller au chalet, puis quand sortir sur l'eau.",
+   "exit": "Les deux questions et la plage de vent utile (7 à 16 nœuds) sont fixées.",
+   "status": "fait",
+   "done_on": "2026-07-15"
+  },
+  {
+   "id": "poc",
+   "name": "Preuve de concept",
+   "goal": "Prouver qu'on peut corriger les modèles météo pour ce lac.",
+   "exit": "Le test sur 2024-2026 montre un gain mesurable.",
+   "status": "fait",
+   "done_on": "2026-07-15"
+  },
+  {
+   "id": "proto",
+   "name": "Prototype",
+   "goal": "Calculer et afficher le verdict chaque jour, automatiquement.",
+   "exit": "Le calcul quotidien tourne sans intervention.",
+   "status": "fait",
+   "done_on": "2026-07-17"
+  },
+  {
+   "id": "lancement",
+   "name": "Lancement",
+   "goal": "S'en servir avant chaque sortie, depuis l'iPhone.",
+   "exit": "Page installée et consultée.",
+   "status": "fait",
+   "done_on": "2026-07-19"
+  },
+  {
+   "id": "amelioration",
+   "name": "Amélioration",
+   "goal": "Un GO plus fiable, et honnête sur sa fiabilité.",
+   "exit": "Bilan 2026 fait ; décision prise sur l'anémomètre et sur HRRR.",
+   "status": "en cours"
+  },
+  {
+   "id": "maturite",
+   "name": "Maturité",
+   "goal": "Tourner seul d'une saison à l'autre.",
+   "exit": "Aucune panne silencieuse ; alertes sur le téléphone en saison.",
+   "status": "à venir"
+  }
+ ],
+ "objectives": [
+  {
+   "id": "O1",
+   "title": "Aller au chalet sur un GO qui tient",
+   "why": "Un faux GO coûte un aller-retour au chalet pour rien. C'est la seule chose que le produit doit bien faire.",
+   "benefit": "precision",
+   "measure": "Part des GO annoncés qui se sont confirmés",
+   "now": "Environ 92 % à 24 h (petit échantillon), 76 % à 4 jours",
+   "target": "À fixer après le bilan de saison",
+   "strategies": [
+    {
+     "id": "O1.S1",
+     "title": "Mesurer le vent au bord du lac",
+     "why": "Les six modèles sous-estiment le vent de 1 à 3 nœuds partout où on l'a mesuré. Aucun calcul ne corrige ça ; seule une mesure au lac le peut.",
+     "state": "active",
+     "initiatives": [
+      {
+       "id": "f-anemo",
+       "title": "Acheter et installer un anémomètre Ecowitt",
+       "status": "bloqué",
+       "owner": "marco",
+       "benefit": "precision",
+       "phase": "maturite",
+       "effort": "S",
+       "minutes": 120,
+       "blocked_by": "dec:f-anemo",
+       "detail": "Le code pour le brancher est prêt (MAINTENANCE.md)."
+      },
+      {
+       "id": "f-anemo-calcul",
+       "title": "Recalculer les corrections avec le vent mesuré",
+       "status": "bloqué",
+       "owner": "ia",
+       "benefit": "precision",
+       "phase": "maturite",
+       "effort": "L",
+       "blocked_by": "f-anemo"
+      }
+     ]
+    },
+    {
+     "id": "O1.S2",
+     "title": "Ajouter un modèle météo plus fin (HRRR, 3 km)",
+     "why": "Les 6 modèles actuels voient le lac à 10-25 km de résolution ; HRRR le voit à 3 km. Il a été ajouté et mesuré sur une branche le 28 août, mais jamais comparé ni intégré.",
+     "state": "active",
+     "initiatives": [
+      {
+       "id": "f-hrrr-mesure",
+       "title": "Ajouter HRRR et le mesurer à côté des 6 modèles",
+       "status": "fait",
+       "owner": "ia",
+       "benefit": "precision",
+       "phase": "amelioration",
+       "effort": "M",
+       "done_on": "2026-08-28",
+       "result": "Mesuré sur une branche à part ; jamais intégré au verdict."
+      },
+      {
+       "id": "f-hrrr-bilan",
+       "title": "Résumer le gain de HRRR et recommander",
+       "status": "à faire",
+       "owner": "ia",
+       "benefit": "precision",
+       "phase": "amelioration",
+       "effort": "XS",
+       "package": "f-p-leviers"
+      }
+     ]
+    },
+    {
+     "id": "O1.S3",
+     "title": "Repondérer les 6 modèles existants",
+     "why": "Testé en août : le meilleur jeu de poids ne déplace la prévision que de 0,3 nœud. Stratégie fermée.",
+     "state": "terminée",
+     "initiatives": [
+      {
+       "id": "f-croisee",
+       "title": "Comparer les modèles à un anémomètre réel (Lac Saint-Pierre)",
+       "status": "fait",
+       "owner": "ia",
+       "benefit": "precision",
+       "phase": "amelioration",
+       "effort": "L",
+       "done_on": "2026-08-23",
+       "result": "Le classement des modèles s'inverse presque ; l'erreur réelle est 3 à 4 fois plus grande qu'estimé."
+      },
+      {
+       "id": "f-ampleur",
+       "title": "Mesurer le gain maximal d'une nouvelle pondération",
+       "status": "fait",
+       "owner": "ia",
+       "benefit": "precision",
+       "phase": "amelioration",
+       "effort": "M",
+       "done_on": "2026-08-27",
+       "result": "0,31 nœud au mieux : ne vaut pas la peine."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "O2",
+   "title": "Savoir si la saison a valu la peine",
+   "why": "Sans bilan, impossible de juger si les améliorations de 2027 méritent du temps ou de l'argent (anémomètre).",
+   "benefit": "usage",
+   "measure": "Bilan écrit : GO annoncés, confirmés, ratés ; visites de la page",
+   "now": "Aucun bilan ; visites comptées depuis le 5 sept. mais jamais lues",
+   "target": "Bilan 2026 publié avant le 1er novembre",
+   "strategies": [
+    {
+     "id": "O2.S1",
+     "title": "Faire le bilan de 2026",
+     "why": "Le bilan dit à la fois si le verdict est fiable et si la page sert.",
+     "state": "active",
+     "initiatives": [
+      {
+       "id": "f-bilan",
+       "title": "Produire le bilan de la saison 2026",
+       "status": "à faire",
+       "owner": "ia",
+       "benefit": "usage",
+       "phase": "amelioration",
+       "effort": "M",
+       "due": "2026-11-01",
+       "package": "f-p-hiver"
+      },
+      {
+       "id": "f-divises",
+       "title": "Vérifier si l'avertissement « modèles divisés » annonce vraiment les ratés",
+       "status": "à faire",
+       "owner": "ia",
+       "benefit": "precision",
+       "phase": "amelioration",
+       "effort": "S",
+       "package": "f-p-hiver"
+      },
+      {
+       "id": "f-goat",
+       "title": "Lire les visites de septembre",
+       "status": "à faire",
+       "owner": "marco",
+       "benefit": "usage",
+       "phase": "amelioration",
+       "effort": "XS",
+       "minutes": 10
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "O3",
+   "title": "Tourner seul tout l'hiver",
+   "why": "Personne ne regarde la page de novembre à avril. Une panne silencieuse ferait un trou dans les données et fausserait le calcul de 2027.",
+   "benefit": "fiabilite",
+   "measure": "Une panne du calcul est connue le jour même",
+   "now": "Visible seulement dans l'onglet Actions de GitHub",
+   "target": "Une panne ouvre une alerte automatiquement",
+   "strategies": [
+    {
+     "id": "O3.S1",
+     "title": "Rendre les pannes visibles",
+     "why": "GitHub prévient mal ; une alerte explicite coûte une heure d'IA.",
+     "state": "active",
+     "initiatives": [
+      {
+       "id": "f-crons",
+       "title": "Créer une alerte quand le calcul quotidien échoue",
+       "status": "à faire",
+       "owner": "ia",
+       "benefit": "fiabilite",
+       "phase": "maturite",
+       "effort": "M",
+       "package": "f-p-hiver"
+      },
+      {
+       "id": "f-auto",
+       "title": "Calcul quotidien et recalibrage du lundi",
+       "status": "en cours",
+       "owner": "auto",
+       "benefit": "fiabilite",
+       "phase": "lancement",
+       "detail": "Tournent seuls."
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "decisions": [
+  {
+   "id": "dec:f-anemo",
+   "question": "Achètes-tu un anémomètre Ecowitt pour la saison 2027 ?",
+   "stakes": "C'est le seul levier mesuré qui peut gagner 1 à 3 nœuds. Sans lui, la précision plafonne.",
+   "options": [
+    "Oui, l'installer ce printemps",
+    "Attendre le bilan de saison, puis décider",
+    "Non"
+   ],
+   "recommendation": "Attendre le bilan (1er novembre). Si plus de 20 % des GO à 4 jours ont raté, acheter. Le prix est à vérifier : je n'ai pas pu le consulter.",
+   "minutes": 10,
+   "unblocks": [
+    "f-anemo"
+   ],
+   "wait": {
+    "label": "le bilan de saison (1er novembre)"
+   }
+  },
+  {
+   "id": "dec:f-hrrr",
+   "question": "Intègres-tu HRRR au verdict ?",
+   "stakes": "Le travail est fait sur une branche ; il reste à juger le gain.",
+   "options": [
+    "Intégrer",
+    "Fermer la branche"
+   ],
+   "recommendation": "Intégrer seulement si le gain mesuré dépasse 0,3 nœud.",
+   "minutes": 5,
+   "unblocks": [],
+   "wait": {
+    "label": "le lot « Faire le point sur les deux leviers »",
+    "package": "f-p-leviers"
+   }
+  },
+  {
+   "id": "dec:f-fauxgo",
+   "question": "Quel taux de faux GO acceptes-tu ?",
+   "stakes": "Aujourd'hui, environ 24 % des GO annoncés 4 jours d'avance tombent.",
+   "options": [
+    "Moins de 15 % (moins de GO annoncés)",
+    "Autour de 25 % (comme maintenant)"
+   ],
+   "recommendation": "Trancher avec les vrais chiffres de 2026.",
+   "minutes": 5,
+   "unblocks": [],
+   "wait": {
+    "label": "le bilan de saison (1er novembre)"
+   }
+  }
+ ],
+ "packages": [
+  {
+   "id": "f-p-leviers",
+   "title": "Faire le point sur les deux leviers de précision",
+   "outcome": "Une page : gain mesuré de HRRR, ce qu'il faut pour l'anémomètre (matériel, étapes), et une recommandation.",
+   "ai_minutes": 15,
+   "review_minutes": 5,
+   "prompt": "Dans le repo Foil : (1) résume ce que la branche claude/add-hrrr-model-xq2tlh a mesuré sur HRRR (gain en nœuds par échéance, risques) ; (2) résume ce qu'il faut pour brancher un anémomètre Ecowitt selon MAINTENANCE.md ; (3) recommande dans quel ordre faire les deux. Écris le résultat dans reports/leviers-2027.md.",
+   "items": [
+    "f-hrrr-bilan"
+   ],
+   "when": "Maintenant"
+  },
+  {
+   "id": "f-p-hiver",
+   "title": "Préparer l'hiver",
+   "outcome": "Une alerte si le calcul quotidien échoue, la vérification de « modèles divisés », et le bilan de saison 2026.",
+   "ai_minutes": 60,
+   "review_minutes": 15,
+   "prompt": "Dans le repo Foil, fais trois choses : (1) item 2 de VISION.md : si quotidien.yml ou recalibrage.yml échoue, ouvrir une issue GitHub avec le lien du run ; (2) item 3 : mesurer si l'avertissement « modèles divisés » prédit les GO ratés, et le retirer s'il ne prédit rien ; (3) item 10 : produire docs/bilan.html pour la saison 2026 (GO annoncés, confirmés, ratés, par échéance).",
+   "items": [
+    "f-crons",
+    "f-divises",
+    "f-bilan"
+   ],
+   "when": "Avant le 1er novembre"
+  }
+ ],
+ "opportunities": [
+  {
+   "title": "Bilan de saison automatique",
+   "value": 3,
+   "effort": "M",
+   "context": "Chaque 1er novembre",
+   "verdict": "Maintenant",
+   "why": "C'est la seule façon de juger 2026 et de décider des investissements de 2027.",
+   "benefit": "usage"
+  },
+  {
+   "title": "Alerte quand le calcul échoue",
+   "value": 3,
+   "effort": "M",
+   "context": "Critique l'hiver, quand personne ne regarde",
+   "verdict": "Maintenant",
+   "why": "Un trou de données fausse le calcul de l'année suivante.",
+   "benefit": "fiabilite"
+  },
+  {
+   "title": "Anémomètre au lac",
+   "value": 3,
+   "effort": "S",
+   "context": "À installer avant mai 2027",
+   "verdict": "À décider",
+   "why": "Seul levier de 1 à 3 nœuds ; coût matériel à confirmer.",
+   "benefit": "precision"
+  },
+  {
+   "title": "Intégrer HRRR",
+   "value": 2,
+   "effort": "M",
+   "context": "Déjà mesuré sur une branche",
+   "verdict": "À décider",
+   "why": "Travail déjà fait ; il reste à juger le gain.",
+   "benefit": "precision"
+  },
+  {
+   "title": "Précision des 30 derniers jours sur la page",
+   "value": 2,
+   "effort": "M",
+   "context": "Utile seulement en saison",
+   "verdict": "Plus tard (avril 2027)",
+   "why": "En hiver, il n'y a aucun GO à compter.",
+   "benefit": "experience"
+  },
+  {
+   "title": "Alertes sur le téléphone la veille d'un GO",
+   "value": 2,
+   "effort": "M",
+   "context": "En saison seulement",
+   "verdict": "Plus tard (avril 2027)",
+   "why": "Bonne idée, mais inutile avant mai.",
+   "benefit": "experience"
+  },
+  {
+   "title": "Fiabilité selon la direction du vent",
+   "value": 1,
+   "effort": "M",
+   "context": "Demande beaucoup de données par direction",
+   "verdict": "Plus tard",
+   "why": "Plus solide après une saison avec anémomètre.",
+   "benefit": "precision"
+  },
+  {
+   "title": "Mode hors ligne",
+   "value": 1,
+   "effort": "M",
+   "context": "Seulement si le réseau manque au chalet",
+   "verdict": "Non",
+   "why": "Le verdict se consulte avant de partir, là où le réseau passe.",
+   "benefit": "experience"
+  },
+  {
+   "title": "Correction statistique avancée (MOS)",
+   "value": 1,
+   "effort": "XS",
+   "context": "Après 1 à 2 mois de mesures au lac",
+   "verdict": "Plus tard",
+   "why": "Le premier essai n'a rien gagné ; à retenter seulement avec l'anémomètre.",
+   "benefit": "precision"
+  },
+  {
+   "title": "Couvrir un deuxième lac",
+   "value": 1,
+   "effort": "L",
+   "context": "Si quelqu'un le demande",
+   "verdict": "Non",
+   "why": "Aucun besoin exprimé ; ajoute de la complexité partout.",
+   "benefit": "usage"
+  }
+ ],
+ "next": {
+  "type": "package",
+  "ref": "f-p-leviers",
+  "why": "15 minutes d'IA rendent les deux décisions de précision faciles à prendre."
+ },
+ "chain": [
+  {
+   "label": "6 modèles météo",
+   "state": "fait",
+   "sub": "Environnement Canada, NOAA, Europe…",
+   "note": ""
+  },
+  {
+   "label": "Correction pour le lac",
+   "state": "fait",
+   "sub": "calibrée sur 2024-2026",
+   "note": ""
+  },
+  {
+   "label": "Verdict GO/NO + fiabilité",
+   "state": "fait",
+   "sub": "par jour et demi-journée",
+   "note": ""
+  },
+  {
+   "label": "Page sur l'iPhone",
+   "state": "fait",
+   "sub": "mise à jour chaque matin",
+   "note": ""
+  },
+  {
+   "label": "Vent mesuré au lac",
+   "state": "manquant",
+   "sub": "aucun anémomètre",
+   "note": "Le seul moyen de gagner 1 à 3 nœuds."
+  },
+  {
+   "label": "Alerte la veille",
+   "state": "ensuite",
+   "sub": "printemps 2027",
+   "note": ""
+  },
+  {
+   "label": "Bilan de saison",
+   "state": "ensuite",
+   "sub": "1er novembre",
+   "note": ""
+  }
+ ],
+ "evolutions": [
+  {
+   "id": "fe-bilan",
+   "title": "Bilan de saison automatique",
+   "pitch": "Chaque automne, tu sais combien de GO ont tenu et si le produit a valu la peine.",
+   "goal": "Savoir si la saison a valu la peine",
+   "benefit": "usage",
+   "value": 3,
+   "sessions": 2,
+   "horizon": "Maintenant",
+   "first_step": "Lancer le lot « Préparer l'hiver ».",
+   "objective": "O2",
+   "depends": [],
+   "source": "repo",
+   "mode": "ia",
+   "why": "Sans chiffres de 2026, toute décision pour 2027 est une intuition.",
+   "implies": "Aucun coût ; l'IA lit les données déjà archivées."
+  },
+  {
+   "id": "fe-hrrr",
+   "title": "Modèle météo haute résolution (HRRR)",
+   "pitch": "Un modèle qui voit le lac à 3 km au lieu de 10-25 km ; déjà mesuré, reste à juger.",
+   "goal": "Aller au chalet sur un GO qui tient",
+   "benefit": "precision",
+   "value": 2,
+   "sessions": 2,
+   "horizon": "Maintenant",
+   "first_step": "Lancer le lot « Faire le point sur les leviers ».",
+   "objective": "O1",
+   "depends": [],
+   "source": "repo",
+   "mode": "ia",
+   "why": "Le travail est à moitié fait sur une branche ; le laisser dormir le fera vieillir.",
+   "implies": "Si le gain est réel : un 7e modèle à surveiller. Sinon : on ferme la branche."
+  },
+  {
+   "id": "fe-anemo",
+   "title": "Anémomètre au lac",
+   "pitch": "Les corrections se calibrent sur le vrai vent du lac, pas sur l'avis des modèles.",
+   "goal": "Aller au chalet sur un GO qui tient",
+   "benefit": "precision",
+   "value": 3,
+   "sessions": 4,
+   "horizon": "Ensuite",
+   "first_step": "Décider l'achat après le bilan.",
+   "objective": "O1",
+   "depends": [
+    "fe-bilan"
+   ],
+   "source": "repo",
+   "mode": "toi",
+   "why": "C'est le seul moyen de voir l'écart entre ce que disent les modèles et ce que vit le lac.",
+   "implies": "Achat de matériel (prix à vérifier), installation au quai, trois clés à entrer."
+  },
+  {
+   "id": "fe-alertes",
+   "title": "Le verdict te trouve",
+   "pitch": "Le téléphone vibre la veille d'une journée GO, et re-vibre si le GO tombe.",
+   "goal": "Ne plus avoir à consulter",
+   "benefit": "experience",
+   "value": 2,
+   "sessions": 2,
+   "horizon": "Ensuite",
+   "first_step": "Choisir les réglages d'alerte en avril.",
+   "objective": null,
+   "depends": [
+    "fe-bilan"
+   ],
+   "source": "repo",
+   "mode": "mixte",
+   "why": "Une fenêtre de vent ratée parce qu'on n'a pas pensé à regarder, c'est la pire perte.",
+   "implies": "Tu choisis 4 réglages ; l'IA fait le reste. Canal ntfy gratuit."
+  },
+  {
+   "id": "fe-chalet",
+   "title": "Planifier la fin de semaine au chalet",
+   "pitch": "Une seule vue : vent des 4 prochains jours, bac à sortir, heure pour brancher l'auto. Relie Vent Lac, Bacs de collecte et Recharge.",
+   "goal": "Moins de charge mentale le jeudi soir",
+   "benefit": "experience",
+   "value": 2,
+   "sessions": 4,
+   "horizon": "Plus tard",
+   "first_step": "Valider l'idée : combien de fois par mois tu planifies une fin de semaine au chalet ?",
+   "objective": null,
+   "depends": [],
+   "source": "Claude",
+   "mode": "mixte",
+   "why": "Trois produits répondent chacun à un morceau de la même question du jeudi soir.",
+   "implies": "Une nouvelle page qui lit trois sources ; demande de valider l'usage d'abord."
+  }
+ ],
+ "plan": {
+  "version": 4,
+  "updated_at": "2026-09-28T01:00",
+  "updated_by": "Claude",
+  "priorities_validated": false,
+  "changes": [
+   {
+    "version": 3,
+    "date": "2026-09-27",
+    "summary": "Analyse produit refaite : cap, objectifs sur mesure, décisions, lots d'une heure, idées triées."
+   },
+   {
+    "version": 4,
+    "date": "2026-09-28",
+    "summary": "Chaîne de valeur et évolutions majeures en séquence (maintenant, ensuite, plus tard)."
+   }
+  ]
+ },
+ "history": [
+  {
+   "date": "2026-09-27",
+   "title": "Afficher la direction du vent heure par heure",
+   "pr": 8
+  },
+  {
+   "date": "2026-09-05",
+   "title": "foil-forecast-refresh : ne plus compter le premier chargement",
+   "pr": null
+  },
+  {
+   "date": "2026-08-27",
+   "title": "Mesurer ce que la repondération peut, et ne peut pas",
+   "pr": 6
+  },
+  {
+   "date": "2026-08-27",
+   "title": "Modèle candidat à l'essai + vue « en service vs proposition »",
+   "pr": 5
+  },
+  {
+   "date": "2026-08-23",
+   "title": "Vue « les modèles vs la réalité » + correctifs du rattrapage croisé",
+   "pr": 3
+  },
+  {
+   "date": "2026-08-22",
+   "title": "Vue « les modèles vs la réalité » + correctifs du rattrapage",
+   "pr": null
+  },
+  {
+   "date": "2026-08-22",
+   "title": "Vérité gelée, versionnage des modèles et vérification croisée",
+   "pr": 2
+  },
+  {
+   "date": "2026-08-21",
+   "title": "Vérification croisée : noter les modèles contre un anémomètre réel",
+   "pr": null
+  },
+  {
+   "date": "2026-08-21",
+   "title": "Recalibrage : committer tout ce que le job écrit (VISION item [1] + registre)",
+   "pr": null
+  },
+  {
+   "date": "2026-08-20",
+   "title": "Dashboard : afficher la version d'interface et la version du modèle",
+   "pr": null
+  },
+  {
+   "date": "2026-08-20",
+   "title": "Vérité gelée (P0) + versionnage des modèles calibrés",
+   "pr": null
+  },
+  {
+   "date": "2026-08-09",
+   "title": "Évaluation de nouvelles sources de données (imeteo.ca + inventaire)",
+   "pr": null
+  },
+  {
+   "date": "2026-08-08",
+   "title": "VISION.md : audit produit horodaté du 2026-08-02",
+   "pr": null
+  }
+ ],
+ "git": {
+  "_generated": "AUTO — généré par tools/git_facts.py (future Action). Ne pas éditer à la main.",
+  "generated_at": "2026-09-27",
+  "last_commit": {
+   "sha": "8cd6c78",
+   "date": "2026-09-27",
+   "author": "github-actions[bot]",
+   "subject": "Vérification quotidienne 2026-09-27"
+  },
+  "last_human_commit": {
+   "sha": "9288cfa",
+   "date": "2026-09-27",
+   "subject": "Afficher la direction du vent heure par heure (#8)"
+  },
+  "commits_30d": 39,
+  "human_commits_30d": 5,
+  "auto_commits_30d": 34,
+  "active_days_30d": 3,
+  "human_commits_per_week_8w": [
+   2,
+   0,
+   7,
+   4,
+   2,
+   0,
+   0,
+   1
+  ],
+  "workflows": [
+   "pages.yml",
+   "quotidien.yml",
+   "rattrapage_croise.yml",
+   "recalibrage.yml",
+   "tests.yml"
+  ]
+ }
+}
