@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "genere_le": "2026-09-27T14:52+00:00",
+ "genere_le": "2026-09-28T17:50+00:00",
  "station": {
   "nom": "Lac Saint-Pierre",
   "id": "701LP0N",
@@ -12,9 +12,9 @@
  },
  "periode": {
   "debut": "2024-05-01",
-  "fin": "2026-09-24",
-  "jours": 515,
-  "paires": 184271
+  "fin": "2026-09-25",
+  "jours": 516,
+  "paires": 184631
  },
  "horizons": {
   "24h": [
@@ -24,8 +24,8 @@
     "reel": {
      "biais": -1.4,
      "rmse": 4.06,
-     "correlation": 0.722,
-     "n": 6166,
+     "correlation": 0.721,
+     "n": 6178,
      "rang": 1
     },
     "officiel": {
@@ -43,7 +43,7 @@
      "biais": -1.43,
      "rmse": 4.09,
      "correlation": 0.728,
-     "n": 6166,
+     "n": 6178,
      "rang": 2
     },
     "officiel": {
@@ -58,10 +58,10 @@
     "modele": "gem_regional",
     "nom": "GEM régional (Canada)",
     "reel": {
-     "biais": -2.46,
+     "biais": -2.45,
      "rmse": 4.4,
-     "correlation": 0.749,
-     "n": 6023,
+     "correlation": 0.748,
+     "n": 6035,
      "rang": 3
     },
     "officiel": {
@@ -76,10 +76,10 @@
     "modele": "gem_global",
     "nom": "GEM global (Canada)",
     "reel": {
-     "biais": -2.77,
+     "biais": -2.76,
      "rmse": 4.71,
-     "correlation": 0.725,
-     "n": 6166,
+     "correlation": 0.724,
+     "n": 6178,
      "rang": 4
     },
     "officiel": {
@@ -97,7 +97,7 @@
      "biais": -3.0,
      "rmse": 4.96,
      "correlation": 0.707,
-     "n": 6166,
+     "n": 6178,
      "rang": 5
     },
     "officiel": {
@@ -112,10 +112,10 @@
     "modele": "ecmwf_ifs025",
     "nom": "ECMWF IFS 0.25°",
     "reel": {
-     "biais": -3.31,
+     "biais": -3.3,
      "rmse": 5.15,
      "correlation": 0.715,
-     "n": 6166,
+     "n": 6178,
      "rang": 6
     },
     "officiel": {
@@ -135,7 +135,7 @@
      "biais": -1.41,
      "rmse": 4.37,
      "correlation": 0.666,
-     "n": 6166,
+     "n": 6178,
      "rang": 1
     },
     "officiel": {
@@ -150,10 +150,10 @@
     "modele": "gem_regional",
     "nom": "GEM régional (Canada)",
     "reel": {
-     "biais": -2.35,
+     "biais": -2.34,
      "rmse": 4.7,
-     "correlation": 0.675,
-     "n": 6161,
+     "correlation": 0.674,
+     "n": 6173,
      "rang": 2
     },
     "officiel": {
@@ -168,10 +168,10 @@
     "modele": "gem_global",
     "nom": "GEM global (Canada)",
     "reel": {
-     "biais": -2.66,
+     "biais": -2.65,
      "rmse": 4.94,
      "correlation": 0.653,
-     "n": 6034,
+     "n": 6046,
      "rang": 3
     },
     "officiel": {
@@ -186,10 +186,10 @@
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
     "reel": {
-     "biais": -2.96,
+     "biais": -2.95,
      "rmse": 5.18,
      "correlation": 0.635,
-     "n": 6166,
+     "n": 6178,
      "rang": 4
     },
     "officiel": {
@@ -204,10 +204,10 @@
     "modele": "ecmwf_ifs025",
     "nom": "ECMWF IFS 0.25°",
     "reel": {
-     "biais": -3.35,
-     "rmse": 5.3,
+     "biais": -3.34,
+     "rmse": 5.29,
      "correlation": 0.677,
-     "n": 6166,
+     "n": 6178,
      "rang": 5
     },
     "officiel": {
@@ -227,7 +227,7 @@
      "biais": -1.45,
      "rmse": 5.26,
      "correlation": 0.483,
-     "n": 6166,
+     "n": 6178,
      "rang": 1
     },
     "officiel": {
@@ -242,10 +242,10 @@
     "modele": "gem_global",
     "nom": "GEM global (Canada)",
     "reel": {
-     "biais": -2.67,
-     "rmse": 5.57,
-     "correlation": 0.489,
-     "n": 6106,
+     "biais": -2.66,
+     "rmse": 5.56,
+     "correlation": 0.488,
+     "n": 6118,
      "rang": 2
     },
     "officiel": {
@@ -263,7 +263,7 @@
      "biais": -3.35,
      "rmse": 5.79,
      "correlation": 0.513,
-     "n": 6166,
+     "n": 6178,
      "rang": 3
     },
     "officiel": {
@@ -278,10 +278,10 @@
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
     "reel": {
-     "biais": -3.1,
+     "biais": -3.09,
      "rmse": 5.85,
      "correlation": 0.447,
-     "n": 6166,
+     "n": 6178,
      "rang": 4
     },
     "officiel": {
