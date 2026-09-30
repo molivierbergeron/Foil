@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "genere_le": "2026-09-29T16:07+00:00",
+ "genere_le": "2026-09-30T16:07+00:00",
  "station": {
   "nom": "Lac Saint-Pierre",
   "id": "701LP0N",
@@ -12,9 +12,9 @@
  },
  "periode": {
   "debut": "2024-05-01",
-  "fin": "2026-09-26",
-  "jours": 517,
-  "paires": 184991
+  "fin": "2026-09-27",
+  "jours": 518,
+  "paires": 185351
  },
  "horizons": {
   "24h": [
@@ -23,9 +23,9 @@
     "nom": "GFS (États-Unis)",
     "reel": {
      "biais": -1.39,
-     "rmse": 4.06,
-     "correlation": 0.721,
-     "n": 6190,
+     "rmse": 4.05,
+     "correlation": 0.722,
+     "n": 6202,
      "rang": 1
     },
     "officiel": {
@@ -40,10 +40,10 @@
     "modele": "gem_hrdps_continental",
     "nom": "HRDPS (Canada, 2.5 km)",
     "reel": {
-     "biais": -1.43,
+     "biais": -1.42,
      "rmse": 4.08,
      "correlation": 0.728,
-     "n": 6190,
+     "n": 6202,
      "rang": 2
     },
     "officiel": {
@@ -61,7 +61,7 @@
      "biais": -2.45,
      "rmse": 4.39,
      "correlation": 0.748,
-     "n": 6047,
+     "n": 6059,
      "rang": 3
     },
     "officiel": {
@@ -76,10 +76,10 @@
     "modele": "gem_global",
     "nom": "GEM global (Canada)",
     "reel": {
-     "biais": -2.76,
+     "biais": -2.77,
      "rmse": 4.71,
-     "correlation": 0.724,
-     "n": 6190,
+     "correlation": 0.725,
+     "n": 6202,
      "rang": 4
     },
     "officiel": {
@@ -94,10 +94,10 @@
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
     "reel": {
-     "biais": -3.0,
+     "biais": -3.01,
      "rmse": 4.96,
-     "correlation": 0.707,
-     "n": 6190,
+     "correlation": 0.708,
+     "n": 6202,
      "rang": 5
     },
     "officiel": {
@@ -114,8 +114,8 @@
     "reel": {
      "biais": -3.3,
      "rmse": 5.14,
-     "correlation": 0.715,
-     "n": 6190,
+     "correlation": 0.716,
+     "n": 6202,
      "rang": 6
     },
     "officiel": {
@@ -132,10 +132,10 @@
     "modele": "gfs_global",
     "nom": "GFS (États-Unis)",
     "reel": {
-     "biais": -1.41,
-     "rmse": 4.37,
-     "correlation": 0.666,
-     "n": 6190,
+     "biais": -1.4,
+     "rmse": 4.36,
+     "correlation": 0.667,
+     "n": 6202,
      "rang": 1
     },
     "officiel": {
@@ -152,8 +152,8 @@
     "reel": {
      "biais": -2.33,
      "rmse": 4.69,
-     "correlation": 0.673,
-     "n": 6185,
+     "correlation": 0.674,
+     "n": 6197,
      "rang": 2
     },
     "officiel": {
@@ -170,8 +170,8 @@
     "reel": {
      "biais": -2.65,
      "rmse": 4.93,
-     "correlation": 0.652,
-     "n": 6058,
+     "correlation": 0.654,
+     "n": 6070,
      "rang": 3
     },
     "officiel": {
@@ -186,10 +186,10 @@
     "modele": "icon_global",
     "nom": "ICON (Allemagne)",
     "reel": {
-     "biais": -2.95,
+     "biais": -2.96,
      "rmse": 5.18,
-     "correlation": 0.634,
-     "n": 6190,
+     "correlation": 0.635,
+     "n": 6202,
      "rang": 4
     },
     "officiel": {
@@ -206,8 +206,8 @@
     "reel": {
      "biais": -3.34,
      "rmse": 5.29,
-     "correlation": 0.677,
-     "n": 6190,
+     "correlation": 0.678,
+     "n": 6202,
      "rang": 5
     },
     "officiel": {
@@ -225,9 +225,9 @@
     "nom": "GFS (États-Unis)",
     "reel": {
      "biais": -1.45,
-     "rmse": 5.26,
-     "correlation": 0.483,
-     "n": 6190,
+     "rmse": 5.25,
+     "correlation": 0.485,
+     "n": 6202,
      "rang": 1
     },
     "officiel": {
@@ -244,8 +244,8 @@
     "reel": {
      "biais": -2.66,
      "rmse": 5.56,
-     "correlation": 0.488,
-     "n": 6130,
+     "correlation": 0.49,
+     "n": 6142,
      "rang": 2
     },
     "officiel": {
@@ -261,9 +261,9 @@
     "nom": "ECMWF IFS 0.25°",
     "reel": {
      "biais": -3.35,
-     "rmse": 5.79,
-     "correlation": 0.513,
-     "n": 6190,
+     "rmse": 5.78,
+     "correlation": 0.515,
+     "n": 6202,
      "rang": 3
     },
     "officiel": {
@@ -279,9 +279,9 @@
     "nom": "ICON (Allemagne)",
     "reel": {
      "biais": -3.1,
-     "rmse": 5.85,
-     "correlation": 0.447,
-     "n": 6190,
+     "rmse": 5.84,
+     "correlation": 0.449,
+     "n": 6202,
      "rang": 4
     },
     "officiel": {
