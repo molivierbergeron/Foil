@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "genere_le": "2026-10-08T16:42+00:00",
+ "genere_le": "2026-10-09T16:26+00:00",
  "station": {
   "nom": "Lac Saint-Pierre",
   "id": "701LP0N",
@@ -12,9 +12,9 @@
  },
  "periode": {
   "debut": "2024-05-01",
-  "fin": "2026-10-05",
-  "jours": 526,
-  "paires": 188231
+  "fin": "2026-10-06",
+  "jours": 527,
+  "paires": 188591
  },
  "horizons": {
   "24h": [
@@ -24,8 +24,8 @@
     "reel": {
      "biais": -1.38,
      "rmse": 4.05,
-     "correlation": 0.723,
-     "n": 6298,
+     "correlation": 0.724,
+     "n": 6310,
      "rang": 1
     },
     "officiel": {
@@ -41,9 +41,9 @@
     "nom": "HRDPS (Canada, 2.5 km)",
     "reel": {
      "biais": -1.41,
-     "rmse": 4.08,
+     "rmse": 4.07,
      "correlation": 0.73,
-     "n": 6298,
+     "n": 6310,
      "rang": 2
     },
     "officiel": {
@@ -60,8 +60,8 @@
     "reel": {
      "biais": -2.44,
      "rmse": 4.4,
-     "correlation": 0.747,
-     "n": 6155,
+     "correlation": 0.748,
+     "n": 6167,
      "rang": 3
     },
     "officiel": {
@@ -78,8 +78,8 @@
     "reel": {
      "biais": -2.76,
      "rmse": 4.7,
-     "correlation": 0.725,
-     "n": 6298,
+     "correlation": 0.726,
+     "n": 6310,
      "rang": 4
     },
     "officiel": {
@@ -97,7 +97,7 @@
      "biais": -3.02,
      "rmse": 4.98,
      "correlation": 0.708,
-     "n": 6298,
+     "n": 6310,
      "rang": 5
     },
     "officiel": {
@@ -112,10 +112,10 @@
     "modele": "ecmwf_ifs025",
     "nom": "ECMWF IFS 0.25°",
     "reel": {
-     "biais": -3.31,
+     "biais": -3.32,
      "rmse": 5.15,
-     "correlation": 0.718,
-     "n": 6298,
+     "correlation": 0.719,
+     "n": 6310,
      "rang": 6
     },
     "officiel": {
@@ -134,8 +134,8 @@
     "reel": {
      "biais": -1.4,
      "rmse": 4.36,
-     "correlation": 0.669,
-     "n": 6298,
+     "correlation": 0.67,
+     "n": 6310,
      "rang": 1
     },
     "officiel": {
@@ -152,8 +152,8 @@
     "reel": {
      "biais": -2.32,
      "rmse": 4.69,
-     "correlation": 0.674,
-     "n": 6293,
+     "correlation": 0.675,
+     "n": 6305,
      "rang": 2
     },
     "officiel": {
@@ -171,7 +171,7 @@
      "biais": -2.64,
      "rmse": 4.93,
      "correlation": 0.654,
-     "n": 6166,
+     "n": 6178,
      "rang": 3
     },
     "officiel": {
@@ -188,8 +188,8 @@
     "reel": {
      "biais": -2.97,
      "rmse": 5.19,
-     "correlation": 0.636,
-     "n": 6298,
+     "correlation": 0.637,
+     "n": 6310,
      "rang": 4
     },
     "officiel": {
@@ -207,7 +207,7 @@
      "biais": -3.35,
      "rmse": 5.3,
      "correlation": 0.679,
-     "n": 6298,
+     "n": 6310,
      "rang": 5
     },
     "officiel": {
@@ -226,8 +226,8 @@
     "reel": {
      "biais": -1.44,
      "rmse": 5.24,
-     "correlation": 0.489,
-     "n": 6298,
+     "correlation": 0.49,
+     "n": 6310,
      "rang": 1
     },
     "officiel": {
@@ -244,8 +244,8 @@
     "reel": {
      "biais": -2.68,
      "rmse": 5.55,
-     "correlation": 0.495,
-     "n": 6238,
+     "correlation": 0.496,
+     "n": 6250,
      "rang": 2
     },
     "officiel": {
@@ -262,8 +262,8 @@
     "reel": {
      "biais": -3.36,
      "rmse": 5.78,
-     "correlation": 0.52,
-     "n": 6298,
+     "correlation": 0.521,
+     "n": 6310,
      "rang": 3
     },
     "officiel": {
@@ -279,9 +279,9 @@
     "nom": "ICON (Allemagne)",
     "reel": {
      "biais": -3.12,
-     "rmse": 5.86,
-     "correlation": 0.451,
-     "n": 6298,
+     "rmse": 5.85,
+     "correlation": 0.452,
+     "n": 6310,
      "rang": 4
     },
     "officiel": {
