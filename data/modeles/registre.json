@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "actif": "v2-2026-08-24",
+  "actif": "v11-2026-10-19",
   "versions": [
     {
       "version": "v1-2026-07-15",
@@ -476,6 +476,101 @@
         "n_min_poids": 500
       },
       "notes": "Poids recalculés sur la compétence mesurée contre l'anémomètre de Lac Saint-Pierre ; biais locaux inchangés. À l'essai, hors service."
+    },
+    {
+      "version": "v11-2026-10-19",
+      "cree_le": "2026-10-19T17:09:54+00:00",
+      "origine": "recalibrage",
+      "empreinte": "sha256:4a9508162dc4b2d2",
+      "genere_le": "2026-10-19",
+      "periode_backtest": "2024-05-01 à 2026-10-16 (mai-octobre)",
+      "donnees_jusqu_au": "2026-10-16",
+      "n_apparie": 192461,
+      "verite": {
+        "version": "median_hour0/v1",
+        "modeles": [
+          "gem_global",
+          "gem_regional",
+          "gem_hrdps_continental",
+          "ecmwf_ifs025",
+          "gfs_global",
+          "icon_global"
+        ]
+      },
+      "modeles_prevision": [
+        "ecmwf_ifs025",
+        "gem_global",
+        "gem_hrdps_continental",
+        "gem_regional",
+        "gfs_global",
+        "icon_global"
+      ],
+      "metriques_validation": {
+        "rmse_ensemble_courant": {
+          "24h": 0.6675727677962545,
+          "48h": 0.8302654949610865,
+          "96h": 1.2719219404922224
+        },
+        "rmse_ensemble_candidat": {
+          "24h": 0.6674296425013602,
+          "48h": 0.8301261268893342,
+          "96h": 1.272077362533669
+        },
+        "fenetre_test_jours": 60,
+        "compare_a": "v2-2026-08-24"
+      },
+      "notes": ""
+    },
+    {
+      "version": "v12-2026-10-19",
+      "cree_le": "2026-10-19T17:09:55+00:00",
+      "origine": "competence-reelle",
+      "empreinte": "sha256:145a84859ce73747",
+      "genere_le": "2026-10-19",
+      "periode_backtest": "2024-05-01 à 2026-10-16 (mai-octobre)",
+      "donnees_jusqu_au": "2026-10-16",
+      "n_apparie": 192191,
+      "verite": {
+        "version": "median_hour0/v1",
+        "modeles": [
+          "gem_global",
+          "gem_regional",
+          "gem_hrdps_continental",
+          "ecmwf_ifs025",
+          "gfs_global",
+          "icon_global"
+        ]
+      },
+      "modeles_prevision": [
+        "ecmwf_ifs025",
+        "gem_global",
+        "gem_hrdps_continental",
+        "gem_regional",
+        "gfs_global",
+        "icon_global"
+      ],
+      "metriques_validation": {
+        "poids_remplaces": [
+          "ecmwf_ifs025/24h",
+          "gem_global/24h",
+          "gem_hrdps_continental/24h",
+          "gem_regional/24h",
+          "gfs_global/24h",
+          "icon_global/24h",
+          "ecmwf_ifs025/48h",
+          "gem_global/48h",
+          "gem_regional/48h",
+          "gfs_global/48h",
+          "icon_global/48h",
+          "ecmwf_ifs025/96h",
+          "gem_global/96h",
+          "gfs_global/96h",
+          "icon_global/96h"
+        ],
+        "poids_conserves": [],
+        "n_min_poids": 500
+      },
+      "notes": "Poids recalculés sur la compétence mesurée contre l'anémomètre de Lac Saint-Pierre ; biais locaux inchangés. À l'essai, hors service."
     }
   ],
   "activations": [
@@ -528,7 +623,17 @@
       "version": "v10-2026-10-12",
       "le": "2026-10-12T20:00:01+00:00",
       "raison": "mise à l'essai comme candidat (competence-reelle) — actif inchangé : v2-2026-08-24"
+    },
+    {
+      "version": "v11-2026-10-19",
+      "le": "2026-10-19T17:09:54+00:00",
+      "raison": "création (recalibrage)"
+    },
+    {
+      "version": "v12-2026-10-19",
+      "le": "2026-10-19T17:09:55+00:00",
+      "raison": "mise à l'essai comme candidat (competence-reelle) — actif inchangé : v11-2026-10-19"
     }
   ],
-  "candidat": "v10-2026-10-12"
+  "candidat": "v12-2026-10-19"
 }

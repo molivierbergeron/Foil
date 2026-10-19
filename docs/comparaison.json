@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "genere_le": "2026-10-19T16:39+00:00",
+ "genere_le": "2026-10-19T17:09+00:00",
  "station": {
   "nom": "Lac Saint-Pierre",
   "id": "701LP0N",
@@ -29,10 +29,10 @@
      "rang": 1
     },
     "officiel": {
-     "biais": 0.44,
-     "rmse": 1.65,
-     "poids": 0.1461,
-     "n": 5772,
+     "biais": 0.42,
+     "rmse": 1.6,
+     "poids": 0.1517,
+     "n": 6444,
      "rang": 5
     }
    },
@@ -47,10 +47,10 @@
      "rang": 2
     },
     "officiel": {
-     "biais": 1.0,
-     "rmse": 2.18,
-     "poids": 0.0836,
-     "n": 5772,
+     "biais": 1.09,
+     "rmse": 2.23,
+     "poids": 0.0787,
+     "n": 6444,
      "rang": 6
     }
    },
@@ -65,10 +65,10 @@
      "rang": 3
     },
     "officiel": {
-     "biais": -0.87,
-     "rmse": 1.52,
+     "biais": -0.86,
+     "rmse": 1.51,
      "poids": 0.1713,
-     "n": 5629,
+     "n": 6301,
      "rang": 2
     }
    },
@@ -84,9 +84,9 @@
     },
     "officiel": {
      "biais": -0.92,
-     "rmse": 1.58,
-     "poids": 0.1596,
-     "n": 5772,
+     "rmse": 1.56,
+     "poids": 0.16,
+     "n": 6444,
      "rang": 4
     }
    },
@@ -101,10 +101,10 @@
      "rang": 5
     },
     "officiel": {
-     "biais": 0.01,
+     "biais": -0.03,
      "rmse": 1.21,
-     "poids": 0.2691,
-     "n": 5772,
+     "poids": 0.2664,
+     "n": 6444,
      "rang": 1
     }
    },
@@ -119,10 +119,10 @@
      "rang": 6
     },
     "officiel": {
-     "biais": 0.56,
-     "rmse": 1.53,
-     "poids": 0.1704,
-     "n": 5772,
+     "biais": 0.58,
+     "rmse": 1.51,
+     "poids": 0.1718,
+     "n": 6444,
      "rang": 3
     }
    }
@@ -139,10 +139,10 @@
      "rang": 1
     },
     "officiel": {
-     "biais": 0.5,
-     "rmse": 1.88,
-     "poids": 0.1621,
-     "n": 5772,
+     "biais": 0.47,
+     "rmse": 1.83,
+     "poids": 0.1676,
+     "n": 6444,
      "rang": 5
     }
    },
@@ -158,9 +158,9 @@
     },
     "officiel": {
      "biais": -0.75,
-     "rmse": 1.7,
-     "poids": 0.1997,
-     "n": 5767,
+     "rmse": 1.68,
+     "poids": 0.1988,
+     "n": 6439,
      "rang": 2
     }
    },
@@ -175,10 +175,10 @@
      "rang": 3
     },
     "officiel": {
-     "biais": -0.82,
+     "biais": -0.84,
      "rmse": 1.72,
-     "poids": 0.195,
-     "n": 5640,
+     "poids": 0.1898,
+     "n": 6312,
      "rang": 4
     }
    },
@@ -193,10 +193,10 @@
      "rang": 4
     },
     "officiel": {
-     "biais": 0.02,
-     "rmse": 1.53,
-     "poids": 0.2467,
-     "n": 5772,
+     "biais": -0.0,
+     "rmse": 1.51,
+     "poids": 0.2466,
+     "n": 6444,
      "rang": 1
     }
    },
@@ -211,10 +211,10 @@
      "rang": 5
     },
     "officiel": {
-     "biais": 0.54,
-     "rmse": 1.71,
-     "poids": 0.1965,
-     "n": 5772,
+     "biais": 0.58,
+     "rmse": 1.69,
+     "poids": 0.1971,
+     "n": 6444,
      "rang": 3
     }
    }
@@ -231,10 +231,10 @@
      "rang": 1
     },
     "officiel": {
-     "biais": 0.44,
-     "rmse": 2.37,
-     "poids": 0.2168,
-     "n": 5772,
+     "biais": 0.43,
+     "rmse": 2.36,
+     "poids": 0.2135,
+     "n": 6444,
      "rang": 4
     }
    },
@@ -249,10 +249,10 @@
      "rang": 2
     },
     "officiel": {
-     "biais": -0.79,
-     "rmse": 2.1,
-     "poids": 0.2772,
-     "n": 5712,
+     "biais": -0.83,
+     "rmse": 2.08,
+     "poids": 0.2759,
+     "n": 6384,
      "rang": 1
     }
    },
@@ -267,10 +267,10 @@
      "rang": 3
     },
     "officiel": {
-     "biais": 0.6,
-     "rmse": 2.27,
-     "poids": 0.236,
-     "n": 5772,
+     "biais": 0.59,
+     "rmse": 2.25,
+     "poids": 0.2354,
+     "n": 6444,
      "rang": 3
     }
    },
@@ -285,16 +285,16 @@
      "rang": 4
     },
     "officiel": {
-     "biais": -0.05,
-     "rmse": 2.12,
-     "poids": 0.2699,
-     "n": 5772,
+     "biais": -0.1,
+     "rmse": 2.08,
+     "poids": 0.2752,
+     "n": 6444,
      "rang": 2
     }
    }
   ]
  },
- "modele_actif": "v2-2026-08-24",
+ "modele_actif": "v11-2026-10-19",
  "versions": [
   {
    "version": "v1-2026-07-15",
@@ -385,19 +385,27 @@
    "donnees_jusqu_au": "2026-10-09",
    "n_apparie": 189671,
    "notes": "Poids recalculés sur la compétence mesurée contre l'anémomètre de Lac Saint-Pierre ; biais locaux inchangés. À l'essai, hors service."
+  },
+  {
+   "version": "v11-2026-10-19",
+   "origine": "recalibrage",
+   "cree_le": "2026-10-19T17:09:54+00:00",
+   "genere_le": "2026-10-19",
+   "donnees_jusqu_au": "2026-10-16",
+   "n_apparie": 192461,
+   "notes": ""
+  },
+  {
+   "version": "v12-2026-10-19",
+   "origine": "competence-reelle",
+   "cree_le": "2026-10-19T17:09:55+00:00",
+   "genere_le": "2026-10-19",
+   "donnees_jusqu_au": "2026-10-16",
+   "n_apparie": 192191,
+   "notes": "Poids recalculés sur la compétence mesurée contre l'anémomètre de Lac Saint-Pierre ; biais locaux inchangés. À l'essai, hors service."
   }
  ],
  "activations": [
-  {
-   "version": "v1-2026-07-15",
-   "le": "2026-08-20T23:24:13+00:00",
-   "raison": "création (import-initial)"
-  },
-  {
-   "version": "v2-2026-08-24",
-   "le": "2026-08-24T11:06:20+00:00",
-   "raison": "création (recalibrage)"
-  },
   {
    "version": "v3-2026-08-28",
    "le": "2026-08-28T00:45:42+00:00",
@@ -437,6 +445,16 @@
    "version": "v10-2026-10-12",
    "le": "2026-10-12T20:00:01+00:00",
    "raison": "mise à l'essai comme candidat (competence-reelle) — actif inchangé : v2-2026-08-24"
+  },
+  {
+   "version": "v11-2026-10-19",
+   "le": "2026-10-19T17:09:54+00:00",
+   "raison": "création (recalibrage)"
+  },
+  {
+   "version": "v12-2026-10-19",
+   "le": "2026-10-19T17:09:55+00:00",
+   "raison": "mise à l'essai comme candidat (competence-reelle) — actif inchangé : v11-2026-10-19"
   }
  ]
 }
