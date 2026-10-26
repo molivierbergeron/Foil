@@ -24,3 +24,4 @@ s'ils font au moins aussi bien. Une dérive soudaine d'un modèle
 | 2026-10-05 | 0.66/0.82/1.17 | 0.66/0.82/1.17 | **conservé** (candidat moins bon) — `v2-2026-08-24` reste active |
 | 2026-10-12 | 0.66/0.82/1.20 | 0.66/0.82/1.20 | **conservé** (candidat moins bon) — `v2-2026-08-24` reste active |
 | 2026-10-19 | 0.67/0.83/1.27 | 0.67/0.83/1.27 | appliqué → `v11-2026-10-19` |
+| 2026-10-26 | 0.65/0.82/1.32 | 0.65/0.82/1.32 | **conservé** (candidat moins bon) — `v11-2026-10-19` reste active |

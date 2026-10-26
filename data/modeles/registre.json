@@ -571,6 +571,57 @@
         "n_min_poids": 500
       },
       "notes": "Poids recalculés sur la compétence mesurée contre l'anémomètre de Lac Saint-Pierre ; biais locaux inchangés. À l'essai, hors service."
+    },
+    {
+      "version": "v13-2026-10-26",
+      "cree_le": "2026-10-26T16:59:41+00:00",
+      "origine": "competence-reelle",
+      "empreinte": "sha256:142af8b3b50aff98",
+      "genere_le": "2026-10-26",
+      "periode_backtest": "2024-05-01 à 2026-10-16 (mai-octobre)",
+      "donnees_jusqu_au": "2026-10-23",
+      "n_apparie": 194711,
+      "verite": {
+        "version": "median_hour0/v1",
+        "modeles": [
+          "gem_global",
+          "gem_regional",
+          "gem_hrdps_continental",
+          "ecmwf_ifs025",
+          "gfs_global",
+          "icon_global"
+        ]
+      },
+      "modeles_prevision": [
+        "ecmwf_ifs025",
+        "gem_global",
+        "gem_hrdps_continental",
+        "gem_regional",
+        "gfs_global",
+        "icon_global"
+      ],
+      "metriques_validation": {
+        "poids_remplaces": [
+          "ecmwf_ifs025/24h",
+          "gem_global/24h",
+          "gem_hrdps_continental/24h",
+          "gem_regional/24h",
+          "gfs_global/24h",
+          "icon_global/24h",
+          "ecmwf_ifs025/48h",
+          "gem_global/48h",
+          "gem_regional/48h",
+          "gfs_global/48h",
+          "icon_global/48h",
+          "ecmwf_ifs025/96h",
+          "gem_global/96h",
+          "gfs_global/96h",
+          "icon_global/96h"
+        ],
+        "poids_conserves": [],
+        "n_min_poids": 500
+      },
+      "notes": "Poids recalculés sur la compétence mesurée contre l'anémomètre de Lac Saint-Pierre ; biais locaux inchangés. À l'essai, hors service."
     }
   ],
   "activations": [
@@ -633,7 +684,12 @@
       "version": "v12-2026-10-19",
       "le": "2026-10-19T17:09:55+00:00",
       "raison": "mise à l'essai comme candidat (competence-reelle) — actif inchangé : v11-2026-10-19"
+    },
+    {
+      "version": "v13-2026-10-26",
+      "le": "2026-10-26T16:59:41+00:00",
+      "raison": "mise à l'essai comme candidat (competence-reelle) — actif inchangé : v11-2026-10-19"
     }
   ],
-  "candidat": "v12-2026-10-19"
+  "candidat": "v13-2026-10-26"
 }
