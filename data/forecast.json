@@ -1,5 +1,5 @@
 {
- "genere_le": "2026-11-01T16:14+00:00",
+ "genere_le": "2026-11-02T19:41+00:00",
  "spot": {
   "latitude": 46.3123,
   "longitude": -73.3638
@@ -7,11 +7,11 @@
  "unites": "noeuds",
  "verdicts_ensemble": {
   "2026-11-01": {
-   "go": true,
+   "go": false,
    "blocs": {
     "matin": false,
-    "midi": true,
-    "apres_midi": true
+    "midi": false,
+    "apres_midi": false
    }
   },
   "2026-11-02": {
@@ -55,6 +55,14 @@
    }
   },
   "2026-11-07": {
+   "go": true,
+   "blocs": {
+    "matin": false,
+    "midi": true,
+    "apres_midi": true
+   }
+  },
+  "2026-11-08": {
    "go": false,
    "blocs": {
     "matin": false,
