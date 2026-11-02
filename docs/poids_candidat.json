@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "genere_le": "2026-10-26",
+  "genere_le": "2026-11-02",
   "periode_backtest": "2024-05-01 à 2026-10-16 (mai-octobre)",
   "truth_source": "median_hour0",
   "verite": {
@@ -51,25 +51,25 @@
           "biais_nds": 0.58,
           "rmse_nds": 1.51,
           "n": 6444,
-          "poids": 0.1264,
-          "rmse_reel_nds": 5.17,
-          "n_reel": 6514
+          "poids": 0.1263,
+          "rmse_reel_nds": 5.16,
+          "n_reel": 6598
         },
         "48h": {
           "biais_nds": 0.58,
           "rmse_nds": 1.69,
           "n": 6444,
-          "poids": 0.1671,
-          "rmse_reel_nds": 5.31,
-          "n_reel": 6514
+          "poids": 0.1669,
+          "rmse_reel_nds": 5.3,
+          "n_reel": 6598
         },
         "96h": {
           "biais_nds": 0.59,
           "rmse_nds": 2.25,
           "n": 6444,
-          "poids": 0.2337,
-          "rmse_reel_nds": 5.79,
-          "n_reel": 6514
+          "poids": 0.2339,
+          "rmse_reel_nds": 5.77,
+          "n_reel": 6598
         }
       },
       "biais_par_secteur": {
@@ -184,25 +184,25 @@
           "biais_nds": -0.92,
           "rmse_nds": 1.56,
           "n": 6444,
-          "poids": 0.1534,
-          "rmse_reel_nds": 4.69,
-          "n_reel": 6514
+          "poids": 0.1537,
+          "rmse_reel_nds": 4.68,
+          "n_reel": 6598
         },
         "48h": {
           "biais_nds": -0.84,
           "rmse_nds": 1.72,
           "n": 6312,
-          "poids": 0.195,
-          "rmse_reel_nds": 4.92,
-          "n_reel": 6382
+          "poids": 0.1955,
+          "rmse_reel_nds": 4.9,
+          "n_reel": 6466
         },
         "96h": {
           "biais_nds": -0.83,
           "rmse_nds": 2.08,
           "n": 6384,
-          "poids": 0.2547,
-          "rmse_reel_nds": 5.55,
-          "n_reel": 6454
+          "poids": 0.2544,
+          "rmse_reel_nds": 5.54,
+          "n_reel": 6538
         }
       },
       "biais_par_secteur": {
@@ -318,9 +318,9 @@
           "biais_nds": 1.09,
           "rmse_nds": 2.23,
           "n": 6444,
-          "poids": 0.204,
-          "rmse_reel_nds": 4.07,
-          "n_reel": 6514
+          "poids": 0.2043,
+          "rmse_reel_nds": 4.06,
+          "n_reel": 6598
         }
       },
       "biais_par_secteur": {
@@ -368,17 +368,17 @@
           "biais_nds": -0.86,
           "rmse_nds": 1.51,
           "n": 6301,
-          "poids": 0.1747,
-          "rmse_reel_nds": 4.4,
-          "n_reel": 6371
+          "poids": 0.1749,
+          "rmse_reel_nds": 4.38,
+          "n_reel": 6455
         },
         "48h": {
           "biais_nds": -0.75,
           "rmse_nds": 1.68,
           "n": 6439,
-          "poids": 0.2149,
-          "rmse_reel_nds": 4.68,
-          "n_reel": 6509
+          "poids": 0.215,
+          "rmse_reel_nds": 4.67,
+          "n_reel": 6593
         }
       },
       "biais_par_secteur": {
@@ -460,25 +460,25 @@
           "biais_nds": 0.42,
           "rmse_nds": 1.6,
           "n": 6444,
-          "poids": 0.2067,
+          "poids": 0.2063,
           "rmse_reel_nds": 4.04,
-          "n_reel": 6514
+          "n_reel": 6598
         },
         "48h": {
           "biais_nds": 0.47,
           "rmse_nds": 1.83,
           "n": 6444,
-          "poids": 0.2489,
-          "rmse_reel_nds": 4.35,
-          "n_reel": 6514
+          "poids": 0.2486,
+          "rmse_reel_nds": 4.34,
+          "n_reel": 6598
         },
         "96h": {
           "biais_nds": 0.43,
           "rmse_nds": 2.36,
           "n": 6444,
-          "poids": 0.2839,
-          "rmse_reel_nds": 5.25,
-          "n_reel": 6514
+          "poids": 0.2842,
+          "rmse_reel_nds": 5.24,
+          "n_reel": 6598
         }
       },
       "biais_par_secteur": {
@@ -594,25 +594,25 @@
           "biais_nds": -0.03,
           "rmse_nds": 1.21,
           "n": 6444,
-          "poids": 0.1348,
-          "rmse_reel_nds": 5.01,
-          "n_reel": 6514
+          "poids": 0.1346,
+          "rmse_reel_nds": 5.0,
+          "n_reel": 6598
         },
         "48h": {
           "biais_nds": -0.0,
           "rmse_nds": 1.51,
           "n": 6444,
-          "poids": 0.1741,
-          "rmse_reel_nds": 5.21,
-          "n_reel": 6514
+          "poids": 0.174,
+          "rmse_reel_nds": 5.19,
+          "n_reel": 6598
         },
         "96h": {
           "biais_nds": -0.1,
           "rmse_nds": 2.08,
           "n": 6444,
           "poids": 0.2276,
-          "rmse_reel_nds": 5.87,
-          "n_reel": 6514
+          "rmse_reel_nds": 5.85,
+          "n_reel": 6598
         }
       },
       "biais_par_secteur": {
@@ -946,9 +946,9 @@
     "methode": "1/RMSE² mesuré contre observation réelle",
     "station": "Lac Saint-Pierre (701LP0N)",
     "distance_km": 38,
-    "periode": "2024-05-01 à 2026-10-23",
-    "n_paires": 194711,
+    "periode": "2024-05-01 à 2026-10-30",
+    "n_paires": 197231,
     "biais": "inchangés — repris du modèle actif (les biais du site de mesure ne se transplantent pas au lac)"
   },
-  "version_modele": "v13-2026-10-26"
+  "version_modele": "v14-2026-11-02"
 }
