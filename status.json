@@ -5,7 +5,7 @@
  "name": "Vent Lac Maskinongé",
  "one_liner": "Dit s'il vaut la peine d'aller faire du foil au Lac Maskinongé : GO ou NO, avec le pourcentage de GO qui se sont vraiment confirmés.",
  "status": "actif",
- "version": "Page 1.4.0 · calcul v2 du 24 août",
+ "version": "Page 1.5.0 · calcul v2 du 24 août",
  "posture": {
   "verdict": "Préparer 2027",
   "why": "La saison de foil se termine en octobre. Cet hiver sert à faire le bilan de 2026 et à décider des deux seuls leviers qui peuvent encore améliorer la précision."
@@ -589,8 +589,8 @@
   }
  ],
  "plan": {
-  "version": 5,
-  "updated_at": "2026-11-04T14:00",
+  "version": 6,
+  "updated_at": "2026-11-04T15:00",
   "updated_by": "Claude",
   "priorities_validated": false,
   "changes": [
@@ -608,10 +608,20 @@
     "version": 5,
     "date": "2026-11-04",
     "summary": "Page allégée (moins de texte), graphique du vent sur 7 jours ; 3 pistes de design proposées, en attente de ton choix."
+   },
+   {
+    "version": 6,
+    "date": "2026-11-04",
+    "summary": "Nouvelle mise en page approuvée : « Maintenant » puis « La semaine » (graphique 7 jours, puis une rangée compacte par jour)."
    }
   ]
  },
  "history": [
+  {
+   "date": "2026-11-04",
+   "title": "Nouvelle mise en page : Maintenant / La semaine",
+   "pr": 11
+  },
   {
    "date": "2026-11-04",
    "title": "Alléger les textes de la page et étendre le graphique à 7 jours",
@@ -692,15 +702,15 @@
   "_generated": "AUTO — généré par tools/git_facts.py (future Action). Ne pas éditer à la main.",
   "generated_at": "2026-11-04",
   "last_commit": {
-   "sha": "364beb6",
-   "date": "2026-11-02",
-   "author": "github-actions[bot]",
-   "subject": "Recalibrage hebdomadaire 2026-11-02"
+   "sha": "fe7572f",
+   "date": "2026-11-04",
+   "author": "Claude",
+   "subject": "Nouvelle mise en page : Maintenant / La semaine"
   },
   "last_human_commit": {
-   "sha": null,
+   "sha": "fe7572f",
    "date": "2026-11-04",
-   "subject": "Alléger les textes de la page et étendre le graphique à 7 jours"
+   "subject": "Nouvelle mise en page : Maintenant / La semaine"
   },
   "commits_30d": 39,
   "human_commits_30d": 5,
