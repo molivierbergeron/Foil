@@ -14,8 +14,8 @@
 </head>
 <body>
 <header>
-  <h1>Vent au Lac Maskinongé</h1>
-  <p class="sous-titre">Foil UFO — prévisions calibrées sur l'erreur mesurée des modèles à ce spot</p>
+  <h1>Vent · Lac Maskinongé</h1>
+  <p class="sous-titre">Foil UFO</p>
 </header>
 
 <main>
@@ -23,18 +23,9 @@
 
   <section id="execution" hidden>
     <h2>Aujourd'hui / demain</h2>
-    <p class="aide">Heure par heure : vent (gros chiffre, nds), rafales, direction, météo.
-    La flèche pointe où va le vent (↗ = vent du sud-ouest) ; pâle = direction peu
-    fiable (vent faible ou modèles en désaccord). Vert = dans la bande de foil.
-    ⚡ = risque d'orage, on ne sort pas.</p>
     <div id="blocs-jours"></div>
     <div id="divergence" class="avis" hidden></div>
-    <h3>Vent prévu, heure par heure (48 h)</h3>
-    <p class="aide">Ligne épaisse : ensemble corrigé. Lignes fines : chaque modèle
-    après correction de son biais mesuré. Zone teintée : bande de foil (7–16 nds).
-    Flèches sous l'axe : direction du vent, heure par heure.
-    Glisse le doigt verticalement sur le graphique pour lire vent, rafales et direction,
-    ou balaie horizontalement pour voir demain.</p>
+    <h3>Vent sur 7 jours</h3>
     <div id="graphique" class="graphique-cadre"></div>
     <div id="legende" class="legende"></div>
   </section>
@@ -48,14 +39,10 @@
 <footer id="pied" hidden>
   <p id="fraicheur"></p>
   <p id="recalibrage"></p>
-  <p>Données météo : <a href="https://open-meteo.com/" rel="noopener">Open-Meteo.com</a> (CC BY 4.0).
-  La vérité de calibration est pour l'instant un consensus de modèles — les cotes
-  seront requalifiées quand l'anémomètre au lac sera en service.</p>
-  <p><a href="essai.html">En service vs proposition →</a> — le vent prévu par
-  le modèle actuel et par la proposition, côte à côte, pour juger sur place.</p>
-  <p><a href="comparaison.html">Les modèles vs la réalité →</a> — comment
-  chaque modèle se comporte face à un anémomètre réel, et l'historique des
-  versions du modèle calibré.</p>
+  <p>Données : <a href="https://open-meteo.com/" rel="noopener">Open-Meteo</a> (CC BY 4.0).
+  Calibré sur le consensus des modèles en attendant l'anémomètre au lac.</p>
+  <p><a href="essai.html">En service vs proposition →</a></p>
+  <p><a href="comparaison.html">Modèles vs réalité →</a></p>
   <p id="versions" class="versions"></p>
 </footer>
 
