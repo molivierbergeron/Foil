@@ -5,7 +5,7 @@
  "name": "Vent Lac Maskinongé",
  "one_liner": "Dit s'il vaut la peine d'aller faire du foil au Lac Maskinongé : GO ou NO, avec le pourcentage de GO qui se sont vraiment confirmés.",
  "status": "actif",
- "version": "Page 1.5.0 · calcul v2 du 24 août",
+ "version": "Page 1.6.0 · calcul v2 du 24 août",
  "posture": {
   "verdict": "Préparer 2027",
   "why": "La saison de foil se termine en octobre. Cet hiver sert à faire le bilan de 2026 et à décider des deux seuls leviers qui peuvent encore améliorer la précision."
@@ -589,8 +589,8 @@
   }
  ],
  "plan": {
-  "version": 7,
-  "updated_at": "2026-11-04T15:40",
+  "version": 8,
+  "updated_at": "2026-11-04T16:30",
   "updated_by": "Claude",
   "priorities_validated": false,
   "changes": [
@@ -618,10 +618,20 @@
     "version": 7,
     "date": "2026-11-04",
     "summary": "Correction : référence du dernier commit."
+   },
+   {
+    "version": 8,
+    "date": "2026-11-04",
+    "summary": "Température ajoutée (graphique aux 4 h, et max du jour dans la semaine) ; graphique plein écran à l'horizontale."
    }
   ]
  },
  "history": [
+  {
+   "date": "2026-11-04",
+   "title": "Température et graphique plein écran à l'horizontale",
+   "pr": 13
+  },
   {
    "date": "2026-11-04",
    "title": "Nouvelle mise en page : Maintenant / La semaine",

@@ -17,7 +17,7 @@
  * séparément, et quand quelque chose cloche il faut pouvoir dire lequel des
  * deux a bougé. Pas de numéro injecté au déploiement : docs/ doit rester
  * copiable tel quel par FTP, sans étape de build. */
-const VERSION_UI = "1.5.0";
+const VERSION_UI = "1.6.0";
 
 const MODELES = {
   gem_global: "GEM global",
@@ -173,6 +173,7 @@ function construireHeures(donnees, meteo, poids) {
         meteoCode: meteo.hourly.weather_code?.[i],
         pluie: meteo.hourly.precipitation?.[i],
         probPluie: meteo.hourly.precipitation_probability?.[i],
+        temp: meteo.hourly.temperature_2m?.[i],
       };
     });
   }
@@ -414,7 +415,9 @@ function rendreSemaine(heures, poids, sport) {
     const [debutJ, finJ] = [Math.min(...Object.values(sport.blocs).map((b) => b[0])),
                             Math.max(...Object.values(sport.blocs).map((b) => b[1]))];
     const dir = directionMoyenne(a.jour.filter((h) => h.heure >= debutJ && h.heure < finJ));
-    const meteo = a.meteo ? `${a.meteo.orage ? "⚡" : a.meteo.icone}` : "";
+    const temps = a.jour.map((h) => h.temp).filter((t) => t != null);
+    const tempMax = temps.length ? ` ${Math.round(Math.max(...temps))}°` : "";
+    const meteo = a.meteo ? `${a.meteo.orage ? "⚡" : a.meteo.icone}${tempMax}` : tempMax.trim();
     const cases = Object.values(a.blocs).map((b) => {
       if (!(b.vent > 0)) return `<div class="case calme"><span class="v">—</span></div>`;
       // Rouge seulement là où on sortirait : sous la bande, le ratio rafales/vent
@@ -481,7 +484,7 @@ function rendreGraphique(heures, sport) {
   const h48 = heures.filter((h) => h.decalage >= 1
     || (h.decalage === 0 && h.heure >= Math.max(0, heureCourante - 2)));
   // Sous l'axe : une rangée de flèches de direction (une par heure), puis les heures.
-  const PX_HEURE = 14, H = 300, mg = { g: 30, d: 8, h: 26, b: 52 };
+  const PX_HEURE = 14, H = 316, mg = { g: 30, d: 8, h: 26, b: 68 };
   const L = mg.g + mg.d + Math.max(1, h48.length - 1) * PX_HEURE;
   const larg = L - mg.g - mg.d, haut = H - mg.h - mg.b;
   const maxY = Math.max(20, ...h48.map((h) => h.ensemble ?? 0),
@@ -540,8 +543,12 @@ function rendreGraphique(heures, sport) {
       + `<path d="${TRACE_FLECHE}"/></g>`;
   });
   for (let i = 0; i < h48.length; i++) {
-    if (h48[i].heure % 3 === 0) {
-      svg += `<text x="${x(i)}" y="${H - 6}" text-anchor="middle" font-size="10" fill="var(--texte-3)">${h48[i].heure} h</text>`;
+    // Heures et température aux 4 h, alignées (0 h, 4 h, 8 h…).
+    if (h48[i].heure % 4 === 0) {
+      svg += `<text x="${x(i)}" y="${H - 22}" text-anchor="middle" font-size="10" fill="var(--texte-3)">${h48[i].heure} h</text>`;
+      if (h48[i].temp != null) {
+        svg += `<text x="${x(i)}" y="${H - 7}" text-anchor="middle" font-size="10" font-weight="600" fill="var(--texte-2)">${Math.round(h48[i].temp)}°</text>`;
+      }
     }
   }
   for (const m of Object.keys(MODELES)) {
@@ -553,7 +560,7 @@ function rendreGraphique(heures, sport) {
   svg += `<path d="${chemin(h48.map((h) => h.ensemble))}" fill="none" stroke="var(--ensemble)" stroke-width="3.2" stroke-linejoin="round"/>`;
   svg += `<g id="curseur" style="display:none"><line y1="${mg.h}" y2="${H - mg.b}" stroke="var(--texte-3)" stroke-width="1"/>`
     + `<circle r="4" fill="var(--ensemble)"/>`
-    + `<rect width="214" height="20" rx="4" fill="var(--surface-carte)" stroke="var(--bordure)"/>`
+    + `<rect width="256" height="20" rx="4" fill="var(--surface-carte)" stroke="var(--bordure)"/>`
     + `<text font-size="11" fill="var(--texte)"></text></g>`;
   svg += `</svg>`;
   const cadre = document.getElementById("graphique");
@@ -575,7 +582,7 @@ function rendreGraphique(heures, sport) {
     ligne.setAttribute("x1", x(i)); ligne.setAttribute("x2", x(i));
     const point = curseur.querySelector("circle");
     point.setAttribute("cx", x(i)); point.setAttribute("cy", y(hh.ensemble));
-    const tx = Math.min(Math.max(x(i) - 107, mg.g), L - 222);
+    const tx = Math.min(Math.max(x(i) - 128, mg.g), L - 264);
     const boite = curseur.querySelector("rect");
     boite.setAttribute("x", tx); boite.setAttribute("y", mg.h);
     const texte = curseur.querySelector("text");
@@ -583,7 +590,8 @@ function rendreGraphique(heures, sport) {
     texte.textContent = `${nomCourt(hh)} ${hh.heure} h · `
       + `vent ${hh.ensemble.toFixed(1)}`
       + (hh.rafales != null ? ` · raf ${hh.rafales.toFixed(0)} nds` : " nds")
-      + (hh.direction != null ? ` · ${secteurDe(hh.direction)} ${Math.round(hh.direction)}°` : "");
+      + (hh.direction != null ? ` · ${secteurDe(hh.direction)}` : "")
+      + (hh.temp != null ? ` · ${Math.round(hh.temp)} °C` : "");
   };
   let luUneFois = false;
   const marquerLecture = () => {
@@ -623,7 +631,7 @@ async function demarrer() {
       + `&models=${Object.keys(MODELES).join(",")}`
       + "&wind_speed_unit=kn&timezone=America%2FToronto&forecast_days=7";
     const urlMeteo = base
-      + "&hourly=weather_code,precipitation,precipitation_probability"
+      + "&hourly=weather_code,precipitation,precipitation_probability,temperature_2m"
       + "&timezone=America%2FToronto&forecast_days=7";
     const [repVent, repMeteo] = await Promise.all([fetch(urlVent), fetch(urlMeteo)]);
     if (!repVent.ok) throw new Error(`Open-Meteo HTTP ${repVent.status}`);
