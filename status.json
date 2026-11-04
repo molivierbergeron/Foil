@@ -589,8 +589,8 @@
   }
  ],
  "plan": {
-  "version": 6,
-  "updated_at": "2026-11-04T15:00",
+  "version": 7,
+  "updated_at": "2026-11-04T15:40",
   "updated_by": "Claude",
   "priorities_validated": false,
   "changes": [
@@ -613,6 +613,11 @@
     "version": 6,
     "date": "2026-11-04",
     "summary": "Nouvelle mise en page approuvée : « Maintenant » puis « La semaine » (graphique 7 jours, puis une rangée compacte par jour)."
+   },
+   {
+    "version": 7,
+    "date": "2026-11-04",
+    "summary": "Correction : référence du dernier commit."
    }
   ]
  },
@@ -702,15 +707,15 @@
   "_generated": "AUTO — généré par tools/git_facts.py (future Action). Ne pas éditer à la main.",
   "generated_at": "2026-11-04",
   "last_commit": {
-   "sha": "fe7572f",
+   "sha": "8749955",
    "date": "2026-11-04",
-   "author": "Claude",
-   "subject": "Nouvelle mise en page : Maintenant / La semaine"
+   "subject": "Nouvelle mise en page : Maintenant / La semaine (#11)",
+   "author": "molivierbergeron"
   },
   "last_human_commit": {
-   "sha": "fe7572f",
+   "sha": "8749955",
    "date": "2026-11-04",
-   "subject": "Nouvelle mise en page : Maintenant / La semaine"
+   "subject": "Nouvelle mise en page : Maintenant / La semaine (#11)"
   },
   "commits_30d": 39,
   "human_commits_30d": 5,
