@@ -322,3 +322,57 @@ footer p.versions {
 #resume p { margin: 0 0 0.4rem; }
 #resume p:last-child { margin-bottom: 0; }
 .resume-ecart { font-weight: 600; }
+
+/* ------------------------------------------------ page principale v1.5
+   Deux temps : « Maintenant » (aujourd'hui / demain, heure par heure) puis
+   « La semaine » (graphique 7 jours, puis une rangée compacte par jour). */
+:root { --jour-alt: rgba(42, 120, 214, 0.035); --trop: #c94d2a; }
+@media (prefers-color-scheme: dark) {
+  :root { --jour-alt: rgba(57, 135, 229, 0.06); --trop: #e0704f; }
+}
+.temps {
+  font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--texte-3); margin: 1.4rem 0 0.5rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.temps::after { content: ""; flex: 1; height: 1px; background: var(--bordure); }
+.jour-blocs .titre-jour { display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
+.titre-jour .meteo-jour { font-weight: 400; font-size: 0.78rem; color: var(--texte-3); text-transform: none; }
+.conf { font-size: 0.72rem; font-weight: 700; color: var(--go); white-space: nowrap; }
+.titre-jour .conf { margin-left: auto; }
+
+.semaine { margin-top: 0.9rem; display: grid; }
+.semaine .tete, .semaine .rangee {
+  display: grid; grid-template-columns: 5.4rem 2.4rem repeat(3, minmax(0, 1fr));
+  gap: 4px; align-items: center;
+}
+.semaine .tete {
+  font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--texte-3); padding-bottom: 4px;
+}
+.semaine .tete span { text-align: center; }
+.semaine .rangee { padding: 6px 0; border-top: 1px solid var(--bordure); }
+.semaine .rangee:last-child { border-bottom: 1px solid var(--bordure); }
+.semaine .nom-jour { display: grid; line-height: 1.15; min-width: 0; }
+.semaine .nom-jour strong { font-size: 0.9rem; text-transform: capitalize; }
+.semaine .nom-jour small { font-size: 0.68rem; color: var(--texte-3); white-space: nowrap; }
+.semaine .dir-jour {
+  display: grid; justify-items: center; font-size: 0.62rem; font-weight: 700;
+  color: var(--texte-2); line-height: 1.1;
+}
+.semaine .dir-jour.go { color: var(--go); }
+.semaine .dir-jour .fl { fill: currentColor; }
+.semaine .dir-jour .fl.pale { opacity: 0.35; }
+.case {
+  border-radius: 8px; background: var(--no-fond); color: var(--no);
+  display: flex; align-items: baseline; justify-content: center; gap: 3px;
+  padding: 6px 0; font-variant-numeric: tabular-nums;
+}
+.case.go { background: var(--go-fond); color: var(--go); }
+.case.marginal { background: var(--avis-fond); color: var(--avis-bord); }
+.case.trop { background: var(--avis-fond); color: var(--trop); }
+.case .v { font-size: 1.1rem; font-weight: 700; line-height: 1; }
+.case .p { font-size: 0.7rem; opacity: 0.85; }
+.case .p.puffy { color: var(--trop); font-weight: 700; opacity: 1; }
+.cle { font-size: 0.66rem; color: var(--texte-3); margin: 0.35rem 0 0; }
+.graphique-cadre { margin-top: 0.3rem; }
