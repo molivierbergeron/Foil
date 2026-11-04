@@ -17,7 +17,7 @@
  * séparément, et quand quelque chose cloche il faut pouvoir dire lequel des
  * deux a bougé. Pas de numéro injecté au déploiement : docs/ doit rester
  * copiable tel quel par FTP, sans étape de build. */
-const VERSION_UI = "1.3.0";
+const VERSION_UI = "1.4.0";
 
 const MODELES = {
   gem_global: "GEM global",
@@ -446,14 +446,24 @@ function rendreExecution(heures, sport) {
   }
 }
 
+function nomJour(h, court = false) {
+  if (h.decalage === 0) return court ? "auj." : "aujourd'hui";
+  if (h.decalage === 1) return court ? "dem." : "demain";
+  const d = new Date(`${h.jourISO}T12:00`);
+  const nom = JOURS[d.getDay()];
+  return court ? `${nom.slice(0, 3)}.` : `${nom} ${d.getDate()}`;
+}
+
 function rendreGraphique(heures, sport) {
-  /* Fenêtre du graphique : de (maintenant - 2 h) à la fin de demain — on
-   * regarde devant, pas la nuit passée. */
+  /* Fenêtre du graphique : de (maintenant - 2 h) à la fin des prévisions
+   * (7 jours) — on regarde devant, pas la nuit passée. Largeur fixe par
+   * heure : le graphique défile horizontalement au doigt. */
   const heureCourante = heureMontreal();
-  const h48 = heures.filter((h) => h.decalage === 1
+  const h48 = heures.filter((h) => h.decalage >= 1
     || (h.decalage === 0 && h.heure >= Math.max(0, heureCourante - 2)));
   // Sous l'axe : une rangée de flèches de direction (une par heure), puis les heures.
-  const L = 720, H = 282, mg = { g: 30, d: 8, h: 12, b: 56 };
+  const PX_HEURE = 14, H = 282, mg = { g: 30, d: 8, h: 12, b: 56 };
+  const L = mg.g + mg.d + Math.max(1, h48.length - 1) * PX_HEURE;
   const larg = L - mg.g - mg.d, haut = H - mg.h - mg.b;
   const maxY = Math.max(20, ...h48.map((h) => h.ensemble ?? 0),
                         ...h48.map((h) => h.rafales ?? 0),
@@ -465,7 +475,12 @@ function rendreGraphique(heures, sport) {
     .map((p, i) => (p == null ? null : `${i === 0 || points[i - 1] == null ? "M" : "L"}${x(i).toFixed(1)},${y(p).toFixed(1)}`))
     .filter(Boolean).join(" ");
 
-  let svg = `<svg viewBox="0 0 ${L} ${H}" width="100%" style="min-width:640px" role="img" aria-label="Vent prévu sur 48 heures, par modèle et ensemble corrigé">`;
+  let svg = `<svg viewBox="0 0 ${L} ${H}" width="${L}" role="img" aria-label="Vent prévu sur 7 jours, par modèle et ensemble corrigé">`;
+  // Nuits (hors heures de navigation) : légèrement assombries pour découper les jours.
+  h48.forEach((h, i) => {
+    if (h.heure >= sport.heure_debut && h.heure < sport.heure_fin) return;
+    svg += `<rect x="${(x(i) - PX_HEURE / 2).toFixed(1)}" y="${mg.h}" width="${PX_HEURE}" height="${haut}" fill="var(--passe)"/>`;
+  });
   svg += `<rect x="${mg.g}" y="${y(sport.vent_max)}" width="${larg}" height="${y(sport.vent_min) - y(sport.vent_max)}" fill="var(--bande)"/>`;
 
   // Repère « maintenant » + les 2 h passées grisées
@@ -496,7 +511,7 @@ function rendreGraphique(heures, sport) {
     }
     if (h48[i].heure === 0 && i > 0) {
       svg += `<line x1="${x(i)}" x2="${x(i)}" y1="${mg.h}" y2="${H - mg.b}" stroke="var(--bordure)" stroke-width="1" stroke-dasharray="3 3"/>`
-        + `<text x="${x(i) + 4}" y="${H - mg.b + 50}" font-size="10" fill="var(--texte-2)">demain</text>`;
+        + `<text x="${x(i) + 4}" y="${H - mg.b + 50}" font-size="10" font-weight="600" fill="var(--texte-2)">${nomJour(h48[i])}</text>`;
     }
   }
   svg += `<text x="${mg.g + 4}" y="${H - mg.b + 50}" font-size="10" fill="var(--texte-2)">aujourd'hui</text>`;
@@ -536,7 +551,7 @@ function rendreGraphique(heures, sport) {
     boite.setAttribute("x", tx); boite.setAttribute("y", mg.h);
     const texte = curseur.querySelector("text");
     texte.setAttribute("x", tx + 7); texte.setAttribute("y", mg.h + 14);
-    texte.textContent = `${hh.decalage === 0 ? "auj." : "dem."} ${hh.heure} h · `
+    texte.textContent = `${nomJour(hh, true)} ${hh.heure} h · `
       + `vent ${hh.ensemble.toFixed(1)}`
       + (hh.rafales != null ? ` · raf ${hh.rafales.toFixed(0)} nds` : " nds")
       + (hh.direction != null ? ` · ${secteurDe(hh.direction)} ${Math.round(hh.direction)}°` : "");
@@ -595,14 +610,11 @@ async function demarrer() {
 
     const maintenant = new Date();
     document.getElementById("fraicheur").textContent =
-      `Prévisions chargées en direct le ${maintenant.toLocaleDateString("fr-CA")} à `
-      + `${maintenant.toLocaleTimeString("fr-CA", { hour: "2-digit", minute: "2-digit" })} `
-      + "(dernier run disponible de chaque modèle) — la page se rafraîchit "
-      + `toute seule chaque heure entre ${RAFRAICHIR_DE} h et ${RAFRAICHIR_A} h.`;
+      `Mis à jour à ${maintenant.toLocaleTimeString("fr-CA", { hour: "2-digit", minute: "2-digit" })}`
+      + ` · rafraîchi chaque heure de ${RAFRAICHIR_DE} h à ${RAFRAICHIR_A} h.`;
     document.getElementById("recalibrage").textContent =
-      `Le % d'un GO = la part des GO annoncés à cette échéance qui se sont `
-      + `réellement confirmés (mesuré sur ${poids.periode_backtest}). `
-      + `Dernier recalibrage des corrections : ${poids.genere_le}.`;
+      `% d'un GO : part des GO confirmés (${poids.periode_backtest}). `
+      + `Recalibré le ${poids.genere_le}.`;
 
     // Les deux versions côte à côte : ce qui est affiché (interface) et ce qui
     // a calculé les chiffres (modèle). Le modèle renvoie à un jeu de poids

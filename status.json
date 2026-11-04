@@ -5,7 +5,7 @@
  "name": "Vent Lac Maskinongé",
  "one_liner": "Dit s'il vaut la peine d'aller faire du foil au Lac Maskinongé : GO ou NO, avec le pourcentage de GO qui se sont vraiment confirmés.",
  "status": "actif",
- "version": "Page 1.3.0 · calcul v2 du 24 août",
+ "version": "Page 1.4.0 · calcul v2 du 24 août",
  "posture": {
   "verdict": "Préparer 2027",
   "why": "La saison de foil se termine en octobre. Cet hiver sert à faire le bilan de 2026 et à décider des deux seuls leviers qui peuvent encore améliorer la précision."
@@ -589,8 +589,8 @@
   }
  ],
  "plan": {
-  "version": 4,
-  "updated_at": "2026-09-28T01:00",
+  "version": 5,
+  "updated_at": "2026-11-04T14:00",
   "updated_by": "Claude",
   "priorities_validated": false,
   "changes": [
@@ -603,10 +603,25 @@
     "version": 4,
     "date": "2026-09-28",
     "summary": "Chaîne de valeur et évolutions majeures en séquence (maintenant, ensuite, plus tard)."
+   },
+   {
+    "version": 5,
+    "date": "2026-11-04",
+    "summary": "Page allégée (moins de texte), graphique du vent sur 7 jours ; 3 pistes de design proposées, en attente de ton choix."
    }
   ]
  },
  "history": [
+  {
+   "date": "2026-11-04",
+   "title": "Alléger les textes de la page et étendre le graphique à 7 jours",
+   "pr": 10
+  },
+  {
+   "date": "2026-09-27",
+   "title": "Brancher le tableau de bord Umbrella",
+   "pr": 9
+  },
   {
    "date": "2026-09-27",
    "title": "Afficher la direction du vent heure par heure",
@@ -675,17 +690,17 @@
  ],
  "git": {
   "_generated": "AUTO — généré par tools/git_facts.py (future Action). Ne pas éditer à la main.",
-  "generated_at": "2026-09-27",
+  "generated_at": "2026-11-04",
   "last_commit": {
-   "sha": "8cd6c78",
-   "date": "2026-09-27",
+   "sha": "364beb6",
+   "date": "2026-11-02",
    "author": "github-actions[bot]",
-   "subject": "Vérification quotidienne 2026-09-27"
+   "subject": "Recalibrage hebdomadaire 2026-11-02"
   },
   "last_human_commit": {
-   "sha": "9288cfa",
-   "date": "2026-09-27",
-   "subject": "Afficher la direction du vent heure par heure (#8)"
+   "sha": null,
+   "date": "2026-11-04",
+   "subject": "Alléger les textes de la page et étendre le graphique à 7 jours"
   },
   "commits_30d": 39,
   "human_commits_30d": 5,

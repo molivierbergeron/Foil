@@ -66,7 +66,6 @@ h1 { font-size: 1.35rem; margin: 0.2rem 0 0; }
 h2 { font-size: 1.1rem; margin: 1.6rem 0 0.4rem; }
 h3 { font-size: 0.95rem; margin: 1.2rem 0 0.2rem; }
 .sous-titre { color: var(--texte-2); margin: 0.15rem 0 0; font-size: 0.9rem; }
-.aide { color: var(--texte-2); font-size: 0.82rem; margin: 0.2rem 0 0.7rem; }
 .etat { color: var(--texte-2); }
 
 .cartes { display: grid; gap: 0.6rem; }
