@@ -1,25 +1,17 @@
 {
- "genere_le": "2026-11-07T15:53+00:00",
+ "genere_le": "2026-11-08T16:10+00:00",
  "spot": {
   "latitude": 46.3123,
   "longitude": -73.3638
  },
  "unites": "noeuds",
  "verdicts_ensemble": {
-  "2026-11-06": {
+  "2026-11-07": {
    "go": false,
    "blocs": {
     "matin": false,
     "midi": false,
     "apres_midi": false
-   }
-  },
-  "2026-11-07": {
-   "go": true,
-   "blocs": {
-    "matin": true,
-    "midi": true,
-    "apres_midi": true
    }
   },
   "2026-11-08": {
@@ -31,11 +23,11 @@
    }
   },
   "2026-11-09": {
-   "go": false,
+   "go": true,
    "blocs": {
-    "matin": false,
-    "midi": false,
-    "apres_midi": false
+    "matin": true,
+    "midi": true,
+    "apres_midi": true
    }
   },
   "2026-11-10": {
@@ -63,11 +55,19 @@
    }
   },
   "2026-11-13": {
-   "go": false,
+   "go": true,
    "blocs": {
-    "matin": false,
-    "midi": false,
-    "apres_midi": false
+    "matin": true,
+    "midi": true,
+    "apres_midi": true
+   }
+  },
+  "2026-11-14": {
+   "go": true,
+   "blocs": {
+    "matin": true,
+    "midi": true,
+    "apres_midi": true
    }
   }
  },
